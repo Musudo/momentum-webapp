@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect } from "react";
+import axios from "axios";
+import Router from "./routes/Router";
+import UserProvider from "./context/UserProvider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import theme from "./theme";
+import "./i18n";
+import Cookies from "js-cookie";
+import { useTranslation } from "react-i18next";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-function App() {
-  const [count, setCount] = useState(0)
+axios.defaults.baseURL = "/api";
+
+const queryClient = new QueryClient();
+
+export default function App() {
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    Cookies.set("lang", i18n.language, { expires: 7 });
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+     {/* <ThemeProvider theme={theme}> */}
+      {/* <CssBaseline /> */}
+      <QueryClientProvider client={queryClient}>
+        <UserProvider>
+          <Router />
+        </UserProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    {/* </ThemeProvider> */}
     </>
-  )
+   
+  );
 }
 
-export default App
+// ReactDom.render(<App />, document.getElementById('root'));

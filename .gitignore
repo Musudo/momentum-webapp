@@ -1,3 +1,10 @@
+### react ###
+.DS_*
+*.log
+logs
+**/*.backup.*
+**/*.back.*
+
 # Logs
 logs
 *.log
@@ -22,3 +29,27 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### yarn ###
+# https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+
+.yarn/*
+!.yarn/releases
+!.yarn/patches
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# Environment files
+.env.local
+.env.development
+.env.production
+.env.test
