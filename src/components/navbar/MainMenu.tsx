@@ -57,13 +57,13 @@ const MainMenu: React.FC<Props> = (props: Props) => {
 					},
 				},
 			}}>
-				<MenuItem key='login' component='a' href='login'>
+				<MenuItem key='login' component='a' href='/login'>
 					<ListItemIcon>
 						<LoginIcon fontSize='small'/>
 					</ListItemIcon>
 					{t('Common.Login')}
 				</MenuItem>
-			{/* {(props.user && props.user.roles.includes('ROLE_USER')) ? (
+			{(props.user /* && props.user.roles.includes('ROLE_USER') */) ? (
 				<MenuItem key='logout' component='a' href='/logout'>
 					<ListItemIcon>
 						<Logout fontSize='small'/>
@@ -71,13 +71,13 @@ const MainMenu: React.FC<Props> = (props: Props) => {
 					{t('Common.Logout')}
 				</MenuItem>
 			) : (
-				<MenuItem key='login' component='a' href='/connect/azure'>
+				<MenuItem key='login' component='a' href='/login'>
 					<ListItemIcon>
 						<LoginIcon fontSize='small'/>
 					</ListItemIcon>
 					{t('Common.Login')}
 				</MenuItem>
-			)} */}
+			)}
 		</Menu>
 	);
 };
