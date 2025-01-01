@@ -11,7 +11,7 @@ import {
 import SendIcon from '@mui/icons-material/Send';
 import {debounce} from 'lodash';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {ITask} from '../../../models/ITask';
+import {ITask} from '../../../types/models/ITask';
 
 interface Props {
 	activityId: number;

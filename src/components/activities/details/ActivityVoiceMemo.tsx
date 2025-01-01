@@ -5,7 +5,7 @@ import StopCircleIcon from '@mui/icons-material/StopCircle';
 import {Box, IconButton, Stack, Tooltip, Typography} from "@mui/material";
 import MicIcon from '@mui/icons-material/Mic';
 import {deleteDataReactQuery, postDataReactQuery} from "../../../utils/HttpRequestUtil";
-import {IActivity} from "../../../models/IActivity";
+import {IActivity} from "../../../types/models/IActivity";
 import ClearIcon from '@mui/icons-material/Clear';
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 

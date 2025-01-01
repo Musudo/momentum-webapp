@@ -16,7 +16,7 @@ import {
 	Toolbar,
 	useMediaQuery
 } from "@mui/material";
-import {IActivity} from "../../../models/IActivity";
+import {IActivity} from "../../../types/models/IActivity";
 // import {
 // 	BasicFormattingButtonGroup,
 // 	DataTransferButtonGroup,
@@ -38,7 +38,7 @@ import {deleteDataReactQuery, patchDataReactQuery, postDataReactQuery} from "../
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import isEmail from 'validator/lib/isEmail';
 import ClearIcon from '@mui/icons-material/Clear';
-import {IAttachment} from "../../../models/IAttachment";
+import {IAttachment} from "../../../types/models/IAttachment";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 
 interface Props {

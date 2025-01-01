@@ -11,7 +11,7 @@ import {Dispatch, SetStateAction} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import Drawer from '@mui/material/Drawer';
-import {NavbarTypesEnum} from "../../enums/ComponentPropsEnums";
+import {NavbarTypesEnum} from "../../types/enums/ComponentPropsEnums";
 
 interface Props {
 	handleDrawerToggle: () => void;
@@ -49,7 +49,7 @@ export default function DrawerMenu(props: Props) {
 				<List>
 					{props.navItems.map((item: string, index: number) => (
 						<ListItem key={index} disablePadding>
-							<Link to="/login">
+							<Link to="/signIn">
 							Go to login
 							</Link>
 							{/* <ListItemButton sx={{textAlign: 'center'}}

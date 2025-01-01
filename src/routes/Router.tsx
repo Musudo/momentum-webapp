@@ -1,18 +1,18 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NotFound from "../components/NotFound";
-import AppOutlet from "../AppOutlet";
+import AppOutlet from "../AppLayout";
 import ActivityRoutes from "./ActivityRoutes";
-import SignIn from "../components/signIn/SignIn";
-import SignUp from "../components/signUp/SignUp";
+import SignIn from "../components/authentication/signIn/SignIn";
+import SignUp from "../components/authentication/signUp/SignUp";
 import Dashboard from "../components/dashboard/Dashboard";
 // import ContactRoutes from "./ContactRoutes";
 // import {Dashboard} from "../components/dashboard/Dashboard";
 
 export default function Router() {
   return (
-    <BrowserRouter>
+    // <BrowserRouter>
       <Routes>
-        <Route element={<AppOutlet />}>
+        {/* <Route element={<AppOutlet />}> */}
           {/* <Route path="/" element={<Dashboard/>}/> */}
           <Route path="/login" element={<SignIn/>}/>
           <Route path="/signUp" element={<SignUp/>}/>
@@ -20,8 +20,8 @@ export default function Router() {
           <Route path="/activities/*" element={<ActivityRoutes />} />
           {/* <Route path="/contacts/*" element={<ContactRoutes/>}/> */}
           <Route path="*" element={<NotFound />} />
-        </Route>
+        {/* </Route> */}
       </Routes>
-    </BrowserRouter>
+    // </BrowserRouter>
   );
 }

@@ -1,6 +1,6 @@
 import {Badge, Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import {NavbarTypesEnum} from "../../enums/ComponentPropsEnums";
+import {NavbarTypesEnum} from "../../types/enums/ComponentPropsEnums";
 
 interface Props {
 	type: NavbarTypesEnum;

@@ -18,12 +18,12 @@ import {
 	InputAdornment,
 	TextField
 } from "@mui/material";
-import {IContact} from "../../../../models/IContact";
+import {IContact} from "../../../../types/models/IContact";
 import EmailIcon from '@mui/icons-material/Email';
 import PersonIcon from '@mui/icons-material/Person';
-import {IActivity} from "../../../../models/IActivity";
+import {IActivity} from "../../../../types/models/IActivity";
 import {VALID_EMAIL_REGEXP} from "../../../../constants/constants";
-import {ParticipantTypesEnum} from "../../../../enums/ComponentPropsEnums";
+import {ParticipantTypesEnum} from "../../../../types/enums/ComponentPropsEnums";
 
 interface Props {
 	activity: IActivity;

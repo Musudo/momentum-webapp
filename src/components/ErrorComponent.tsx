@@ -1,7 +1,7 @@
 import {Alert, Box, Typography} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import React from 'react';
-import {ErrorTypesEnum} from '../enums/ErrorTypesEnum';
+import {ErrorTypesEnum} from '../types/enums/ErrorTypesEnum';
 
 interface Props {
 	type: ErrorTypesEnum;

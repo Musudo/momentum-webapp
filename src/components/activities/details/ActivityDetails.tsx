@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {IActivity} from "../../../models/IActivity";
+import {IActivity} from "../../../types/models/IActivity";
 import {useParams} from "react-router-dom";
 import {
 	Box,
@@ -37,9 +37,9 @@ import timezone from 'dayjs/plugin/timezone';
 import {allyProps} from "../../../props/MUIElementProps";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {ErrorComponent} from "../../ErrorComponent";
-import {ActivityTypesEnum} from "../../../enums/ActivityTypesEnum";
-import {ParticipantTypesEnum} from "../../../enums/ComponentPropsEnums";
-import {ErrorTypesEnum} from "../../../enums/ErrorTypesEnum";
+import {ActivityTypesEnum} from "../../../types/enums/ActivityTypesEnum";
+import {ParticipantTypesEnum} from "../../../types/enums/ComponentPropsEnums";
+import {ErrorTypesEnum} from "../../../types/enums/ErrorTypesEnum";
 import LoadingComponent from "../../LoadingComponent";
 
 dayjs.extend(utc);
@@ -51,7 +51,7 @@ interface TabPanelProps {
 	value: number;
 }
 
-export function ActivityDetails() {
+const ActivityDetails = () => {
 	const {guid} = useParams();
 	const [isUpdated, setIsUpdated] = useState(true);
 	const isMobile = useMediaQuery('(max-width: 600px)');
@@ -276,3 +276,5 @@ export function ActivityDetails() {
 		</Container>
 	);
 }
+
+export default ActivityDetails;

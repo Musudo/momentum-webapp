@@ -3,7 +3,7 @@ import {Avatar, IconButton, List, ListItem, ListItemAvatar, ListItemText, Toolti
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import {patchDataReactQuery} from "../../../../utils/HttpRequestUtil";
-import {IContact} from "../../../../models/IContact";
+import {IContact} from "../../../../types/models/IContact";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 
 interface Props {

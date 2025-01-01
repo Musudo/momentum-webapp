@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Box, Button, Divider, Typography} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import {useNavigate} from "react-router-dom";
-import {IActivity} from "../../../models/IActivity";
+import {IActivity} from "../../../types/models/IActivity";
 import {addressFormatter} from "../../../utils/DataFormatterUtil";
 
 interface Props {

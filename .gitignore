@@ -47,6 +47,7 @@ dist-ssr
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+.yarn/install-state.gz
 
 # Environment files
 .env.local

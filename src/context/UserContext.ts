@@ -1,5 +1,5 @@
 import {createContext} from "react";
-import {IUser} from "../models/IUser";
+import {IUser} from "../types/models/IUser";
 
 // use of user context to easily change to another provider
 export interface IUserContext {

@@ -1,5 +1,5 @@
 import React, {useRef, useState} from "react";
-import {IActivity} from "../../../models/IActivity";
+import {IActivity} from "../../../types/models/IActivity";
 import {
 	Box,
 	Button,
@@ -19,7 +19,7 @@ import {
 	useMediaQuery
 } from "@mui/material";
 import {ActivitiesColumn} from "./ActivitiesColumn";
-import {IInstitution} from "../../../models/IInstitution";
+import {IInstitution} from "../../../types/models/IInstitution";
 import {ActivitySpeedDial} from "./ActivitySpeedDial";
 import {fetchDataReactQuery} from "../../../utils/HttpRequestUtil";
 import InstitutionSearchBar from "./InstitutionSearchBar";
@@ -31,9 +31,9 @@ import ActivitiesSwipeableMobile from "./ActivitiesSwipeableMobile";
 import {useTranslation} from "react-i18next";
 import {ArchivedActivitiesYearPicker} from "./ArchivedActivitiesYearPicker";
 import {useQuery} from "@tanstack/react-query";
-import {ActivityColumnsEnum, SpeedDialDirectionsEnum} from "../../../enums/ComponentPropsEnums";
+import {ActivityColumnsEnum, SpeedDialDirectionsEnum} from "../../../types/enums/ComponentPropsEnums";
 
-export function ActivitiesOverview() {
+export default function ActivitiesOverview() {
 	const [institution, setInstitution] = useState<IInstitution | null>(null);
 	const [isArchived, setIsArchived] = useState(false);
 	const isMobile = useMediaQuery('(max-width: 600px)');

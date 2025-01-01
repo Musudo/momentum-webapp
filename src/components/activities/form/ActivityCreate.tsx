@@ -24,13 +24,13 @@ import {ExternalParticipantForm} from "./ExternalParticipantForm";
 import {fetchDataReactQuery, postDataReactQuery} from "../../../utils/HttpRequestUtil";
 import dayjs from "dayjs";
 import UserContext, {IUserContext} from "../../../context/UserContext";
-import {IContact} from "../../../models/IContact";
-import {IInstitution} from "../../../models/IInstitution";
-import {ITag} from "../../../models/ITag";
+import {IContact} from "../../../types/models/IContact";
+import {IInstitution} from "../../../types/models/IInstitution";
+import {ITag} from "../../../types/models/ITag";
 import {useTranslation} from "react-i18next";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {IActivity} from "../../../models/IActivity";
-import {FormTypesEnum} from "../../../enums/ComponentPropsEnums";
+import {IActivity} from "../../../types/models/IActivity";
+import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
@@ -43,7 +43,7 @@ interface IExternal {
 	index: number;
 }
 
-export function ActivityCreate() {
+const ActivityCreate = () => {
 	const [sendEmail, setSendEmail] = useState(false);
 	const [externals, setExternals] = useState<IExternal[]>([]);
 	// default institution, institutions and contacts should stay outside of participant form for now,
@@ -249,3 +249,5 @@ export function ActivityCreate() {
 		</Container>
 	);
 }
+
+export default ActivityCreate;

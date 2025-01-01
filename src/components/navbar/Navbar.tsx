@@ -18,18 +18,22 @@ import LocaleMenu from "./LocaleMenu";
 import MobileMenu from "./MobileMenu";
 import MainMenu from "./MainMenu";
 import DrawerMenu from "./DrawerMenu";
-import {NavbarTypesEnum} from "../../enums/ComponentPropsEnums";
+import {NavbarTypesEnum} from "../../types/enums/ComponentPropsEnums";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 // import {mainListItems, secondaryListItems} from "../dashboard/listItems";
 import AppBar, {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar/AppBar";
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 export function Navbar() {
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const navigate = useNavigate();
-	const {user} = useContext<IUserContext>(UserContext);
+	// const {user} = useContext<IUserContext>(UserContext);
 	const {t, i18n} = useTranslation();
+
+	const user = useSelector((state: RootState) => state.user);
 
 	/* drawer menu configuration >> */
 	const navItems = ['Dashboard', 'Activities', 'Contacts'];
@@ -156,7 +160,8 @@ export function Navbar() {
 							color="inherit"
 						>
 							<Avatar>
-								{user ? stringAvatar(`${user.firstName} ${user.lastName}`).children.toString() : ""}
+								AB
+								{/* {user ? stringAvatar(`${user.firstName} ${user.lastName}`).children.toString() : ""} */}
 							</Avatar>
 						</IconButton>
 					</Box>

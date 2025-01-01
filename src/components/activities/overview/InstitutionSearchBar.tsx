@@ -3,13 +3,13 @@ import {Dispatch, SetStateAction, SyntheticEvent, useEffect, useMemo, useState} 
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import {fetchDataReactQuery} from "../../../utils/HttpRequestUtil";
-import {IInstitution} from "../../../models/IInstitution";
+import {IInstitution} from "../../../types/models/IInstitution";
 import {debounce} from "lodash";
 import {AutocompleteRenderInputParams, CircularProgress, InputAdornment} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import {useTranslation} from "react-i18next";
 import {useQuery} from "@tanstack/react-query";
-import {IContact} from "../../../models/IContact";
+import {IContact} from "../../../types/models/IContact";
 import ClearIcon from '@mui/icons-material/Clear';
 
 interface Props {

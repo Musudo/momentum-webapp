@@ -1,6 +1,6 @@
 import React from "react";
 import {Box, CardActionArea, Paper, Typography} from "@mui/material";
-import {IActivity} from "../../../models/IActivity";
+import {IActivity} from "../../../types/models/IActivity";
 import {useNavigate} from "react-router-dom";
 import PersonIcon from '@mui/icons-material/Person';
 import PeopleIcon from '@mui/icons-material/People';
@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import {useTranslation} from "react-i18next";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import {ActivityTypesEnum} from "../../../enums/ActivityTypesEnum";
+import {ActivityTypesEnum} from "../../../types/enums/ActivityTypesEnum";
 import AssignmentIcon from '@mui/icons-material/Assignment';
 
 dayjs.extend(utc);

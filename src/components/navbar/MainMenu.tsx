@@ -1,21 +1,27 @@
 import React from 'react';
 import {ListItemIcon, Menu, MenuItem} from '@mui/material';
 import {useTranslation} from 'react-i18next';
-import {IUser} from '../../models/IUser';
+import {IUser} from '../../types/models/IUser';
 import {Logout} from '@mui/icons-material';
 import LoginIcon from '@mui/icons-material/Login';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface Props {
 	mainMenuAnchorEl: HTMLElement | null;
 	handleMainMenuClose: () => void;
 	isMainMenuOpen: boolean;
-	user: IUser | null;
+	user: any;
 	mainMenuId: string;
 }
 
 const MainMenu: React.FC<Props> = (props: Props) => {
 	const {t} = useTranslation();
+	const navigate = useNavigate();
+
+	const handleSignOut = () => {
+		sessionStorage.removeItem('authToken');
+		navigate('/signIn');
+	  };
 
 	return (
 		<Menu
@@ -57,21 +63,21 @@ const MainMenu: React.FC<Props> = (props: Props) => {
 					},
 				},
 			}}>
-				<MenuItem key='login' component='a' href='/login'>
+				<MenuItem key='login' component='a' href='/signIn'>
 					<ListItemIcon>
 						<LoginIcon fontSize='small'/>
 					</ListItemIcon>
 					{t('Common.Login')}
 				</MenuItem>
 			{(props.user /* && props.user.roles.includes('ROLE_USER') */) ? (
-				<MenuItem key='logout' component='a' href='/logout'>
+				<MenuItem key='logout' component='a' onClick={handleSignOut}>
 					<ListItemIcon>
 						<Logout fontSize='small'/>
 					</ListItemIcon>
 					{t('Common.Logout')}
 				</MenuItem>
 			) : (
-				<MenuItem key='login' component='a' href='/login'>
+				<MenuItem key='login' component='a' onClick={handleSignOut}>
 					<ListItemIcon>
 						<LoginIcon fontSize='small'/>
 					</ListItemIcon>

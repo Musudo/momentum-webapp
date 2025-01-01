@@ -5,8 +5,8 @@ import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {SpeedDialDirectionsEnum} from '../../../enums/ComponentPropsEnums';
-import {ActivityTypesEnum} from '../../../enums/ActivityTypesEnum';
+import {SpeedDialDirectionsEnum} from '../../../types/enums/ComponentPropsEnums';
+import {ActivityTypesEnum} from '../../../types/enums/ActivityTypesEnum';
 
 interface Props {
 	direction: SpeedDialDirectionsEnum | undefined;

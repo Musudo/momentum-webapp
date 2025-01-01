@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {IUser} from '../models/IUser';
+import {IUser} from '../types/models/IUser';
 import UserContext from './UserContext';
 import axios from 'axios';
 

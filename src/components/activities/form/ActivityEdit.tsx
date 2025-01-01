@@ -4,22 +4,22 @@ import {Box, Button, Container, Paper, Typography} from "@mui/material";
 import {useForm} from "react-hook-form";
 import dayjs from "dayjs";
 import {useParams} from "react-router-dom";
-import {IActivity} from "../../../models/IActivity";
+import {IActivity} from "../../../types/models/IActivity";
 import {fetchDataReactQuery, patchDataReactQuery} from "../../../utils/HttpRequestUtil";
 import {FormSubmitSnackbar} from "../../FormSubmitSnackbar";
-import {ITag} from "../../../models/ITag";
+import {ITag} from "../../../types/models/ITag";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import LoadingComponent from "../../LoadingComponent";
 import {ErrorComponent} from "../../ErrorComponent";
-import {ErrorTypesEnum} from "../../../enums/ErrorTypesEnum";
-import {FormTypesEnum} from "../../../enums/ComponentPropsEnums";
+import {ErrorTypesEnum} from "../../../types/enums/ErrorTypesEnum";
+import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export function ActivityEdit() {
+ const ActivityEdit = () => {
 	const [openSnackbar, setOpenSnackbar] = useState(false);
 	const {guid} = useParams();
 
@@ -95,3 +95,5 @@ export function ActivityEdit() {
 		</Container>
 	);
 }
+
+export default ActivityEdit;

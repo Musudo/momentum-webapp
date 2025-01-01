@@ -23,13 +23,13 @@ import 'dayjs/locale/fr';
 import 'dayjs/locale/de';
 import 'dayjs/locale/es';
 import 'dayjs/locale/en-gb';
-import {ActivityTypesEnum} from "../../../enums/ActivityTypesEnum";
-import {ITag} from "../../../models/ITag";
-import {IActivity} from "../../../models/IActivity";
+import {ActivityTypesEnum} from "../../../types/enums/ActivityTypesEnum";
+import {ITag} from "../../../types/models/ITag";
+import {IActivity} from "../../../types/models/IActivity";
 import {useTranslation} from "react-i18next";
 import {getLocale} from "../../../utils/LocaleGeneratorUtil";
 import {MenuProps} from "../../../props/MUIElementProps";
-import {FormTypesEnum} from "../../../enums/ComponentPropsEnums";
+import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

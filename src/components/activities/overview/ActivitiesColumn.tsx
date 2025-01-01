@@ -1,7 +1,7 @@
-import { IActivity } from "../../../models/IActivity";
+import { IActivity } from "../../../types/models/IActivity";
 import { Box, Typography } from "@mui/material";
 import { ActivityCard } from "./ActivityCard";
-import { ActivityColumnsEnum } from "../../../enums/ComponentPropsEnums";
+import { ActivityColumnsEnum } from "../../../types/enums/ComponentPropsEnums";
 
 interface Props {
   activities: IActivity[];

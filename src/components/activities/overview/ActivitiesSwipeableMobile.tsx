@@ -6,7 +6,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import {IActivity} from "../../../models/IActivity";
+import {IActivity} from "../../../types/models/IActivity";
 import {ActivitiesColumn} from "./ActivitiesColumn";
 import {useTranslation} from "react-i18next";
 import {allyProps} from "../../../props/MUIElementProps";

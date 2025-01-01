@@ -1,10 +1,21 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import App from "./App";
+import "./index.css";
+import QueryWrapper from "./queryWrapper";
+import { store } from "./redux/store";
 
-createRoot(document.getElementById('root')!).render(
+// configuration for production mode
+// if (import.meta.env.MODE == "production") {
+// }
+
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    <Provider store={store}>
+      <QueryWrapper>
+        <App />
+      </QueryWrapper>
+    </Provider>
+  </StrictMode>
+);

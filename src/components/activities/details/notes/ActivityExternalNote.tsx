@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Box, Button, IconButton, TextField, Tooltip, Typography} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import {IActivity} from "../../../../models/IActivity";
+import {IActivity} from "../../../../types/models/IActivity";
 import {useForm} from "react-hook-form";
 import {patchDataReactQuery} from "../../../../utils/HttpRequestUtil";
 import {useMutation, useQueryClient} from "@tanstack/react-query";

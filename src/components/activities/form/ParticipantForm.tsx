@@ -1,14 +1,14 @@
 import React, {Dispatch, SetStateAction, useEffect} from "react";
 import {Box, Chip, FormControl, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select} from "@mui/material";
 import {Controller} from "react-hook-form";
-import {IContact} from "../../../models/IContact";
-import {IInstitution} from "../../../models/IInstitution";
+import {IContact} from "../../../types/models/IContact";
+import {IInstitution} from "../../../types/models/IInstitution";
 import {fetchData, fetchDataReactQuery} from "../../../utils/HttpRequestUtil";
 import InstitutionSearchBar from "../overview/InstitutionSearchBar";
 import {useTranslation} from "react-i18next";
 import {MenuProps} from "../../../props/MUIElementProps";
 import {useQuery} from "@tanstack/react-query";
-import {IActivity} from "../../../models/IActivity";
+import {IActivity} from "../../../types/models/IActivity";
 
 interface Props {
 	control: any,

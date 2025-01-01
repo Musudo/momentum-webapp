@@ -3,7 +3,7 @@ import {Avatar, IconButton, Menu, MenuItem} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import {stringAvatar} from "../../utils/AvatarGeneratorUtil";
 import TranslateIcon from "@mui/icons-material/Translate";
-import {IUser} from "../../models/IUser";
+import {IUser} from "../../types/models/IUser";
 
 interface Props {
 	mobileMoreAnchorEl: HTMLElement | null;
@@ -11,7 +11,7 @@ interface Props {
 	handleProfileMenuOpen: (event: React.MouseEvent<HTMLElement>) => void;
 	handleLocaleMenuOpen: (event: React.MouseEvent<HTMLElement>) => void;
 	isMobileMenuOpen: boolean;
-	user: IUser | null;
+	user: any; //IUser | null;
 	mobileMenuId: string;
 }
 

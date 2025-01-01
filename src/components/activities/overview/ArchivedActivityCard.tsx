@@ -1,6 +1,6 @@
 import {Card, CardActionArea, CardContent, Typography} from "@mui/material";
 import React from "react";
-import {IActivity} from "../../../models/IActivity";
+import {IActivity} from "../../../types/models/IActivity";
 import dayjs from "dayjs";
 import {useNavigate} from "react-router-dom";
 

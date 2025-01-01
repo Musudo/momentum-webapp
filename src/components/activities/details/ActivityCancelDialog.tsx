@@ -1,7 +1,7 @@
 import React, {Dispatch, SetStateAction} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import {deleteData, postData} from "../../../utils/HttpRequestUtil";
-import {IActivity} from "../../../models/IActivity";
+import {IActivity} from "../../../types/models/IActivity";
 import {useNavigate} from "react-router-dom";
 
 interface Props {

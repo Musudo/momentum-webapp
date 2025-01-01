@@ -11,7 +11,7 @@ import {
 	Typography
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
-import {IExternalParticipant} from "../../../../models/IExternalParticipant";
+import {IExternalParticipant} from "../../../../types/models/IExternalParticipant";
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import {useNavigate} from "react-router-dom";
