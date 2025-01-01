@@ -160,8 +160,8 @@ export function Navbar() {
 							color="inherit"
 						>
 							<Avatar>
-								AB
-								{/* {user ? stringAvatar(`${user.firstName} ${user.lastName}`).children.toString() : ""} */}
+								{`${user.firstName} ${user.lastName}`}
+								{/* {user ? stringAvatar(`${user.firstName} ${user.lastName}`).children.toString() : "XX"} */}
 							</Avatar>
 						</IconButton>
 					</Box>

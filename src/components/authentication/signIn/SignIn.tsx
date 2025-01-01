@@ -12,13 +12,14 @@ import Typography from "@mui/material/Typography";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import * as React from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../../redux/slice/userSlice";
 import AppTheme from "../shared-theme/AppTheme";
 import ColorModeSelect from "../shared-theme/ColorModeSelect";
 import { FacebookIcon, GoogleIcon } from "../shared-theme/CustomIcons";
 import { SignInCard } from "../signInCard";
 import { SignInContainer } from "../signInContainer";
 import ForgotPassword from "./ForgotPassword";
-import { Navigate, useNavigate } from "react-router-dom";
 
 const SignIn = (props: { disableCustomTheme?: boolean }) => {
   const [emailError, setEmailError] = React.useState(false);
@@ -26,7 +27,7 @@ const SignIn = (props: { disableCustomTheme?: boolean }) => {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -94,10 +95,9 @@ const SignIn = (props: { disableCustomTheme?: boolean }) => {
       return res.data;
     },
     onSuccess: (res) => {
-      console.log("===>", res);
-
-      sessionStorage.setItem("authToken", res);
-      // window.history.back()
+      sessionStorage.setItem("authToken", res["token"]);
+      dispatch(setUser(res["user"]));
+      window.history.back();
     },
     onError: (err) => {
       console.log("Error: ", err);
