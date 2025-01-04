@@ -11,7 +11,7 @@ type TStorageProps = {
   getState: () => RootState;
 };
 
-const sessionStorageMiddleware: Middleware = ({ getState }: TStorageProps) => {
+const localStorageMiddleware: Middleware = ({ getState }: TStorageProps) => {
   return (next) => (action) => {
     const result = next(action);
     sessionStorage.setItem("applicationState", JSON.stringify(getState()));
@@ -33,6 +33,6 @@ export const store = configureStore({
   },
   preloadedState: reHydrateStore(),
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(sessionStorageMiddleware),
+    getDefaultMiddleware().concat(localStorageMiddleware),
   // devTools: import.meta.env.MODE !== "production",
 });

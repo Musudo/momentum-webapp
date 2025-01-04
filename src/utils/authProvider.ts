@@ -99,7 +99,7 @@ class AuthProviderClass {
     );
   };
 
-  signin = () => {
+  signIn = () => {
     const codeVerifierKey = this.uuidv4();
     const codeVerifier = AuthProviderClass.#cleanUpEncodedString(
       Base64.stringify(sha256(this.uuidv4() + this.uuidv4() + this.uuidv4()))
@@ -114,15 +114,15 @@ class AuthProviderClass {
     });
 
     localStorage.setItem(`codeVerifier${codeVerifierKey}`, codeVerifier);
-    const redirectUrl = `${AuthProviderClass.#authUri}?client_id=${
+    const redirectUrl = "/dashboard"; /* `${AuthProviderClass.#authUri}?client_id=${
       import.meta.env.VITE_AUTH_CLIENTID
     }&response_type=code&code_challenge=${codeChallenge}&code_challenge_method=S256&scope=${
       import.meta.env.VITE_AUTH_CLIENTSCOPES
-    }&redirect_uri=${AuthProviderClass.#redirectUri}&state=${state}`;
+    }&redirect_uri=${AuthProviderClass.#redirectUri}&state=${state}`; */
     return redirectUrl;
   };
 
-  validateSignin = async (
+  validateSignIn = async (
     validationCode: string | null,
     codeVerifierKey: string | null
   ) => {
@@ -134,10 +134,10 @@ class AuthProviderClass {
     const body = {
       grant_type: "authorization_code",
       code: validationCode,
-      resource: import.meta.env.VITE_AUTH_RESOURCE,
+      resource: "test",//import.meta.env.VITE_AUTH_RESOURCE,
       redirect_uri: AuthProviderClass.#redirectUri,
       code_verifier: codeVerifier,
-      client_id: import.meta.env.VITE_AUTH_CLIENTID,
+      client_id: "test",//import.meta.env.VITE_AUTH_CLIENTID,
     };
     await AuthProviderClass.#generateAuthToken(body);
   };
@@ -158,11 +158,11 @@ class AuthProviderClass {
   signout = () => {
     setCookie("authToken", "", 0);
     sessionStorage.clear();
-    const redirectUrl = `${AuthProviderClass.#signoutUri}?client_id=${
+    const redirectUrl = "/dashboard";/* `${AuthProviderClass.#signoutUri}?client_id=${
       import.meta.env.VITE_AUTH_CLIENTID
     }&post_logout_redirect_uri=${window.location.origin}${
       import.meta.env.VITE_AUTH_SIGNOUTCALLBACK
-    }`;
+    }`; */
     return redirectUrl;
   };
 
@@ -170,7 +170,7 @@ class AuthProviderClass {
     if (!this.isAuthenticated) {
       const refreshToken = sessionStorage.getItem("refreshToken");
       if (!refreshToken) {
-        return AuthProvider.signin();
+        return AuthProvider.signIn();
       }
       await AuthProvider.refreshAuthToken(refreshToken);
     }

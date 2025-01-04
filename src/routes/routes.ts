@@ -1,13 +1,13 @@
 import React, { lazy } from "react";
 
-export type RouteConfig = {
+export type TRouteConfig = {
   path: string;
   component: React.LazyExoticComponent<React.FC>;
-  children?: RouteConfig[];
+  children?: TRouteConfig[];
   guard?: React.FC<{ children: JSX.Element }>;
 };
 
-const routes: RouteConfig[] = [
+const routes: TRouteConfig[] = [
   // {
   //   path: "/",
   //   component: lazy(() => import("")),

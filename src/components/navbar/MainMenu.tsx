@@ -1,29 +1,22 @@
 import { Logout } from "@mui/icons-material";
 import LoginIcon from "@mui/icons-material/Login";
 import { ListItemIcon, Menu, MenuItem } from "@mui/material";
-import axios from "axios";
-import React from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
-import { reset, TUser } from "../../redux/slice/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { resetUser } from "../../redux/slice/userSlice";
+import { RootState } from "../../redux/store";
 
-interface Props {
+type TProps = {
   mainMenuAnchorEl: HTMLElement | null;
   handleMainMenuClose: () => void;
   isMainMenuOpen: boolean;
-  user: TUser;
   mainMenuId: string;
-}
+};
 
-const MainMenu: React.FC<Props> = (props: Props) => {
+const MainMenu = (props: TProps) => {
   const { t } = useTranslation();
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
-
-  const handleSignOut = async () => {
-    sessionStorage.removeItem("authToken");
-    dispatch(reset());
-    window.location.href = "/signIn";
-  };
 
   return (
     <Menu
@@ -68,21 +61,27 @@ const MainMenu: React.FC<Props> = (props: Props) => {
         },
       }}
     >
-      <MenuItem key="login" component="a" href="/signIn">
-        <ListItemIcon>
-          <LoginIcon fontSize="small" />
-        </ListItemIcon>
-        {t("Common.Login")}
-      </MenuItem>
-      {props.user && props.user.roles.includes("ROLE_USER") ? (
-        <MenuItem key="signOut" component="a" onClick={handleSignOut}>
+      {user && user.roles.includes("ROLE_USER") ? (
+        <MenuItem
+          key="signOut"
+          onClick={() => {
+            sessionStorage.removeItem("authToken");
+            dispatch(resetUser());
+            window.location.href = "/signIn";
+          }}
+        >
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
           {t("Common.Logout")}
         </MenuItem>
       ) : (
-        <MenuItem key="login" component="a" onClick={handleSignOut}>
+        <MenuItem
+          key="login"
+          onClick={() => {
+            window.location.href = "/signIn";
+          }}
+        >
           <ListItemIcon>
             <LoginIcon fontSize="small" />
           </ListItemIcon>

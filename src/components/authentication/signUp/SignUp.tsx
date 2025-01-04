@@ -10,70 +10,124 @@ import FormControl from "@mui/material/FormControl";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import AppTheme from "../shared-theme/AppTheme";
-import { GoogleIcon, FacebookIcon } from "../shared-theme/CustomIcons";
-import ColorModeSelect from "../shared-theme/ColorModeSelect";
+import AppTheme from "../../../shared-theme/AppTheme";
+import { GoogleIcon, FacebookIcon } from "../../../shared-theme/CustomIcons";
+import ColorModeSelect from "../../../shared-theme/ColorModeSelect";
 import { SignInContainer } from "../signInContainer";
 import { SignInCard } from "../signInCard";
+import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
+import { Snackbar, SnackbarCloseReason } from "@mui/material";
+import { useState } from "react";
 
 const SignUp = (props: { disableCustomTheme?: boolean }) => {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState("");
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [firstNameErrorMessage, setFirstNameErrorMessage] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [lastNameError, setLastNameError] = useState(false);
+  const [lastNameErrorMessage, setLastNameErrorMessage] = useState("");
+  const [snackbarState, setSnackbarState] = useState({
+    open: false,
+    message: "",
+  });
 
-  const validateInputs = () => {
-    const email = document.getElementById("email") as HTMLInputElement;
-    const password = document.getElementById("password") as HTMLInputElement;
-    const name = document.getElementById("name") as HTMLInputElement;
-
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage("Please enter a valid email address.");
-      isValid = false;
+  const validateField = (
+    value: string,
+    fieldName: string,
+    setError: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>
+  ) => {
+    if (value.trim() === "") {
+      setError(true);
+      setErrorMessage(`${fieldName} is required`);
+    } else if (!/^[a-zA-Z]+$/.test(value)) {
+      setError(true);
+      setErrorMessage(`${fieldName} can only contain letters`);
     } else {
-      setEmailError(false);
-      setEmailErrorMessage("");
+      setError(false);
+      setErrorMessage("");
     }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage("");
-    }
-
-    if (!name.value || name.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage("Name is required.");
-      isValid = false;
-    } else {
-      setNameError(false);
-      setNameErrorMessage("");
-    }
-
-    return isValid;
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    if (nameError || emailError || passwordError) {
-      event.preventDefault();
-      return;
+  const validateEmail = (
+    value: string,
+    setError: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>
+  ) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (value.trim() === "") {
+      setError(true);
+      setErrorMessage("Email is required");
+    } else if (!emailRegex.test(value)) {
+      setError(true);
+      setErrorMessage("Invalid email address");
+    } else {
+      setError(false);
+      setErrorMessage("");
     }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get("name"),
-      lastName: data.get("lastName"),
-      email: data.get("email"),
-      password: data.get("password"),
-    });
   };
+
+  const validatePassword = (
+    value: string,
+    setError: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>
+  ) => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/;
+
+    if (value.trim() === "") {
+      setError(true);
+      setErrorMessage("Password is required");
+    } else if (!passwordRegex.test(value)) {
+      setError(true);
+      setErrorMessage(
+        "Password must be at least 6 characters long, contain at least 1 digit, and at least 1 uppercase letter"
+      );
+    } else {
+      setError(false);
+      setErrorMessage("");
+    }
+  };
+
+  const signUpMutation = useMutation({
+    mutationFn: async (data: object) => {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/users`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/ld+json",
+          },
+        }
+      );
+      return res.data;
+    },
+    onSuccess: (res) => {
+      setSnackbarState({
+        ...snackbarState,
+        open: true,
+        message: "New user created",
+      });
+      setTimeout(() => {
+        window.location.href = `/signIn?email=${encodeURIComponent(res.email)}`;
+      }, 2000);
+    },
+    onError: (err) => {
+      console.log("Error: ", err);
+      setSnackbarState({
+        ...snackbarState,
+        open: true,
+        message: "Failed to create new user",
+      });
+    },
+  });
 
   return (
     <AppTheme {...props}>
@@ -81,7 +135,21 @@ const SignUp = (props: { disableCustomTheme?: boolean }) => {
       <ColorModeSelect sx={{ position: "fixed", top: "1rem", right: "1rem" }} />
       <SignInContainer direction="column" justifyContent="space-between">
         <SignInCard variant="outlined">
-          {/* <SitemarkIcon /> */}
+          <Snackbar
+            open={snackbarState.open}
+            onClose={(
+              event: React.SyntheticEvent | Event,
+              reason?: SnackbarCloseReason
+            ) => {
+              if (reason === "clickaway") {
+                return;
+              }
+              setSnackbarState({ ...snackbarState, open: false });
+            }}
+            autoHideDuration={2000}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            message={snackbarState.message}
+          />
           <Typography
             component="h1"
             variant="h4"
@@ -89,11 +157,7 @@ const SignUp = (props: { disableCustomTheme?: boolean }) => {
           >
             Sign up
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-          >
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <FormControl>
               <FormLabel htmlFor="name">First name</FormLabel>
               <TextField
@@ -103,23 +167,41 @@ const SignUp = (props: { disableCustomTheme?: boolean }) => {
                 fullWidth
                 id="firstName"
                 placeholder="Jon"
-                error={nameError}
-                helperText={nameErrorMessage}
-                color={nameError ? "error" : "primary"}
+                error={firstNameError}
+                helperText={firstNameErrorMessage}
+                color={firstNameError ? "error" : "primary"}
+                onChange={(event) => {
+                  setFirstName(event.target.value);
+                  validateField(
+                    event.target.value,
+                    "First name",
+                    setFirstNameError,
+                    setFirstNameErrorMessage
+                  );
+                }}
               />
             </FormControl>
             <FormControl>
               <FormLabel htmlFor="name">Last name</FormLabel>
               <TextField
                 autoComplete="lastName"
-                name="name"
+                name="lastName"
                 required
                 fullWidth
                 id="lastName"
                 placeholder="Snow"
-                error={nameError}
-                helperText={nameErrorMessage}
-                color={nameError ? "error" : "primary"}
+                error={lastNameError}
+                helperText={lastNameErrorMessage}
+                color={lastNameError ? "error" : "primary"}
+                onChange={(event) => {
+                  setLastName(event.target.value);
+                  validateField(
+                    event.target.value,
+                    "Last name",
+                    setLastNameError,
+                    setLastNameErrorMessage
+                  );
+                }}
               />
             </FormControl>
             <FormControl>
@@ -135,6 +217,14 @@ const SignUp = (props: { disableCustomTheme?: boolean }) => {
                 error={emailError}
                 helperText={emailErrorMessage}
                 color={passwordError ? "error" : "primary"}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  validateEmail(
+                    event.target.value,
+                    setEmailError,
+                    setEmailErrorMessage
+                  );
+                }}
               />
             </FormControl>
             <FormControl>
@@ -151,6 +241,14 @@ const SignUp = (props: { disableCustomTheme?: boolean }) => {
                 error={passwordError}
                 helperText={passwordErrorMessage}
                 color={passwordError ? "error" : "primary"}
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                  validatePassword(
+                    event.target.value,
+                    setPasswordError,
+                    setPasswordErrorMessage
+                  );
+                }}
               />
             </FormControl>
             <FormControlLabel
@@ -158,10 +256,46 @@ const SignUp = (props: { disableCustomTheme?: boolean }) => {
               label="I want to receive updates via email."
             />
             <Button
-              type="submit"
+              type="button"
               fullWidth
               variant="contained"
-              onClick={validateInputs}
+              onClick={() => {
+                let hasErrors = false;
+
+                if (firstNameError || !firstName) {
+                  setFirstNameError(true);
+                  setFirstNameErrorMessage("First name is required");
+                  hasErrors = true;
+                }
+
+                if (lastNameError || !lastName) {
+                  setLastNameError(true);
+                  setLastNameErrorMessage("Last name is required");
+                  hasErrors = true;
+                }
+
+                if (emailError || !email) {
+                  setEmailError(true);
+                  setEmailErrorMessage("Email is required");
+                  hasErrors = true;
+                }
+
+                if (passwordError || !password) {
+                  setPasswordError(true);
+                  setPasswordErrorMessage("Password is required");
+                  hasErrors = true;
+                }
+
+                if (hasErrors) return;
+
+                signUpMutation.mutate({
+                  email: email,
+                  plainPassword: password,
+                  firstName: firstName,
+                  lastName: lastName,
+                  roles: ["ROLE_USER"],
+                });
+              }}
             >
               Sign up
             </Button>

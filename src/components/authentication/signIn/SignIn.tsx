@@ -1,3 +1,4 @@
+import { Snackbar, SnackbarCloseReason } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -12,73 +13,69 @@ import Typography from "@mui/material/Typography";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import * as React from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../redux/slice/userSlice";
-import AppTheme from "../shared-theme/AppTheme";
-import ColorModeSelect from "../shared-theme/ColorModeSelect";
-import { FacebookIcon, GoogleIcon } from "../shared-theme/CustomIcons";
+import AppTheme from "../../../shared-theme/AppTheme";
+import ColorModeSelect from "../../../shared-theme/ColorModeSelect";
+import { FacebookIcon, GoogleIcon } from "../../../shared-theme/CustomIcons";
 import { SignInCard } from "../signInCard";
 import { SignInContainer } from "../signInContainer";
 import ForgotPassword from "./ForgotPassword";
 
 const SignIn = (props: { disableCustomTheme?: boolean }) => {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-  const [open, setOpen] = React.useState(false);
+  const urlParams = new URLSearchParams(window.location.search);
+  const [email, setEmail] = useState(urlParams.get("email"));
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [resetPasswordModalState, setResetPasswordModalState] = useState(false);
+  const [snackbarState, setSnackbarState] = useState({
+    open: false,
+    message: "",
+  });
   const dispatch = useDispatch();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const validateEmail = (
+    value: string,
+    setError: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>
+  ) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-
-  const validateInputs = async () => {
-    const email = document.getElementById("email") as HTMLInputElement;
-    const password = document.getElementById("password") as HTMLInputElement;
-
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage("Please enter a valid email address.");
-      isValid = false;
+    if (value.trim() === "") {
+      setError(true);
+      setErrorMessage("Email is required");
+    } else if (!emailRegex.test(value)) {
+      setError(true);
+      setErrorMessage("Invalid email address");
     } else {
-      setEmailError(false);
-      setEmailErrorMessage("");
+      setError(false);
+      setErrorMessage("");
     }
+  };
 
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
-      isValid = false;
+  const validatePassword = (
+    value: string,
+    setError: React.Dispatch<React.SetStateAction<boolean>>,
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>
+  ) => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/;
+
+    if (value.trim() === "") {
+      setError(true);
+      setErrorMessage("Password is required");
+    } else if (!passwordRegex.test(value)) {
+      setError(true);
+      setErrorMessage(
+        "Password must be at least 6 characters long, contain at least 1 digit, and at least 1 uppercase letter"
+      );
     } else {
-      setPasswordError(false);
-      setPasswordErrorMessage("");
+      setError(false);
+      setErrorMessage("");
     }
-
-    signInMutation.mutate({
-      email: email.value,
-      password: password.value,
-    });
-
-    return isValid;
   };
 
   const signInMutation = useMutation({
@@ -97,19 +94,37 @@ const SignIn = (props: { disableCustomTheme?: boolean }) => {
     onSuccess: (res) => {
       sessionStorage.setItem("authToken", res["token"]);
       dispatch(setUser(res["user"]));
-      window.history.back();
+      window.location.href = "/dashboard";
     },
     onError: (err) => {
       console.log("Error: ", err);
+      setSnackbarState({
+        ...snackbarState,
+        open: true,
+        message: "Invalid credentials",
+      });
     },
   });
 
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
+      <ColorModeSelect sx={{ position: "fixed", top: "1rem", right: "1rem" }} />
       <SignInContainer direction="column" justifyContent="space-between">
-        <ColorModeSelect
-          sx={{ position: "fixed", top: "1rem", right: "1rem" }}
+        <Snackbar
+          open={snackbarState.open}
+          onClose={(
+            event: React.SyntheticEvent | Event,
+            reason?: SnackbarCloseReason
+          ) => {
+            if (reason === "clickaway") {
+              return;
+            }
+            setSnackbarState({ ...snackbarState, open: false });
+          }}
+          autoHideDuration={2000}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          message={snackbarState.message}
         />
         <SignInCard variant="outlined">
           <Typography
@@ -120,9 +135,6 @@ const SignIn = (props: { disableCustomTheme?: boolean }) => {
             Sign in
           </Typography>
           <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -138,6 +150,7 @@ const SignIn = (props: { disableCustomTheme?: boolean }) => {
                 id="email"
                 type="email"
                 name="email"
+                defaultValue={email}
                 placeholder="your@email.com"
                 autoComplete="email"
                 autoFocus
@@ -145,6 +158,14 @@ const SignIn = (props: { disableCustomTheme?: boolean }) => {
                 fullWidth
                 variant="outlined"
                 color={emailError ? "error" : "primary"}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  validateEmail(
+                    event.target.value,
+                    setEmailError,
+                    setEmailErrorMessage
+                  );
+                }}
               />
             </FormControl>
             <FormControl>
@@ -162,25 +183,57 @@ const SignIn = (props: { disableCustomTheme?: boolean }) => {
                 fullWidth
                 variant="outlined"
                 color={passwordError ? "error" : "primary"}
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                  validatePassword(
+                    event.target.value,
+                    setPasswordError,
+                    setPasswordErrorMessage
+                  );
+                }}
               />
             </FormControl>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <ForgotPassword open={open} handleClose={handleClose} />
+            <ForgotPassword
+              open={resetPasswordModalState}
+              handleClose={() => setResetPasswordModalState(false)}
+            />
             <Button
               type="button"
               fullWidth
               variant="contained"
-              onClick={validateInputs}
+              onClick={() => {
+                let hasErrors = false;
+
+                if (emailError || !email) {
+                  setEmailError(true);
+                  setEmailErrorMessage("Email is required");
+                  hasErrors = true;
+                }
+
+                if (passwordError || !password) {
+                  setPasswordError(true);
+                  setPasswordErrorMessage("Password is required");
+                  hasErrors = true;
+                }
+
+                if (hasErrors) return;
+
+                signInMutation.mutate({
+                  email: email,
+                  password: password,
+                });
+              }}
             >
               Sign in
             </Button>
             <Link
               component="button"
               type="button"
-              onClick={handleClickOpen}
+              onClick={() => setResetPasswordModalState(true)}
               variant="body2"
               sx={{ alignSelf: "center" }}
             >

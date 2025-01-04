@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import "./i18n";
 import AppRoutes from "./routes/appRoutes";
 
-export default function App() {
+const App = () => {
   const { i18n } = useTranslation();
 
   useEffect(() => {
@@ -13,9 +13,10 @@ export default function App() {
 
   return (
     <>
-      <AppRoutes/>
+      <AppRoutes />
     </>
   );
-}
+};
 
+export default App;
 // ReactDom.render(<App />, document.getElementById('root'));
