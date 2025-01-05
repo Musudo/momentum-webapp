@@ -13,7 +13,7 @@ type TProps = {
   mainMenuId: string;
 };
 
-const MainMenu = (props: TProps) => {
+const DesktopMenu = (props: TProps) => {
   const { t } = useTranslation();
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
@@ -92,4 +92,4 @@ const MainMenu = (props: TProps) => {
   );
 };
 
-export default MainMenu;
+export default DesktopMenu;

@@ -81,7 +81,7 @@ const SignIn = (props: { disableCustomTheme?: boolean }) => {
   const signInMutation = useMutation({
     mutationFn: async (data: object) => {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/auth`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth`,
         data,
         {
           headers: {
@@ -92,7 +92,7 @@ const SignIn = (props: { disableCustomTheme?: boolean }) => {
       return res.data;
     },
     onSuccess: (res) => {
-      sessionStorage.setItem("authToken", res["token"]);
+      sessionStorage.setItem("authToken", res.token);
       dispatch(setUser(res["user"]));
       window.location.href = "/dashboard";
     },

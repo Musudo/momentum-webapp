@@ -52,7 +52,7 @@
     "@types/lodash": "^4",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
-    "@types/react-swipeable-views": "^0",
+    "@types/react-swipeable-views": "^0.13.6",
     "@types/validator": "^13",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.17.0",

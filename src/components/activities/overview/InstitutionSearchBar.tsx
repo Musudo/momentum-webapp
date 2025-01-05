@@ -26,27 +26,27 @@ export default function InstitutionSearchBar(props: Props) {
 	let loading = open && options.length === 0;
 	const {t} = useTranslation();
 
-	const {data: institutions} = useQuery<IInstitution[]>(
-		['institution', searchValue],
-		() => {
-			if (searchValue !== "") {
-				return fetchDataReactQuery(`/institutions/info/${searchValue}`);
-			} else {
-				return [];
-			}
-		}
-	);
+	// const {data: institutions} = useQuery<IInstitution[]>(
+	// 	['institution', searchValue],
+	// 	() => {
+	// 		if (searchValue !== "") {
+	// 			return fetchDataReactQuery(`/institutions/info/${searchValue}`);
+	// 		} else {
+	// 			return [];
+	// 		}
+	// 	}
+	// );
 
 	useEffect(() => {
 		if (!open) setOptions([]);
 	}, [open]);
 
-	useEffect(() => {
-		if (institutions && institutions.length > 0) {
-			setOptions([...institutions.map((i: IInstitution) => i)]);
-			loading = false;
-		}
-	}, [institutions]);
+	// useEffect(() => {
+	// 	if (institutions && institutions.length > 0) {
+	// 		setOptions([...institutions.map((i: IInstitution) => i)]);
+	// 		loading = false;
+	// 	}
+	// }, [institutions]);
 
 	const handleSearchValueChange = (event: any) => setSearchValue(event.target.value);
 

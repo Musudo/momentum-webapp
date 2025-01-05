@@ -55,7 +55,7 @@ const MobileMenu = (props: TProps) => {
         ) : (
           <Avatar />
         )}
-        User account
+        Account
       </MenuItem>
       <MenuItem key="locale mobile menu" onClick={props.handleLocaleMenuOpen}>
         <IconButton size="small" color="inherit">

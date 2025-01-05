@@ -16,11 +16,11 @@ import { RootState } from "../../redux/store";
 import { NavbarTypesEnum } from "../../types/enums/ComponentPropsEnums";
 import { stringAvatar } from "../../utils/AvatarGeneratorUtil";
 import { unCapitalizeFirstLetter } from "../../utils/StringFormatterUtil";
-import DrawerMenu from "./DrawerMenu";
-import LocaleMenu from "./LocaleMenu";
-import MainMenu from "./MainMenu";
+import CustomDrawer from "./CustomDrawer";
+import DesktopMenu from "./DesktopMenu";
 import MobileMenu from "./MobileMenu";
 import ReleaseVersion from "./ReleaseVersion";
+import Locales from "./Locales";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -88,7 +88,6 @@ export function Navbar() {
     setActiveTab(newValue);
   };
   /* nav tabs highlighting */
-  console.log(user.email+sessionStorage.getItem("authToken"));
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -172,7 +171,7 @@ export function Navbar() {
           </Box>
         </Toolbar>
       </AppBar>
-      <LocaleMenu
+      <Locales
         localeMenuAnchorEl={anchorElLocaleMenu}
         handleLocaleMenuClose={handleLocaleMenuClose}
         language={i18n.language}
@@ -185,14 +184,14 @@ export function Navbar() {
         isMobileMenuOpen={isMobileMenuOpen}
         mobileMenuId={mobileMenuId}
       />
-      <MainMenu
+      <DesktopMenu
         mainMenuAnchorEl={anchorEl}
         handleMainMenuClose={handleMainMenuClose}
         isMainMenuOpen={isMainMenuOpen}
         mainMenuId={mainMenuId}
       />
       <Box component="nav">
-        <DrawerMenu
+        <CustomDrawer
           mobileOpen={mobileOpen}
           setMobileOpen={setMobileOpen}
           handleDrawerToggle={handleDrawerToggle}

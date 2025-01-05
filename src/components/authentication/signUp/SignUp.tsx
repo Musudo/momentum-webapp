@@ -19,6 +19,7 @@ import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { Snackbar, SnackbarCloseReason } from "@mui/material";
 import { useState } from "react";
+import { fetchUser } from "../../../utils/axios/configs/userAxios";
 
 const SignUp = (props: { disableCustomTheme?: boolean }) => {
   const [email, setEmail] = useState("");
@@ -99,7 +100,7 @@ const SignUp = (props: { disableCustomTheme?: boolean }) => {
   const signUpMutation = useMutation({
     mutationFn: async (data: object) => {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/users`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/register`,
         data,
         {
           headers: {
@@ -290,10 +291,9 @@ const SignUp = (props: { disableCustomTheme?: boolean }) => {
 
                 signUpMutation.mutate({
                   email: email,
-                  plainPassword: password,
+                  password: password,
                   firstName: firstName,
                   lastName: lastName,
-                  roles: ["ROLE_USER"],
                 });
               }}
             >

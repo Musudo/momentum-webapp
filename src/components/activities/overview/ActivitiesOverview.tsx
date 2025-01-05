@@ -1,297 +1,401 @@
-import React, {useRef, useState} from "react";
-import {IActivity} from "../../../types/models/IActivity";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import {
-	Box,
-	Button,
-	ButtonGroup,
-	ClickAwayListener,
-	Container,
-	FormControl,
-	FormControlLabel,
-	Grid,
-	Grow,
-	IconButton,
-	MenuItem,
-	MenuList,
-	Paper,
-	Popper,
-	Switch,
-	useMediaQuery
+  Box,
+  Button,
+  ButtonGroup,
+  ClickAwayListener,
+  Container,
+  FormControl,
+  FormControlLabel,
+  Grow,
+  IconButton,
+  MenuItem,
+  MenuList,
+  Paper,
+  Popper,
+  Switch,
+  useMediaQuery,
 } from "@mui/material";
-import {ActivitiesColumn} from "./ActivitiesColumn";
-import {IInstitution} from "../../../types/models/IInstitution";
-import {ActivitySpeedDial} from "./ActivitySpeedDial";
-import {fetchDataReactQuery} from "../../../utils/HttpRequestUtil";
+import Grid from "@mui/material/Grid2";
+import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  ActivityColumnsEnum,
+  SpeedDialDirectionsEnum,
+} from "../../../types/enums/ComponentPropsEnums";
+import { IInstitution } from "../../../types/models/IInstitution";
+import { ActivitySpeedDial } from "./ActivitySpeedDial";
+import { ArchivedActivitiesYearPicker } from "./ArchivedActivitiesYearPicker";
 import InstitutionSearchBar from "./InstitutionSearchBar";
+import { useQuery } from "@tanstack/react-query";
+import { fetchActivity } from "../../../utils/axios/configs/activityAxios";
 import ArchivedActivityCard from "./ArchivedActivityCard";
-import FilterListIcon from '@mui/icons-material/FilterList';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import LoadingComponent from "../../LoadingComponent";
+import { IActivity } from "../../../types/models/IActivity";
 import ActivitiesSwipeableMobile from "./ActivitiesSwipeableMobile";
-import {useTranslation} from "react-i18next";
-import {ArchivedActivitiesYearPicker} from "./ArchivedActivitiesYearPicker";
-import {useQuery} from "@tanstack/react-query";
-import {ActivityColumnsEnum, SpeedDialDirectionsEnum} from "../../../types/enums/ComponentPropsEnums";
+import ActivitiesColumn from "./ActivitiesColumn";
 
-export default function ActivitiesOverview() {
-	const [institution, setInstitution] = useState<IInstitution | null>(null);
-	const [isArchived, setIsArchived] = useState(false);
-	const isMobile = useMediaQuery('(max-width: 600px)');
-	const {t} = useTranslation();
+const ActivitiesOverview = () => {
+  const [institution, setInstitution] = useState<IInstitution | null>(null);
+  const [isArchived, setIsArchived] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 600px)");
+  const { t } = useTranslation();
+  console.log("===>", sessionStorage.getItem("authToken"));
 
-	/* archive button configuration >> */
-	const [archivedYear, setArchivedYear] = useState<Date | null>(new Date());
-	const handleArchivedYearChange = (newValue: Date | null) => setArchivedYear(newValue);
-	/* << archive button configuration */
+  const {
+    data: activities,
+    error,
+    status,
+  } = useQuery({
+    queryKey: ["activities"],
+    queryFn: async () => {
+      const res = await fetchActivity.get(
+        "?activityCreator.email=pcrist@stark.org"
+      );
+      return res.data.member;
+    },
+  });
 
-	/* sort button configuration >> */
-	const options = ['Earliest first', 'Latest first'];
-	const [open, setOpen] = useState(false);
-	const anchorRef = useRef<HTMLDivElement>(null);
-	const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  console.log("===>>>", activities);
 
-	const handleSortButtonClick = (event: any, index: number) => {
-		if (selectedIndex !== index) {
-			setSelectedIndex(index);
-			setOpen(false);
-			sortActivitiesByDate();
-		}
-	};
+  /* archive button */
+  const [archivedYear, setArchivedYear] = useState<Date | null>(new Date());
+  const handleArchivedYearChange = (newValue: Date | null) =>
+    setArchivedYear(newValue);
+  /* archive button */
 
-	const handleSortButtonOpen = () => setOpen((prevOpen: boolean) => !prevOpen);
+  /* sort button */
+  const options = ["Earliest first", "Latest first"];
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const handleSortButtonClick = (event: unknown, index: number) => {
+    if (selectedIndex !== index) {
+      setSelectedIndex(index);
+      setOpen(false);
+      //   sortActivitiesByDate();
+    }
+  };
+  const handleSortButtonOpen = () => setOpen((prevOpen: boolean) => !prevOpen);
+  const handleSortButtonClose = (event: unknown) => {
+    // if (anchorRef.current && anchorRef.current.contains(event.target)) return;
+    setOpen(false);
+  };
+  const handleSortButtonClickMobile = (event: unknown) => {
+    setSelectedIndex(selectedIndex === 1 ? 0 : 1);
+    // sortActivitiesByDate();
+  };
+  /* sort button */
 
-	const handleSortButtonClose = (event: any) => {
-		if (anchorRef.current && anchorRef.current.contains(event.target)) return;
+  //   const { data: activitiesToday, status: statusOfActivitiesToday } = useQuery<
+  //     IActivity[]
+  //   >(["activitiesToday", institution], () => {
+  //     if (institution) {
+  //       return fetchDataReactQuery(
+  //         `/activities/today/institution-info/${institution.guid}`
+  //       );
+  //     } else {
+  //       return fetchDataReactQuery("/activities/today");
+  //     }
+  //   });
 
-		setOpen(false);
-	};
+  //   const {
+  //     data: activitiesNextSevenDays,
+  //     status: statusOfActivitiesNextSevenDays,
+  //   } = useQuery<IActivity[]>(["activitiesNextSevenDays", institution], () => {
+  //     if (institution) {
+  //       return fetchDataReactQuery(
+  //         `/activities/next-seven-days/institution-info/${institution.guid}`
+  //       );
+  //     } else {
+  //       return fetchDataReactQuery("/activities/next-seven-days");
+  //     }
+  //   });
 
-	const handleSortButtonClickMobile = (event: any) => {
-		setSelectedIndex(selectedIndex === 1 ? 0 : 1);
-		sortActivitiesByDate();
-	}
-	/* << sort button configuration */
+  //   const {
+  //     data: activitiesNextThirtyDays,
+  //     status: statusOfActivitiesNextThirtyDays,
+  //   } = useQuery<IActivity[]>(["activitiesNextThirtyDays", institution], () => {
+  //     if (institution) {
+  //       return fetchDataReactQuery(
+  //         `/activities/next-thirty-days/institution-info/${institution.guid}`
+  //       );
+  //     } else {
+  //       return fetchDataReactQuery("/activities/next-thirty-days");
+  //     }
+  //   });
 
-	const {data: activitiesToday, status: statusOfActivitiesToday} = useQuery<IActivity[]>(
-		['activitiesToday', institution],
-		() => {
-			if (institution) {
-				return fetchDataReactQuery(`/activities/today/institution-info/${institution.guid}`);
-			} else {
-				return fetchDataReactQuery('/activities/today');
-			}
-		}
-	);
+  //   const { data: expiredActivities, status: statusOfExpiredActivities } =
+  //     useQuery<IActivity[]>(["expiredActivities", archivedYear], () => {
+  //       let year = `${archivedYear?.getFullYear().toString()}-01-01 00:00`;
+  //       return fetchDataReactQuery(`/activities/expired/${year}`);
+  //     });
 
-	const {data: activitiesNextSevenDays, status: statusOfActivitiesNextSevenDays} = useQuery<IActivity[]>(
-		['activitiesNextSevenDays', institution],
-		() => {
-			if (institution) {
-				return fetchDataReactQuery(`/activities/next-seven-days/institution-info/${institution.guid}`);
-			} else {
-				return fetchDataReactQuery('/activities/next-seven-days');
-			}
-		}
-	);
+  /* const sortActivitiesByDate = () => {
+    if (!isArchived) {
+      activitiesToday && activitiesToday.sort().reverse();
+      activitiesNextSevenDays && activitiesNextSevenDays.sort().reverse();
+      activitiesNextThirtyDays && activitiesNextThirtyDays.sort().reverse();
+    } else {
+      expiredActivities && expiredActivities.sort().reverse();
+    }
+  }; */
 
-	const {data: activitiesNextThirtyDays, status: statusOfActivitiesNextThirtyDays} = useQuery<IActivity[]>(
-		['activitiesNextThirtyDays', institution],
-		() => {
-			if (institution) {
-				return fetchDataReactQuery(`/activities/next-thirty-days/institution-info/${institution.guid}`);
-			} else {
-				return fetchDataReactQuery('/activities/next-thirty-days');
-			}
-		}
-	);
+  const handleArchivedActivitiesSwitchChange = () =>
+    setIsArchived((current) => !current);
 
-	const {data: expiredActivities, status: statusOfExpiredActivities} = useQuery<IActivity[]>(
-		['expiredActivities', archivedYear],
-		() => {
-			let year = `${archivedYear?.getFullYear().toString()}-01-01 00:00`;
-			return fetchDataReactQuery(`/activities/expired/${year}`)
-		}
-	);
+  //   const loadingStatuses = [
+  //     statusOfActivitiesToday,
+  //     statusOfExpiredActivities,
+  //     statusOfActivitiesNextSevenDays,
+  //     statusOfActivitiesNextThirtyDays,
+  //   ];
 
-	const sortActivitiesByDate = () => {
-		if (!isArchived) {
-			activitiesToday && activitiesToday.sort().reverse();
-			activitiesNextSevenDays && activitiesNextSevenDays.sort().reverse();
-			activitiesNextThirtyDays && activitiesNextThirtyDays.sort().reverse();
-		} else {
-			expiredActivities && expiredActivities.sort().reverse();
-		}
-	}
+  //   if (loadingStatuses.some((status) => status === "loading"))
+  // return <LoadingComponent />;
 
-	const handleArchivedActivitiesSwitchChange = () => setIsArchived(current => !current);
+  return (
+    <Container
+      sx={{
+        flexGrow: 1,
+        overflow: "auto",
+        py: 2,
+      }}
+      maxWidth="lg"
+    >
+      {/*show page functionality and activities for desktop view*/}
+      {!isMobile ? (
+        <>
+          <Grid
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "1em",
+            }}
+          >
+            <Box display="flex" flexDirection="row" width="90vh">
+              <FormControl sx={{ width: 250 }}>
+                <InstitutionSearchBar
+                  setInstitution={setInstitution}
+                  institution={institution}
+                  setContacts={null}
+                  setValue={null}
+                />
+              </FormControl>
+              <FormControl
+                component="fieldset"
+                variant="standard"
+                sx={{ ml: 2 }}
+              >
+                <FormControlLabel
+                  sx={{ width: 240 }}
+                  control={
+                    <Switch
+                      checked={isArchived}
+                      name="archive"
+                      onChange={handleArchivedActivitiesSwitchChange}
+                    />
+                  }
+                  label={t("Activities overview page.Show archived activities")}
+                />
+              </FormControl>
+              <Box sx={{ width: 300, ml: 1 }}>
+                <ButtonGroup
+                  variant="text"
+                  ref={anchorRef}
+                  aria-label="sort button"
+                >
+                  <Button
+                    aria-controls="button-menu"
+                    aria-expanded="true"
+                    aria-label="sort button"
+                    aria-haspopup="menu"
+                    startIcon={<FilterListIcon />}
+                    endIcon={<ArrowDropDownIcon />}
+                    onClick={handleSortButtonOpen}
+                  >
+                    {t(`Activities overview page.${options[selectedIndex]}`)}
+                  </Button>
+                </ButtonGroup>
+                <Popper
+                  sx={{ zIndex: 1 }}
+                  open={open}
+                  anchorEl={anchorRef.current}
+                  role={undefined}
+                  transition
+                  disablePortal
+                >
+                  {({ TransitionProps, placement }) => (
+                    <Grow
+                      {...TransitionProps}
+                      style={{
+                        transformOrigin:
+                          placement === "bottom"
+                            ? "center top"
+                            : "center bottom",
+                      }}
+                    >
+                      <Paper>
+                        <ClickAwayListener onClickAway={handleSortButtonClose}>
+                          <MenuList id="button-menu" autoFocusItem>
+                            {options.map((option: string, index: number) => (
+                              <MenuItem
+                                key={option}
+                                selected={index === selectedIndex}
+                                onClick={(event) =>
+                                  handleSortButtonClick(event, index)
+                                }
+                              >
+                                {t(`Activities overview page.${option}`)}
+                              </MenuItem>
+                            ))}
+                          </MenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </Grow>
+                  )}
+                </Popper>
+              </Box>
+            </Box>
+            <Box mt={7}>
+              <ActivitySpeedDial direction={SpeedDialDirectionsEnum.Left} />
+            </Box>
+          </Grid>
+          <Paper elevation={0} sx={{ py: 2, px: 2, bgcolor: "#eaeaee" }}>
+            {isArchived ? (
+              <Grid container spacing={2}>
+                <Grid>
+                  <ArchivedActivitiesYearPicker
+                    archivedYear={archivedYear}
+                    handleArchivedYearChange={handleArchivedYearChange}
+                  />
+                </Grid>
+                <Grid display="flex" flexWrap="wrap" width="100%" gap={2}>
+                  {activities &&
+                    activities.map((activity: IActivity) => (
+                      <ArchivedActivityCard activity={activity} />
+                    ))}
+                </Grid>
+              </Grid>
+            ) : (
+              <Grid
+                container
+                display="flex"
+                justifyContent="space-around"
+                spacing={{ xs: 1, sm: 2, md: 3 }}
+              >
+                {
+                  <ActivitiesColumn
+                    activities={activities ?? []}
+                    columnName={
+                      t(
+                        "Activities overview page.Today"
+                      ) as ActivityColumnsEnum.Today
+                    }
+                  />
+                }
+                {
+                  <ActivitiesColumn
+                    activities={activities ?? []}
+                    columnName={
+                      t(
+                        "Activities overview page.Next 7 days"
+                      ) as ActivityColumnsEnum.Next_7_Days
+                    }
+                  />
+                }
+                {
+                  <ActivitiesColumn
+                    activities={activities ?? []}
+                    columnName={
+                      t(
+                        "Activities overview page.Next 30 days"
+                      ) as ActivityColumnsEnum.Next_30_Days
+                    }
+                  />
+                }
+              </Grid>
+            )}
+          </Paper>
+        </>
+      ) : (
+        <>
+          {/*show page functionality and activities for mobile view*/}
+          <Box display="flex" flexDirection="row" mb={2}>
+            <FormControl fullWidth>
+              <InstitutionSearchBar
+                setInstitution={setInstitution}
+                institution={institution}
+                setContacts={null}
+                setValue={null}
+              />
+            </FormControl>
+            <FormControl component="fieldset" variant="standard" sx={{ ml: 2 }}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isArchived}
+                    name="archive"
+                    onChange={handleArchivedActivitiesSwitchChange}
+                  />
+                }
+                label=""
+              />
+            </FormControl>
+            <IconButton
+              aria-label="sort"
+              color="primary"
+              onClick={(event) => handleSortButtonClickMobile(event)}
+            >
+              <FilterListIcon />
+            </IconButton>
+          </Box>
+          {isArchived ? (
+            <Paper elevation={0} sx={{ py: 2, px: 2, bgcolor: "#eaeaee" }}>
+              <Grid container spacing={2}>
+                <Grid>
+                  <ArchivedActivitiesYearPicker
+                    archivedYear={archivedYear}
+                    handleArchivedYearChange={handleArchivedYearChange}
+                  />
+                </Grid>
+                <Grid display="flex" flexWrap="wrap" width="100%" gap={1}>
+                  {activities &&
+                    activities.map((activity: IActivity) => (
+                      <ArchivedActivityCard activity={activity} />
+                    ))}
+                </Grid>
+              </Grid>
+            </Paper>
+          ) : (
+            <ActivitiesSwipeableMobile
+              activitiesToday={activities ?? []}
+              activitiesNextSevenDays={activities ?? []}
+              activitiesNextThirtyDays={activities ?? []}
+            />
+          )}
+        </>
+      )}
 
-	const loadingStatuses = [
-		statusOfActivitiesToday,
-		statusOfExpiredActivities,
-		statusOfActivitiesNextSevenDays,
-		statusOfActivitiesNextThirtyDays
-	];
+      {/*show speed dial for mobile view*/}
+      {isMobile && (
+        <Grid>
+          <Box
+            position="fixed"
+            bottom={0}
+            left={0}
+            width="100%"
+            p={2}
+            // bgcolor="primary.main"
+            // color="primary.contrastText"
+            textAlign="center"
+          >
+            <ActivitySpeedDial direction={SpeedDialDirectionsEnum.Up} />
+          </Box>
+        </Grid>
+      )}
+    </Container>
+  );
+};
 
-	if (loadingStatuses.some(status => status === 'loading')) return <LoadingComponent/>;
-
-	return (
-		<Container sx={{
-			flexGrow: 1,
-			overflow: 'auto',
-			py: 2
-		}} maxWidth='lg'>
-			{/*show page functionality and activities for desktop view*/}
-			{!isMobile ? (
-				<>
-					<Grid item sx={{display: 'flex', justifyContent: 'space-between', marginBottom: "1em"}}>
-						<Box display="flex" flexDirection="row" width="90vh">
-							<FormControl sx={{width: 250}}>
-								<InstitutionSearchBar setInstitution={setInstitution} institution={institution}
-													  setContacts={null} setValue={null}/>
-							</FormControl>
-							<FormControl component="fieldset" variant="standard" sx={{ml: 2}}>
-								<FormControlLabel
-									sx={{width: 240}}
-									control={<Switch checked={isArchived} name="archive"
-													 onChange={handleArchivedActivitiesSwitchChange}/>}
-									label={t('Activities overview page.Show archived activities')}/>
-							</FormControl>
-							<Box sx={{width: 300, ml: 1}}>
-								<ButtonGroup variant="text" ref={anchorRef} aria-label="sort button">
-									<Button aria-controls='button-menu'
-											aria-expanded='true'
-											aria-label="sort button"
-											aria-haspopup="menu"
-											startIcon={<FilterListIcon/>}
-											endIcon={<ArrowDropDownIcon/>}
-											onClick={handleSortButtonOpen}>
-										{t(`Activities overview page.${options[selectedIndex]}`)}
-									</Button>
-								</ButtonGroup>
-								<Popper
-									sx={{zIndex: 1}}
-									open={open}
-									anchorEl={anchorRef.current}
-									role={undefined}
-									transition
-									disablePortal>
-									{({TransitionProps, placement}) => (
-										<Grow
-											{...TransitionProps}
-											style={{
-												transformOrigin:
-													placement === 'bottom' ? 'center top' : 'center bottom',
-											}}>
-											<Paper>
-												<ClickAwayListener onClickAway={handleSortButtonClose}>
-													<MenuList id="button-menu" autoFocusItem>
-														{options.map((option: string, index: number) => (
-															<MenuItem
-																key={option}
-																selected={index === selectedIndex}
-																onClick={(event) => handleSortButtonClick(event, index)}>
-																{t(`Activities overview page.${option}`)}
-															</MenuItem>
-														))}
-													</MenuList>
-												</ClickAwayListener>
-											</Paper>
-										</Grow>
-									)}
-								</Popper>
-							</Box>
-						</Box>
-						<Box mt={7}>
-							<ActivitySpeedDial direction={SpeedDialDirectionsEnum.Left}/>
-						</Box>
-					</Grid>
-					<Paper elevation={0} sx={{py: 2, px: 2, bgcolor: "#eaeaee"}}>
-						{isArchived ? (
-							<Grid container spacing={2}>
-								<Grid item xs={12}>
-									<ArchivedActivitiesYearPicker archivedYear={archivedYear}
-																  handleArchivedYearChange={handleArchivedYearChange}/>
-								</Grid>
-								<Grid item xs={12} display="flex" flexWrap="wrap" width="100%" gap={2}>
-									{expiredActivities && expiredActivities.map(activity =>
-										<ArchivedActivityCard activity={activity}/>
-									)}
-								</Grid>
-							</Grid>
-						) : (
-							<Grid container
-								  display="flex"
-								  justifyContent="space-around"
-								  spacing={{xs: 1, sm: 2, md: 3}}>
-								{<ActivitiesColumn activities={activitiesToday ?? []}
-												   columnName={t('Activities overview page.Today') as ActivityColumnsEnum.Today}/>}
-								{<ActivitiesColumn activities={activitiesNextSevenDays ?? []}
-												   columnName={t('Activities overview page.Next 7 days') as ActivityColumnsEnum.Next_7_Days}/>}
-								{<ActivitiesColumn activities={activitiesNextThirtyDays ?? []}
-												   columnName={t('Activities overview page.Next 30 days') as ActivityColumnsEnum.Next_30_Days}/>}
-							</Grid>
-						)}
-					</Paper>
-				</>
-
-			) : (
-				<>
-					{/*show page functionality and activities for mobile view*/}
-					<Box display="flex" flexDirection="row" mb={2}>
-						<FormControl fullWidth>
-							<InstitutionSearchBar setInstitution={setInstitution} institution={institution}
-												  setContacts={null} setValue={null}/>
-						</FormControl>
-						<FormControl component="fieldset" variant="standard" sx={{ml: 2}}>
-							<FormControlLabel
-								control={<Switch checked={isArchived} name="archive"
-												 onChange={handleArchivedActivitiesSwitchChange}/>}
-								label=""/>
-						</FormControl>
-						<IconButton aria-label="sort" color="primary"
-									onClick={(event) => handleSortButtonClickMobile(event)}>
-							<FilterListIcon/>
-						</IconButton>
-					</Box>
-					{isArchived ? (
-						<Paper elevation={0} sx={{py: 2, px: 2, bgcolor: "#eaeaee"}}>
-							<Grid container spacing={2}>
-								<Grid item xs={12}>
-									<ArchivedActivitiesYearPicker archivedYear={archivedYear}
-																  handleArchivedYearChange={handleArchivedYearChange}/>
-								</Grid>
-								<Grid item display="flex" flexWrap="wrap" width="100%" gap={1}>
-									{expiredActivities && expiredActivities.map(activity =>
-										<ArchivedActivityCard activity={activity}/>)}
-								</Grid>
-							</Grid>
-						</Paper>
-					) : (
-						<ActivitiesSwipeableMobile
-							activitiesToday={activitiesToday ?? []}
-							activitiesNextSevenDays={activitiesNextSevenDays ?? []}
-							activitiesNextThirtyDays={activitiesNextThirtyDays ?? []}/>
-					)}
-				</>
-			)}
-
-			{/*show speed dial for mobile view*/}
-			{isMobile && (
-				<Grid item xs={12}>
-					<Box
-						position="fixed"
-						bottom={0}
-						left={0}
-						width="100%"
-						p={2}
-						// bgcolor="primary.main"
-						// color="primary.contrastText"
-						textAlign="center"
-					>
-						<ActivitySpeedDial direction={SpeedDialDirectionsEnum.Up}/>
-					</Box>
-				</Grid>
-			)}
-		</Container>
-	);
-}
+export default ActivitiesOverview;

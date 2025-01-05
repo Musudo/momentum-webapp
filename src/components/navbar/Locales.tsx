@@ -11,7 +11,7 @@ type TProps = {
   localeMenuId: string;
 };
 
-const LocaleMenu = (props: TProps) => {
+const Locales = (props: TProps) => {
   const { i18n } = useTranslation();
 
   const handleLocaleMenuChange = (event: React.MouseEvent<HTMLElement>) => {
@@ -87,4 +87,4 @@ const LocaleMenu = (props: TProps) => {
   );
 };
 
-export default LocaleMenu;
+export default Locales;

@@ -1,14 +1,14 @@
 import { IActivity } from "../../../types/models/IActivity";
 import { Box, Typography } from "@mui/material";
-import { ActivityCard } from "./ActivityCard";
 import { ActivityColumnsEnum } from "../../../types/enums/ComponentPropsEnums";
+import ActivityCard from "./ActivityCard";
 
-interface Props {
+type TProps = {
   activities: IActivity[];
   columnName: ActivityColumnsEnum | null;
-}
+};
 
-export function ActivitiesColumn({ activities, columnName }: Props) {
+const ActivitiesColumn = ({ activities, columnName }: TProps) => {
   return (
     <Box flexDirection="column">
       {columnName && (
@@ -18,7 +18,7 @@ export function ActivitiesColumn({ activities, columnName }: Props) {
       )}
       <Box
         overflow="auto"
-        height="74vh"
+        height="70vh"
         flexDirection="column"
         display="flex"
         sx={{
@@ -45,4 +45,6 @@ export function ActivitiesColumn({ activities, columnName }: Props) {
       </Box>
     </Box>
   );
-}
+};
+
+export default ActivitiesColumn;
