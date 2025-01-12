@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import routes, { RouteConfig } from "./routes";
+import routes, { TRouteConfig } from "./routes";
 import AppLayout from "../AppLayout";
 
-const renderRoutes = (routeConfigs: RouteConfig[]) =>
+const renderRoutes = (routeConfigs: TRouteConfig[]) =>
   routeConfigs.map(({ path, component: Component, children, guard: Guard }) => {
     const element = (
       <Suspense fallback={<div>Loading...</div>}>
@@ -12,24 +12,26 @@ const renderRoutes = (routeConfigs: RouteConfig[]) =>
     );
 
     return (
-      <Route
-        key={path}
-        path={path}
-        element={Guard ? <Guard>{element}</Guard> : element}
-      >
-        {children && renderRoutes(children)}
+      <Route element={<AppLayout />}>
+        <Route
+          key={path}
+          path={path}
+          element={Guard ? <Guard>{element}</Guard> : element}
+        >
+          {children && renderRoutes(children)}
+        </Route>
       </Route>
     );
   });
 
-const AppRoutes = () => {
+const CreateRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<AppLayout />}>{renderRoutes(routes)}</Route>
+        <Route>{renderRoutes(routes)}</Route>
       </Routes>
     </BrowserRouter>
   );
 };
 
-export default AppRoutes;
+export default CreateRoutes;

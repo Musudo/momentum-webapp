@@ -49,7 +49,8 @@ const ActivitySpeedDial = ({ direction }: TProps) => {
               tooltipTitle={
                 !isMobile ? t(`Common.Activity speed dial.${action.name}`) : ""
               }
-              onClick={() => navigate(`/activities/new/${action.name}`)}
+              onClick={() => navigate(`/activities/create`)}
+              // onClick={() => navigate(`/activities/new/${action.name}`)}
             />
           ))}
         </SpeedDial>

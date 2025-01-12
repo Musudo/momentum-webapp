@@ -1,8 +1,8 @@
 import Cookies from "js-cookie";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import AppLayout from "./AppLayout";
 import "./i18n";
-import AppRoutes from "./routes/appRoutes";
 
 const App = () => {
   const { i18n } = useTranslation();
@@ -11,11 +11,7 @@ const App = () => {
     Cookies.set("lang", i18n.language, { expires: 7 });
   }, [i18n.language]);
 
-  return (
-    <>
-      <AppRoutes />
-    </>
-  );
+  return <AppLayout />;
 };
 
 export default App;

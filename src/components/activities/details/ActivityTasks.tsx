@@ -12,6 +12,7 @@ import SendIcon from '@mui/icons-material/Send';
 import {debounce} from 'lodash';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {ITask} from '../../../types/models/ITask';
+import { fetchTask } from '../../../utils/axios/configs/taskAxios';
 
 interface Props {
 	activityId: number;
@@ -33,6 +34,16 @@ export function ActivityTasks({activityId, activityGuid}: Props) {
 		['tasks'],
 		() => fetchDataReactQuery(`/tasks/activities/${activityGuid}`)
 	);
+
+	// const {
+	// 	data: tasks,
+	//   } = useQuery({
+	// 	queryKey: ["activity"],
+	// 	queryFn: async () => {
+	// 	  const res = await fetchTask.get(`/${id}`);
+	// 	  return res.data;
+	// 	},
+	//   });
 
 	const createTaskMutation = useMutation(
 		{

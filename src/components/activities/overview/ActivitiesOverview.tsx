@@ -25,7 +25,6 @@ import {
   SpeedDialDirectionsEnum,
 } from "../../../types/enums/ComponentPropsEnums";
 import { IInstitution } from "../../../types/models/IInstitution";
-import { ActivitySpeedDial } from "./ActivitySpeedDial";
 import { ArchivedActivitiesYearPicker } from "./ArchivedActivitiesYearPicker";
 import InstitutionSearchBar from "./InstitutionSearchBar";
 import { useQuery } from "@tanstack/react-query";
@@ -34,12 +33,17 @@ import ArchivedActivityCard from "./ArchivedActivityCard";
 import { IActivity } from "../../../types/models/IActivity";
 import ActivitiesSwipeableMobile from "./ActivitiesSwipeableMobile";
 import ActivitiesColumn from "./ActivitiesColumn";
+import ActivitySpeedDial from "./ActivitySpeedDial";
+import { Outlet } from "react-router-dom";
+import { RootState } from "../../../redux/store";
+import { useSelector } from "react-redux";
 
 const ActivitiesOverview = () => {
   const [institution, setInstitution] = useState<IInstitution | null>(null);
   const [isArchived, setIsArchived] = useState(false);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const { t } = useTranslation();
+  const user = useSelector((state: RootState) => state.user);
   console.log("===>", sessionStorage.getItem("authToken"));
 
   const {
@@ -50,13 +54,13 @@ const ActivitiesOverview = () => {
     queryKey: ["activities"],
     queryFn: async () => {
       const res = await fetchActivity.get(
-        "?activityCreator.email=pcrist@stark.org"
+        `?activityCreator.email=${user.email}`
       );
       return res.data.member;
     },
   });
 
-  console.log("===>>>", activities);
+  console.log("===>>", activities);
 
   /* archive button */
   const [archivedYear, setArchivedYear] = useState<Date | null>(new Date());
@@ -163,6 +167,7 @@ const ActivitiesOverview = () => {
       }}
       maxWidth="lg"
     >
+      <Outlet />
       {/*show page functionality and activities for desktop view*/}
       {!isMobile ? (
         <>

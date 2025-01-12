@@ -6,7 +6,7 @@ import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { Box, CardActionArea, Paper, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { ActivityTypesEnum } from "../../../types/enums/ActivityTypesEnum";
 import { IActivity } from "../../../types/models/IActivity";
 
@@ -29,7 +29,9 @@ const ActivityCard = ({ activity }: TProps) => {
   };
 
   return (
-    <CardActionArea onClick={() => navigate(`/activities/${activity.id}`)}>
+    <>
+            <Link to={`/activities/${activity.id}`}>Nav</Link>
+            <CardActionArea onClick={() => navigate(`/activities/${activity.id}`)}>
       <Paper
         sx={{
           height: 140,
@@ -66,6 +68,8 @@ const ActivityCard = ({ activity }: TProps) => {
         </Box>
       </Paper>
     </CardActionArea>
+    </>
+    
   );
 };
 
