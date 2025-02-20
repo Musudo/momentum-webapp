@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetUser } from "../../redux/slice/userSlice";
 import { RootState } from "../../redux/store";
 import { stringAvatar } from "../../utils/AvatarGeneratorUtil";
+import {AuthProvider} from "../../utils/auth/authProvider.ts";
 
 type TProps = {
   mobileMoreAnchorEl: HTMLElement | null;
@@ -64,13 +65,12 @@ const MobileMenu = (props: TProps) => {
         {t("Common.Active language")}
       </MenuItem>
       <Divider />
-      {user && user.roles.includes("ROLE_USER") ? (
+      {AuthProvider.isAuthenticated ? (
         <MenuItem
           key="signOut"
           onClick={() => {
-            sessionStorage.removeItem("authToken");
             dispatch(resetUser());
-            window.location.href = "/signIn";
+            window.location.href = AuthProvider.signOut();
           }}
         >
           <ListItemIcon>
@@ -82,7 +82,7 @@ const MobileMenu = (props: TProps) => {
         <MenuItem
           key="signIn"
           onClick={() => {
-            window.location.href = "/signIn";
+            window.location.href = `${window.location.origin}${import.meta.env.VITE_AUTH_SIGNIN_URL}`;
           }}
         >
           <ListItemIcon>

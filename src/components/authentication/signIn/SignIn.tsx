@@ -81,11 +81,11 @@ const SignIn = (props: { disableCustomTheme?: boolean }) => {
   const signInMutation = useMutation({
     mutationFn: async (data: object) => {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
         data,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
           },
         }
       );
@@ -223,7 +223,7 @@ const SignIn = (props: { disableCustomTheme?: boolean }) => {
                 if (hasErrors) return;
 
                 signInMutation.mutate({
-                  email: email,
+                  username: email,
                   password: password,
                 });
               }}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthProvider } from "../utils/authProvider";
+import { AuthProvider } from "../utils/auth/authProvider.ts";
 // import { Authentication } from '@/helpers/auth';
 
 export const useAuth = () => {

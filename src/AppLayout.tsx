@@ -9,7 +9,7 @@ const AppLayout = () => {
     <>
       <Navbar />
       <main>
-        <ErrorBoundary fallback={<div>Something went wrong!</div>}>
+        <ErrorBoundary fallback={<div>Something went wrong! test</div>}>
           <Outlet />
         </ErrorBoundary>
       </main>

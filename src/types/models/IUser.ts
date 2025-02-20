@@ -1,8 +1,8 @@
-import { IModel } from "./IModel";
-import { IActivity } from "./IActivity";
-import { IInstitution } from "./IInstitution";
+import {IActivity} from "./IActivity";
+import {IInstitution} from "./IInstitution";
 
-export interface IUser extends IModel {
+export interface IUser {
+  id: string;
   email: string;
   firstName: string;
   lastName: string;

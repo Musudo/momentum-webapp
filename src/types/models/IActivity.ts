@@ -1,13 +1,11 @@
-import { IContact } from "./IContact";
-import { IExternalParticipant } from "./IExternalParticipant";
-import { IInstitution } from "./IInstitution";
-import { IModel } from "./IModel";
-import { IReview } from "./IReview";
-import { ITag } from "./ITag";
-import { ITask } from "./ITask";
-import { IVoiceMemo } from "./IVoiceMemo";
+import {IExternalParticipant} from "./IExternalParticipant";
+import {IReview} from "./IReview";
+import {ITag} from "./ITag";
+import {ITask} from "./ITask";
+import {IVoiceMemo} from "./IVoiceMemo";
 
-export interface IActivity extends IModel {
+export interface IActivity {
+  id: string;
   subject: string;
   tags: ITag[];
   externalNote?: string;
@@ -17,10 +15,7 @@ export interface IActivity extends IModel {
   endTime: string;
   voiceMemo?: IVoiceMemo | null;
   review?: IReview | null;
-  user: number;
-  contacts: IContact[];
   tasks?: ITask[];
   externalParticipants?: IExternalParticipant[];
-  institution: IInstitution | null;
   emailSentAt: Date | null;
 }

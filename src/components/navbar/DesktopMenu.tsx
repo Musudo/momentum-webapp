@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { resetUser } from "../../redux/slice/userSlice";
 import { RootState } from "../../redux/store";
+import {AuthProvider} from "../../utils/auth/authProvider.ts";
 
 type TProps = {
   mainMenuAnchorEl: HTMLElement | null;
@@ -61,13 +62,12 @@ const DesktopMenu = (props: TProps) => {
         },
       }}
     >
-      {user && user.roles.includes("ROLE_USER") ? (
+      {AuthProvider.isAuthenticated && user.roles.includes("ROLE_USER") ? (
         <MenuItem
           key="signOut"
           onClick={() => {
-            sessionStorage.removeItem("authToken");
             dispatch(resetUser());
-            window.location.href = "/signIn";
+            window.location.href = AuthProvider.signOut();
           }}
         >
           <ListItemIcon>
@@ -79,7 +79,7 @@ const DesktopMenu = (props: TProps) => {
         <MenuItem
           key="login"
           onClick={() => {
-            window.location.href = "/signIn";
+            window.location.href = `${window.location.origin}${import.meta.env.VITE_AUTH_SIGNIN_URL}`;
           }}
         >
           <ListItemIcon>

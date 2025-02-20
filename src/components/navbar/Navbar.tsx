@@ -21,7 +21,7 @@ import DesktopMenu from "./DesktopMenu";
 import MobileMenu from "./MobileMenu";
 import ReleaseVersion from "./ReleaseVersion";
 import Locales from "./Locales";
-import '../../i18n'; // i18n instance for translations
+import '../../i18n';
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);

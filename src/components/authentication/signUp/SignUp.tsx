@@ -19,7 +19,6 @@ import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { Snackbar, SnackbarCloseReason } from "@mui/material";
 import { useState } from "react";
-import { fetchUser } from "../../../utils/axios/configs/userAxios";
 
 const SignUp = (props: { disableCustomTheme?: boolean }) => {
   const [email, setEmail] = useState("");
@@ -100,11 +99,11 @@ const SignUp = (props: { disableCustomTheme?: boolean }) => {
   const signUpMutation = useMutation({
     mutationFn: async (data: object) => {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/register`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/register`,
         data,
         {
           headers: {
-            "Content-Type": "application/ld+json",
+            "Content-Type": "application/json"
           },
         }
       );
@@ -290,7 +289,7 @@ const SignUp = (props: { disableCustomTheme?: boolean }) => {
                 if (hasErrors) return;
 
                 signUpMutation.mutate({
-                  email: email,
+                  username: email,
                   password: password,
                   firstName: firstName,
                   lastName: lastName,

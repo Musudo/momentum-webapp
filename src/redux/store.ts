@@ -1,38 +1,38 @@
-import { Middleware, configureStore } from "@reduxjs/toolkit";
-import languageSlice, { TLanguage } from "./slice/languageSlice.ts";
-import userSlice, { TUser } from "./slice/userSlice.ts";
+import {Middleware, configureStore} from "@reduxjs/toolkit";
+import languageSlice, {TLanguage} from "./slice/languageSlice.ts";
+import userSlice, {TUser} from "./slice/userSlice.ts";
 
 export type RootState = {
-  language: TLanguage;
-  user: TUser;
+    language: TLanguage;
+    user: TUser;
 };
 
 type TStorageProps = {
-  getState: () => RootState;
+    getState: () => RootState;
 };
 
-const localStorageMiddleware: Middleware = ({ getState }: TStorageProps) => {
-  return (next) => (action) => {
-    const result = next(action);
-    sessionStorage.setItem("applicationState", JSON.stringify(getState()));
-    return result;
-  };
+const localStorageMiddleware: Middleware = ({getState}: TStorageProps) => {
+    return (next) => (action) => {
+        const result = next(action);
+        sessionStorage.setItem("applicationState", JSON.stringify(getState()));
+        return result;
+    };
 };
 
 const reHydrateStore = (): RootState | string | undefined => {
-  const storedValue = sessionStorage.getItem("applicationState");
-  if (storedValue) {
-    return JSON.parse(storedValue || "");
-  }
+    const storedValue = sessionStorage.getItem("applicationState");
+    if (storedValue) {
+        return JSON.parse(storedValue || "");
+    }
 };
 
 export const store = configureStore({
-  reducer: {
-    language: languageSlice,
-    user: userSlice,
-  },
-  preloadedState: reHydrateStore(),
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(localStorageMiddleware),
-  // devTools: import.meta.env.MODE !== "production",
+    reducer: {
+        language: languageSlice,
+        user: userSlice,
+    },
+    preloadedState: reHydrateStore(),
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(localStorageMiddleware),
+    // devTools: import.meta.env.MODE !== "production",
 });
