@@ -18,10 +18,10 @@ const Router = () => {
             <Suspense fallback={<div>Loading...</div>}>
                 <Routes>
                     <Route element={<AppLayout/>}>
-                        <Route path="/" element={<Dashboard/>}/>
+                        <Route path="/" element={<SignIn/>}/>
                         <Route path="/signIn" element={<SignIn/>}/>
                         <Route path="/signUp" element={<SignUP/>}/>
-                        {/* Wrap the protected routes */}
+                        {/* Wrap protected routes */}
                         <Route
                             path="/dashboard"
                             element={

@@ -1,5 +1,5 @@
 import {useForm} from "react-hook-form";
-import {Button, Container, Paper, Typography} from "@mui/material";
+import {Button, Container, Paper, Snackbar, Typography} from "@mui/material";
 import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {IContact} from "../../../types/models/IContact.ts";
@@ -7,9 +7,16 @@ import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums.ts";
 import ContactForm from "./ContactForm.tsx";
 import {fetchContact} from "../../../utils/axios/configs/contactAxios.ts";
 import {fetchInstitution} from "../../../utils/axios/configs/institutionAxios.ts";
+import {useState} from "react";
 
 const ContactCreate = () => {
     const {external} = useParams();
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+
+    const handleCloseSnackbar = () => {
+        setOpenSnackbar(false);
+    };
 
     const {register, control, handleSubmit, setValue, formState: {errors}} = useForm<IContact>({
         defaultValues: {
@@ -27,20 +34,23 @@ const ContactCreate = () => {
     const createContactMutation = useMutation(
         {
             mutationFn: (data: object) => fetchContact.post("", data),
-            onSuccess: () => console.log("Success"),
-            onError: error => console.log(error),
+            onSuccess: () => {
+                setOpenSnackbar(true);
+                setSnackbarMessage("Contact created");
+            },
+            onError: error => {
+                setOpenSnackbar(true);
+                setSnackbarMessage("Failed to create a contact: " + error.message);
+            },
         }
     );
 
     const onSubmit = (data: object) => {
-        // console.log('Form data:', data);
         createContactMutation.mutate(data)
     }
 
     const {
         data: institutions,
-        error,
-        status,
     } = useQuery({
         queryKey: ["institutions"],
         queryFn: async () => {
@@ -48,7 +58,6 @@ const ContactCreate = () => {
             return res.data;
         },
     });
-    console.log("-->", institutions)
 
     return (
         <Container component="main" maxWidth="sm" sx={{mb: 4}}>
@@ -70,6 +79,13 @@ const ContactCreate = () => {
                     </div>
                 </form>
             </Paper>
+            <Snackbar
+                anchorOrigin={{vertical: "top", horizontal: "center"}}
+                open={openSnackbar}
+                onClose={handleCloseSnackbar}
+                message={snackbarMessage}
+                autoHideDuration={3000}
+            />
         </Container>
     );
 }

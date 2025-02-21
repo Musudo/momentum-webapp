@@ -11,6 +11,7 @@ import ContactList from "./ContactList.tsx";
 
 const ContactsOverview = () => {
     const [filteredContacts, setFilteredContacts] = useState<IContact[]>([]);
+    // @ts-expect-error TODO: rework searching mechanism later
     const [searchValue, setSearchValue] = useState<string>("");
     const navigate = useNavigate();
     const isMobile = useMediaQuery('(max-width: 600px)');

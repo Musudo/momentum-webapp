@@ -10,11 +10,12 @@ type TProps = {
 }
 
 const ContactList = (props: TProps) => {
+    const {page, rowsPerPage, filteredContacts} = props;
     return (
-        <List sx={{ width: '100%', minWidth: 800, bgcolor: 'background.paper' }}>
-            {(props.filteredContacts && props.filteredContacts.length > 0) && (
-                props.filteredContacts
-                    ?.slice(props.page * props.rowsPerPage, props.page * props.rowsPerPage + props.rowsPerPage)
+        <List sx={{width: '100%', minWidth: 800, bgcolor: 'background.paper'}}>
+            {(filteredContacts && filteredContacts.length > 0) && (
+                filteredContacts
+                    ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((contact: IContact, index: number) => (
                         <Fragment key={index}>
                             <ContactListItem contact={contact}/>

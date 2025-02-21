@@ -16,23 +16,26 @@ import {stringAvatar, stringColoredAvatar} from "../../../utils/AvatarGeneratorU
 import {capitalizeFirstLetter} from "../../../utils/StringFormatterUtil";
 import {dataFieldFormatter, nameFormatter} from "../../../utils/DataFormatterUtil";
 import {useQuery} from "@tanstack/react-query";
-import LoadingComponent from "../../LoadingComponent";
-import {ErrorComponent} from "../../ErrorComponent";
-import {fetchDataReactQuery} from "../../../utils/HttpRequestUtil";
-import {IContact} from "../../../types/models/IContact.ts";
 import ContactDetailsAside from "./ContactDetailsAside.tsx";
 import {IInstitution} from "../../../types/models/IInstitution.ts";
+import {fetchContact} from "../../../utils/axios/configs/contactAxios.ts";
 
 const ContactDetails = () => {
     let fullName = '';
     let jobTitle = '';
-    const {guid} = useParams();
+    const {id} = useParams();
 
-    const {data: contact, status} = useQuery<IContact>(
-        ['contact'],
-        () => fetchDataReactQuery(`/contacts/${guid}`)
-    );
-
+    const {
+        data: contact,
+        status,
+    } = useQuery({
+        queryKey: ["contacts"],
+        queryFn: async () => {
+            const res = await fetchContact.get(`/${id}`);
+            return res.data;
+        },
+    });
+    console.log(contact);
     if (status === 'success') {
         fullName = nameFormatter(contact?.firstName, contact?.lastName);
         jobTitle = dataFieldFormatter(contact?.jobTitle);
@@ -59,7 +62,7 @@ const ContactDetails = () => {
                 ))
             }
             <Grid container spacing={3}>
-                <Grid >
+                <Grid>
                     <Paper sx={{
                         p: 2,
                         display: "flex",
@@ -68,22 +71,20 @@ const ContactDetails = () => {
                     }}>
                         <Typography variant="h5" marginBottom={1}>
                             <ListItem alignItems="flex-start" disablePadding>
-                                <ListItemAvatar>
-                                    {fullName === "na"
-                                        ? <Avatar {...stringAvatar("n a")} />
-                                        : <Avatar {...stringColoredAvatar(fullName)} />}
-                                </ListItemAvatar>
-                                <ListItemText id={contact?.id.toString()}
-                                              primary={<Typography variant="h5">{fullName}</Typography>}
-                                              secondary={
-                                                  contact && contact.institutions.map((i: IInstitution) => (
-                                                      <Typography variant="body1">
-                                                          {jobTitle === "na" ? jobTitle : `${capitalizeFirstLetter(jobTitle)}`}
-                                                          {` at ${i.name}`}
-                                                      </Typography>
-                                                  ))
-                                              }
-                                />
+                                {/*<ListItemAvatar>*/}
+                                {/*    {fullName === "na"*/}
+                                {/*        ? <Avatar {...stringAvatar("n a")} />*/}
+                                {/*        : <Avatar {...stringColoredAvatar(fullName)} />}*/}
+                                {/*</ListItemAvatar>*/}
+                                {/*<ListItemText id={contact?.id}*/}
+                                {/*              primary={<Typography variant="h5">{fullName}</Typography>}*/}
+                                {/*              secondary={*/}
+                                {/*                  <Typography variant="body1">*/}
+                                {/*                      {jobTitle === "na" ? jobTitle : `${capitalizeFirstLetter(jobTitle)}`}*/}
+                                {/*                      {` at ${contact.institution.name}`}*/}
+                                {/*                  </Typography>*/}
+                                {/*              }*/}
+                                {/*/>*/}
                             </ListItem>
                         </Typography>
                     </Paper>
