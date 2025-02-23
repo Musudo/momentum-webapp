@@ -18,7 +18,7 @@ const ContactsOverviewAside = ({setSearchValue, handleJobTitleFilter}: TProps) =
     return (
         <div style={{display: 'flex', flexDirection: 'column'}}>
             <ContactSearchBar setSearchValue={setSearchValue}/>
-            <List dense>
+            <List dense style={{marginLeft: "22px"}}>
                 <Fragment key={1}>
                     <Stack direction="row" alignItems="center" gap={1}>
                         <LabelIcon/>

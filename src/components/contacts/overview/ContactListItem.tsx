@@ -32,7 +32,7 @@ const ContactListItem = ({contact}: TProps) => {
                         <>
                             <span style={{color: "black"}}>{`${contact.email1} - ${phoneNumber}`}</span>
                             <br/>
-                            <span key={contact.institution.id}>{contact.institution.name}<br/></span>)
+                            <span key={contact.institution.id}>{contact.institution.name}<br/></span>
                         </>
                     }
                 />

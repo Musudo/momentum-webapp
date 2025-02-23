@@ -1,29 +1,47 @@
 import {useState} from "react";
-import {Autocomplete, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField} from "@mui/material";
+import {
+    Autocomplete,
+    FormControl,
+    FormHelperText,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    TextField
+} from "@mui/material";
 import {VALID_EMAIL_REGEXP} from '../../../constants/constants';
 import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums.ts";
 import {IInstitution} from "../../../types/models/IInstitution.ts";
 import {JobTitlesEnum} from "../../../types/enums/JobTitlesEnum.ts";
 import {IContact} from "../../../types/models/IContact.ts";
-import {Control, Controller, FieldErrors, FieldValues, UseFormRegister, UseFormSetValue} from "react-hook-form";
+import {Control, Controller, UseFormRegister, UseFormSetValue} from "react-hook-form";
+import {useQuery} from "@tanstack/react-query";
+import {fetchInstitution} from "../../../utils/axios/configs/institutionAxios.ts";
 
 type TProps = {
     register: UseFormRegister<IContact>;
-    errors: FieldErrors<FieldValues>;
+    errors: any;
     setValue: UseFormSetValue<IContact>;
     control: Control<IContact>;
-    institutions: IInstitution[];
     currentInstitutions?: IInstitution[];
     type: FormTypesEnum;
     contact: IContact | null;
 }
 
 const ContactForm = (props: TProps) => {
-    const {register, setValue, control, institutions, type, contact} = props;
+    const {register, setValue, control, type, contact, errors} = props;
     const [title, setTitle] = useState("");
     const jobTitles = Object.keys(JobTitlesEnum);
 
-    const handleChange = (event: SelectChangeEvent) => setTitle(event.target.value as string);
+    const {
+        data: institutions,
+    } = useQuery({
+        queryKey: ["institutions"],
+        queryFn: async () => {
+            const res = await fetchInstitution.get("");
+            return res.data;
+        },
+    });
 
     return (
         <div style={{
@@ -44,7 +62,7 @@ const ContactForm = (props: TProps) => {
                     minLength: {value: 2, message: "Name must be longer than 1 character"}
                 })}
             />
-            {/*<FormHelperText error>{errors?.firstName?.message}</FormHelperText>*/}
+            <FormHelperText error>{errors?.firstName?.message}</FormHelperText>
             <TextField
                 id="lastName"
                 label="Last name"
@@ -56,7 +74,7 @@ const ContactForm = (props: TProps) => {
                     minLength: {value: 2, message: "Last name must be longer than 1 character"}
                 })}
             />
-            {/*<FormHelperText error>{props?.errors?.lastName?.message}</FormHelperText>*/}
+            <FormHelperText error>{errors?.lastName?.message}</FormHelperText>
             <TextField
                 id="email1"
                 label="Email 1"
@@ -71,7 +89,7 @@ const ContactForm = (props: TProps) => {
                     }
                 })}
             />
-            {/*<FormHelperText error>{props?.errors?.email1?.message}</FormHelperText>*/}
+            <FormHelperText error>{errors?.email1?.message}</FormHelperText>
             <TextField
                 id="email2"
                 label="Email 2"
@@ -85,7 +103,7 @@ const ContactForm = (props: TProps) => {
                     }
                 })}
             />
-            {/*<FormHelperText error>{props?.errors?.email2?.message}</FormHelperText>*/}
+            <FormHelperText error>{errors?.email2?.message}</FormHelperText>
             <TextField
                 id="phone1"
                 label="Phone number 1"
@@ -97,7 +115,7 @@ const ContactForm = (props: TProps) => {
                     minLength: {value: 6, message: "Phone number 1 is too short"}
                 })}
             />
-            {/*<FormHelperText error>{props?.errors?.phoneNumber1?.message}</FormHelperText>*/}
+            <FormHelperText error>{errors?.phone1?.message}</FormHelperText>
             <TextField
                 id="phone2"
                 label="Phone number 2"
@@ -107,7 +125,7 @@ const ContactForm = (props: TProps) => {
                     minLength: {value: 6, message: "Phone number 2 is too short"}
                 })}
             />
-            {/*<FormHelperText error>{props?.errors?.phoneNumber2?.message}</FormHelperText>*/}
+            <FormHelperText error>{errors?.phone2?.message}</FormHelperText>
             <FormControl variant="standard" sx={{minWidth: 120}} fullWidth>
                 <InputLabel id="jobTitleLabel" shrink>Job title</InputLabel>
                 {type === FormTypesEnum.Create && (
@@ -116,7 +134,7 @@ const ContactForm = (props: TProps) => {
                         labelId="jobTitleLabel"
                         value={title}
                         {...register("jobTitle", {required: "Job title is required"})}
-                        onChange={handleChange}
+                        onChange={(event) => setTitle(event.target.value as string)}
                     >
                         {jobTitles.map((jobTitle: string, index: number) => (
                             <MenuItem key={index + 1} value={jobTitle}>
@@ -129,7 +147,6 @@ const ContactForm = (props: TProps) => {
                     <Select
                         id="jobTitle"
                         labelId="jobTitleLabel"
-                        // InputLabelProps={{shrink: true}}
                         displayEmpty
                         defaultValue={contact?.jobTitle}
                         {...register("jobTitle", {required: "Job title is required"})}
@@ -147,7 +164,7 @@ const ContactForm = (props: TProps) => {
                         }
                     </Select>
                 )}
-                {/*<FormHelperText error>{props?.errors?.jobTitle?.message}</FormHelperText>*/}
+                <FormHelperText error>{errors?.jobTitle?.message}</FormHelperText>
             </FormControl>
             {institutions && (
                 <Controller
@@ -155,7 +172,7 @@ const ContactForm = (props: TProps) => {
                     control={control}
                     render={({field: {onChange, value}, fieldState: {error}}) => {
                         const selectedInstitution =
-                            institutions.find((inst) => inst.id === value) || null;
+                            institutions.find((i: IInstitution) => i.id === value) || null;
 
                         return (
                             <Autocomplete

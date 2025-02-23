@@ -30,7 +30,7 @@ const ContactDetailsAside = ({contact}: TProps) => {
                     {phoneNumber2 && <><br/>{contact.phone2}</>}
                 </Typography>
             </Box>
-            <Typography variant="subtitle2" fontWeight="bold">Institution</Typography>
+            <Typography variant="subtitle2" fontWeight="bold">Institution info</Typography>
             <Divider/>
             <Box mt={1} mb={1}>
                 <Typography variant="body2">
