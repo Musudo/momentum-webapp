@@ -1,6 +1,6 @@
 import {Avatar, Chip, ListItem, ListItemAvatar, ListItemButton, ListItemText, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {stringAvatar, stringColoredAvatar} from "../../../utils/AvatarGeneratorUtil";
+import {stringAvatar, coloredStringAvatar} from "../../../utils/avatarHelpers.ts";
 import {dataFieldFormatter, nameFormatter} from "../../../utils/DataFormatterUtil";
 import {IContact} from "../../../types/models/IContact.ts";
 
@@ -19,7 +19,7 @@ const ContactListItem = ({contact}: TProps) => {
             <ListItemButton onClick={() => navigate(`/contacts/${contact.id}`)}>
                 <ListItemAvatar>
                     {fullName === "na" ? <Avatar {...stringAvatar("n a")} /> :
-                        <Avatar {...stringColoredAvatar(fullName)} />}
+                        <Avatar {...coloredStringAvatar(fullName)} />}
                 </ListItemAvatar>
                 <ListItemText
                     primary={

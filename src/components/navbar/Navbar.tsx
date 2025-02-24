@@ -14,14 +14,14 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { NavbarTypesEnum } from "../../types/enums/ComponentPropsEnums";
-import { stringAvatar } from "../../utils/AvatarGeneratorUtil";
-import { unCapitalizeFirstLetter } from "../../utils/StringFormatterUtil";
+import { stringAvatar } from "../../utils/avatarHelpers.ts";
 import CustomDrawer from "./CustomDrawer";
 import DesktopMenu from "./DesktopMenu";
 import MobileMenu from "./MobileMenu";
 import ReleaseVersion from "./ReleaseVersion";
 import Locales from "./Locales";
 import '../../i18n';
+import {unCapitalizeFirstLetter} from "../../utils/stringHelpers.ts";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -85,7 +85,7 @@ export function Navbar() {
     }
   };
   const [activeTab, setActiveTab] = useState(getInitialTab());
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
   /* nav tabs highlighting */

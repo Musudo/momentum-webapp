@@ -1,6 +1,6 @@
 type PatternReplacementPair = {
-  pattern: string;
-  replacement: string;
+    pattern: string;
+    replacement: string;
 };
 
 /**
@@ -16,10 +16,10 @@ export const getFirstLetter = (value: string): string => value.slice(0, 1);
  * @returns
  */
 export const kebabize = (str: string) =>
-  str.replace(
-    /[A-Z]+(?![a-z])|[A-Z]/g,
-    ($, ofs) => (ofs ? "-" : "") + $.toLowerCase()
-  );
+    str.replace(
+        /[A-Z]+(?![a-z])|[A-Z]/g,
+        ($, ofs) => (ofs ? "-" : "") + $.toLowerCase()
+    );
 
 /**
  *
@@ -28,14 +28,14 @@ export const kebabize = (str: string) =>
  * @returns
  */
 export const replacePatterns = (
-  input: string,
-  replacements: PatternReplacementPair[]
+    input: string,
+    replacements: PatternReplacementPair[]
 ): string => {
-  let result = input;
-  replacements.forEach(({ pattern, replacement }) => {
-    result = result.replace(pattern, replacement);
-  });
-  return result;
+    let result = input;
+    replacements.forEach(({pattern, replacement}) => {
+        result = result.replace(pattern, replacement);
+    });
+    return result;
 };
 
 /**
@@ -44,7 +44,7 @@ export const replacePatterns = (
  * @returns
  */
 export const capitalizeFirstLetter = (param: string) => {
-  return param.charAt(0).toUpperCase() + param.slice(1);
+    return param.charAt(0).toUpperCase() + param.slice(1);
 };
 
 /**
@@ -53,5 +53,20 @@ export const capitalizeFirstLetter = (param: string) => {
  * @returns
  */
 export const unCapitalizeFirstLetter = (param: string) => {
-  return param.charAt(0).toLowerCase() + param.slice(1);
+    return param.charAt(0).toLowerCase() + param.slice(1);
+};
+
+/**
+ *
+ * @param address
+ */
+export const formatAddress = (address: any): string => {
+    const {countryCode, city, postalCode, street, buildingNumber, postbox = ""} = address;
+    let formattedAddress = `${countryCode}, ${city} ${postalCode}, ${street} ${buildingNumber}`;
+
+    if (postbox) {
+        formattedAddress += ` ${postbox}`;
+    }
+
+    return formattedAddress;
 };

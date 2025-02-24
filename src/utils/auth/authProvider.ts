@@ -2,7 +2,7 @@ import {setCookie} from "../cookies.ts";
 
 class AuthProviderClass {
     static #signInUri = `${window.location.origin}${import.meta.env.VITE_AUTH_SIGNIN_URL}`;
-    static TOKEN_EXPIRY = 10 * 60 * 60 * 1000;
+    static TOKEN_EXPIRY = 60 * 60 * 10 * 1000;
 
     constructor() {
     }
@@ -24,6 +24,7 @@ class AuthProviderClass {
             return undefined;
         }
 
+        // TODO: get the expiration date from the backend and implement it in the future
         const tokenTime = Number(tokenTimestamp);
         // Check if the token is older than 10 hours
         if (Date.now() - tokenTime > AuthProviderClass.TOKEN_EXPIRY) {

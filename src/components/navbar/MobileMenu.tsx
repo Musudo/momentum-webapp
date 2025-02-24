@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { resetUser } from "../../redux/slice/userSlice";
 import { RootState } from "../../redux/store";
-import { stringAvatar } from "../../utils/AvatarGeneratorUtil";
+import { stringAvatar } from "../../utils/avatarHelpers.ts";
 import {AuthProvider} from "../../utils/auth/authProvider.ts";
 
 type TProps = {

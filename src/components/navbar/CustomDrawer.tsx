@@ -10,8 +10,8 @@ import { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { NavbarTypesEnum } from "../../types/enums/ComponentPropsEnums";
-import { unCapitalizeFirstLetter } from "../../utils/StringFormatterUtil";
 import ReleaseVersion from "./ReleaseVersion";
+import {unCapitalizeFirstLetter} from "../../utils/stringHelpers.ts";
 
 type TProps = {
   handleDrawerToggle: () => void;
