@@ -1,20 +1,20 @@
 "use client";
 
-import { ErrorBoundary } from "react-error-boundary";
-import { Outlet } from "react-router-dom";
-import { Navbar } from "./components/navbar/Navbar";
+import {ErrorBoundary} from "react-error-boundary";
+import {Outlet} from "react-router-dom";
+import {Navbar} from "./components/navbar/Navbar";
 
 const AppLayout = () => {
-  return (
-    <>
-      <Navbar />
-      <main>
-        <ErrorBoundary fallback={<div>Something went wrong! test</div>}>
-          <Outlet />
-        </ErrorBoundary>
-      </main>
-    </>
-  );
+    return (
+        <>
+            <Navbar/>
+            <main>
+                <ErrorBoundary fallback={<div>Error...</div>}>
+                    <Outlet/>
+                </ErrorBoundary>
+            </main>
+        </>
+    );
 };
 
 export default AppLayout;

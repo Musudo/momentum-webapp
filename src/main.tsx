@@ -14,7 +14,7 @@ createRoot(document.getElementById("root")!).render(
     // <StrictMode>
     <Provider store={store}>
         <QueryWrapper>
-            <Suspense fallback={<></>}>
+            <Suspense fallback={<div>Loading...</div>}>
                 <Router/>
             </Suspense>
         </QueryWrapper>

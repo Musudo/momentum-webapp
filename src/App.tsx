@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
-import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import {useEffect} from "react";
+import {useTranslation} from "react-i18next";
 import AppLayout from "./AppLayout";
 import "./i18n";
 

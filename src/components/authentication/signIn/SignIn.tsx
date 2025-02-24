@@ -22,6 +22,7 @@ import { FacebookIcon, GoogleIcon } from "../../../shared-theme/CustomIcons";
 import { SignInCard } from "../signInCard";
 import { SignInContainer } from "../signInContainer";
 import ForgotPassword from "./ForgotPassword";
+import {AuthProvider} from "../../../utils/auth/authProvider.ts";
 
 const SignIn = (props: { disableCustomTheme?: boolean }) => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -92,7 +93,7 @@ const SignIn = (props: { disableCustomTheme?: boolean }) => {
       return res.data;
     },
     onSuccess: (res) => {
-      sessionStorage.setItem("authToken", res.token);
+      AuthProvider.storeToken(res.token);
       dispatch(setUser(res["user"]));
       window.location.href = "/dashboard";
     },

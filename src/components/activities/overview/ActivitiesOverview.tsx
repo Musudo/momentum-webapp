@@ -44,7 +44,6 @@ const ActivitiesOverview = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const { t } = useTranslation();
   const user = useSelector((state: RootState) => state.user);
-  console.log("===>", sessionStorage.getItem("authToken"));
 
   const {
     data: activities,
@@ -59,8 +58,6 @@ const ActivitiesOverview = () => {
       return res.data.member;
     },
   });
-
-  console.log("===>>", activities);
 
   /* archive button */
   const [archivedYear, setArchivedYear] = useState<Date | null>(new Date());
