@@ -1,8 +1,7 @@
-import {IActivity} from "./IActivity";
-import {IModel} from "./IModel";
-
-export interface ITask extends IModel {
-	description: string;
-	completed: boolean;
-	activity: IActivity | null;
+export interface ITask {
+    id: string;
+    description: string;
+    completed: boolean;
+    activityId: string;
+    createdAt: string;
 }

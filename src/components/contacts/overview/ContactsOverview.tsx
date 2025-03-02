@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {Button, Container, Paper, TablePagination, useMediaQuery} from "@mui/material";
+import {Button, Container, TablePagination, useMediaQuery} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import {useQuery} from "@tanstack/react-query";
 import {useTranslation} from "react-i18next";
@@ -45,7 +45,7 @@ const ContactsOverview = () => {
         }
     }, [contacts, status]);
 
-    const handleJobTitleFilter = (jobTitle: string)=> {
+    const handleJobTitleFilter = (jobTitle: string) => {
         if (jobTitle === 'Show all') {
             setFilteredContacts(contacts as IContact[]);
         } else {
@@ -59,34 +59,32 @@ const ContactsOverview = () => {
 
     return (
         <Container sx={{
+            display: 'flex',
             flexGrow: 1,
             overflow: 'auto',
-            py: 2
+            py: 2,
+            gap: 6
         }} maxWidth='lg'>
-            <div style={{display: "flex"}}>
-                <ContactsOverviewAside setSearchValue={setSearchValue}
-                                       handleJobTitleFilter={handleJobTitleFilter}/>
-                <div>
-                    <div style={{display: "flex", justifyContent: "end", marginBottom: 4}}>
-                        <Button variant='contained'
-                                startIcon={<AddIcon/>}
-                                fullWidth={isMobile}
-                                onClick={() => navigate(`/contacts/create`)}>
-                            {t('Contacts overview page.New contact')}
-                        </Button>
-                    </div>
-                    <Paper>
-                        <ContactList page={page} rowsPerPage={rowsPerPage} filteredContacts={filteredContacts}/>
-                    </Paper>
-                    <TablePagination
-                        component="div"
-                        count={(filteredContacts && filteredContacts.length) ?? 0}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        rowsPerPage={rowsPerPage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
+            <ContactsOverviewAside setSearchValue={setSearchValue}
+                                   handleJobTitleFilter={handleJobTitleFilter}/>
+            <div>
+                <div style={{display: "flex", justifyContent: "end", marginBottom: 16}}>
+                    <Button variant='contained'
+                            startIcon={<AddIcon/>}
+                            fullWidth={isMobile}
+                            onClick={() => navigate(`/contacts/create`)}>
+                        {t('Contacts overview page.New contact')}
+                    </Button>
                 </div>
+                <ContactList page={page} rowsPerPage={rowsPerPage} filteredContacts={filteredContacts}/>
+                <TablePagination
+                    component="div"
+                    count={(filteredContacts && filteredContacts.length) ?? 0}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </div>
         </Container>
     );

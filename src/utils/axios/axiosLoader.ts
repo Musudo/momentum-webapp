@@ -5,6 +5,7 @@ import {fetchReview} from "./configs/reviewAxios";
 import {fetchTag} from "./configs/tagAxios";
 import {fetchTask} from "./configs/taskAxios";
 import {fetchUser} from "./configs/userAxios";
+import {fetchEmail} from "./configs/emailAxios.ts";
 
 const axiosServices = [
     fetchUser,
@@ -13,6 +14,7 @@ const axiosServices = [
     fetchTask,
     fetchReview,
     fetchInstitution,
+    fetchEmail
 ];
 
 export const initAxiosServices = (/* queryParams: TGenericObject = {} */) => {

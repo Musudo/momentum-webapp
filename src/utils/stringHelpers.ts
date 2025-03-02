@@ -39,21 +39,34 @@ export const replacePatterns = (
 };
 
 /**
+ * Removes all whitespaces, makes everything lower case and removes give substring to normalize given string
+ * @param str string to normalize
+ * @param partToRemove substring which will be removed
+ */
+export const normalizeString = (str: string, partToRemove: string = "") => {
+    const partToRemoveRegex = new RegExp(partToRemove + '$', 'i');
+    return str
+        .replace(/\s+/g, '') // remove all whitespace
+        .toLowerCase()
+        .replace(partToRemoveRegex, '');
+}
+
+/**
  * Makes the first letter capital
- * @param param
+ * @param str string to capitalize
  * @returns
  */
-export const capitalizeFirstLetter = (param: string) => {
-    return param.charAt(0).toUpperCase() + param.slice(1);
+export const capitalizeFirstLetter = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
 /**
  * Makes the first letter non-capital
- * @param param
+ * @param str string to uncapitalize
  * @returns
  */
-export const unCapitalizeFirstLetter = (param: string) => {
-    return param.charAt(0).toLowerCase() + param.slice(1);
+export const unCapitalizeFirstLetter = (str: string) => {
+    return str.charAt(0).toLowerCase() + str.slice(1);
 };
 
 /**

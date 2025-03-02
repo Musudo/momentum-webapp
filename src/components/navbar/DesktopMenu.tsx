@@ -62,7 +62,7 @@ const DesktopMenu = (props: TProps) => {
         },
       }}
     >
-      {AuthProvider.isAuthenticated && user.roles.includes("ROLE_USER") ? (
+      {AuthProvider.isAuthenticated ? (
         <MenuItem
           key="signOut"
           onClick={() => {
@@ -77,7 +77,7 @@ const DesktopMenu = (props: TProps) => {
         </MenuItem>
       ) : (
         <MenuItem
-          key="login"
+          key="signIn"
           onClick={() => {
             window.location.href = `${window.location.origin}${import.meta.env.VITE_AUTH_SIGNIN_URL}`;
           }}

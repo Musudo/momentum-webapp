@@ -17,5 +17,6 @@ export interface IActivity {
   review?: IReview | null;
   tasks?: ITask[];
   externalParticipants?: IExternalParticipant[];
-  emailSentAt: Date | null;
+  emailSentAt: string;
+  createdAt: string;
 }

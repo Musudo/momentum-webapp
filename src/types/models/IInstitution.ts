@@ -7,4 +7,5 @@ export interface IInstitution {
     city: string;
     postalCode: string;
     countryCode: string;
+    createdAt: string;
 }
