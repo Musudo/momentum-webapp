@@ -5,7 +5,7 @@
  * @param mapper - A function that transforms each item.
  * @returns An array of transformed items.
  */
-export function mapArray<T, U>(data: T[], mapper: (item: T, index: number) => U): U[] {
+export const mapArray = <T, U>(data: T[], mapper: (item: T, index: number) => U): U[] => {
     return data.map(mapper);
 }
 

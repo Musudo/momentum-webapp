@@ -17,9 +17,7 @@ const Copyright = (props: TypographyProps) => {
             {'Copyright © '}
             <Link color="inherit" href="#">
                 Momentum App
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
+            </Link>{' '}{new Date().getFullYear()}{'.'}
         </Typography>
     );
 }

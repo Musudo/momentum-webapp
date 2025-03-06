@@ -1,8 +1,9 @@
 import {Navigate} from "react-router-dom";
 import {AuthProvider} from "../utils/auth/authProvider.ts";
+import {ReactElement} from "react";
 
 type TAuthGuardProps = {
-    children: JSX.Element;
+    children: ReactElement;
 };
 
 const ProtectedRoute = ({children}: TAuthGuardProps) => {

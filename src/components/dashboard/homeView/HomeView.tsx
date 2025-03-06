@@ -2,73 +2,79 @@ import Grid from '@mui/material/Grid2';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import HighlightedCard from './HighlightedCard.tsx';
-import PageViewsBarChart from './PageViewsBarChart.tsx';
-import SessionsChart from './SessionsChart.tsx';
-import StatCard, {TStatCardProps} from './StatCard.tsx';
+import StatCard, {TStatCardProps} from './statCard.tsx';
 import {useQuery} from "@tanstack/react-query";
-import {fetchActivity} from "../../../utils/axios/configs/activityAxios.ts";
-import {mapMultipleEntities} from "../../../utils/mappers/genericMapper.ts";
-import {
-    mapActivitiesToStatCard,
-    mapEmailsToStatCard,
-    mapTasksToStatCard,
-} from "../../../utils/mappers/entityMapper.ts";
-import {fetchTask} from "../../../utils/axios/configs/taskAxios.ts";
-import {fetchEmail} from "../../../utils/axios/configs/emailAxios.ts";
-
-const defaultData: TStatCardProps[] = [];
+import {fetchStat} from "../../../utils/axios/configs/statAxios.ts";
+import BarChart from "./barChart.tsx";
+import LineChart from './lineChart.tsx';
 
 const HomeView = () => {
 
     const {
-        data: activities,
-        status: activitiesStatus,
+        data: activitiesStatCard,
     } = useQuery({
-        queryKey: ["activities"],
+        queryKey: ["activitiesStatCard"],
         queryFn: async () => {
-            const res = await fetchActivity.get("/last30Days");
+            const res = await fetchStat.get("/activities/last-month/amounts-per-day");
             return res.data;
         },
     });
 
     const {
-        data: emails,
-        status: emailsStatus,
+        data: tasksStatCard,
     } = useQuery({
-        queryKey: ["emails"],
+        queryKey: ["tasksStatCard"],
         queryFn: async () => {
-            const res = await fetchEmail.get("");
+            const res = await fetchStat.get("/tasks/last-month/amounts-per-day");
             return res.data;
         },
     });
 
     const {
-        data: tasks,
-        status: tasksStatus,
+        data: reviewsStatCard,
     } = useQuery({
-        queryKey: ["tasks"],
+        queryKey: ["reviewsStatCard"],
         queryFn: async () => {
-            const res = await fetchTask.get("/last30Days");
+            const res = await fetchStat.get("/reviews/last-month/amounts-per-day");
             return res.data;
         },
     });
 
-    const statCardData: TStatCardProps[] = mapMultipleEntities({
-        activitiesData: {
-            data: activities ?? defaultData,
-            mapper: mapActivitiesToStatCard,
-        },
-        emailsData: {
-            data: emails ?? defaultData,
-            mapper: mapEmailsToStatCard,
-        },
-        tasksData: {
-            data: tasks ?? defaultData,
-            mapper: mapTasksToStatCard,
+    const {
+        data: activityTypesBarChart,
+    } = useQuery({
+        queryKey: ["activityTypesBarChart"],
+        queryFn: async () => {
+            const res = await fetchStat.get("/activities/last-six-months/amounts-per-month");
+            return res.data;
         },
     });
 
-    console.log(statCardData)
+    const {
+        data: lineChart,
+    } = useQuery({
+        queryKey: ["lineChart"],
+        queryFn: async () => {
+            const res = await fetchStat.get("/line-chart-data/last-month/amounts-per-day");
+            return res.data;
+        },
+    });
+
+    // const statCardData: TStatCardProps[] = [...activitiesAmounts, ...tasksAmounts, ...reviewsAmounts];
+
+    // console.log("test", statCardData)
+
+    if (!activitiesStatCard || !tasksStatCard || !reviewsStatCard || !activityTypesBarChart || !lineChart) {
+        return <>error</>;
+    }
+
+    const statCards: TStatCardProps[] = [
+        activitiesStatCard,
+        tasksStatCard,
+        reviewsStatCard
+    ];
+
+    console.log("test 2", activitiesStatCard)
 
     return (
         <Box sx={{width: '100%', maxWidth: {sm: '100%', md: '1700px'}}}>
@@ -81,7 +87,7 @@ const HomeView = () => {
                 columns={12}
                 sx={{mb: (theme) => theme.spacing(2)}}
             >
-                {statCardData.map((card, index) => (
+                {statCards.map((card, index) => (
                     <Grid key={index} size={{xs: 12, sm: 6, lg: 3}}>
                         <StatCard {...card} />
                     </Grid>
@@ -90,10 +96,10 @@ const HomeView = () => {
                     <HighlightedCard/>
                 </Grid>
                 <Grid size={{xs: 12, md: 6}}>
-                    <SessionsChart/>
+                    <LineChart {...lineChart} />
                 </Grid>
                 <Grid size={{xs: 12, md: 6}}>
-                    <PageViewsBarChart/>
+                    <BarChart {...activityTypesBarChart} />
                 </Grid>
             </Grid>
         </Box>

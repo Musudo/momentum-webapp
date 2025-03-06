@@ -7,32 +7,16 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import {SparkLineChart} from '@mui/x-charts/SparkLineChart';
 import {areaElementClasses} from '@mui/x-charts/LineChart';
+import {TTrend} from "../../../types/statTypes.ts";
 
 export type TStatCardProps = {
     title: string;
     value: number;
-    interval: string;
-    trend: 'up' | 'down' | 'neutral';
+    caption: string;
+    trend: TTrend;
     data: number[];
-    month: number;
-    year: number;
+    dates: string[];
 };
-
-const getDaysInMonth = (month: number, year: number) => {
-    const date = new Date(year, month, 0);
-    const monthName = date.toLocaleDateString('nl-BE', {
-        month: 'short',
-    });
-    const daysInMonth = date.getDate();
-    const days = [];
-    let i = 1;
-    while (days.length < daysInMonth) {
-        days.push(`${monthName} ${i}`);
-        i += 1;
-    }
-
-    return days;
-}
 
 const AreaGradient = ({color, id}: { color: string; id: string }) => {
     return (
@@ -48,14 +32,12 @@ const AreaGradient = ({color, id}: { color: string; id: string }) => {
 const StatCard = ({
                       title,
                       value,
-                      interval,
+                      caption,
                       trend,
                       data,
-                      month,
-                      year
+                      dates
                   }: TStatCardProps) => {
     const theme = useTheme();
-    const daysInWeek = getDaysInMonth(month, year);
 
     const trendColors = {
         up:
@@ -71,13 +53,11 @@ const StatCard = ({
                 ? theme.palette.grey[400]
                 : theme.palette.grey[700],
     };
-
     const labelColors = {
         up: 'success' as const,
         down: 'error' as const,
         neutral: 'default' as const,
     };
-
     const color = labelColors[trend];
     const chartColor = trendColors[trend];
     const trendValues = {up: '+25%', down: '-25%', neutral: '+5%'};
@@ -103,7 +83,7 @@ const StatCard = ({
                             <Chip size="small" color={color} label={trendValues[trend]}/>
                         </Stack>
                         <Typography variant="caption" sx={{color: 'text.secondary'}}>
-                            {interval}
+                            {caption}
                         </Typography>
                     </Stack>
                     <Box sx={{width: '100%', height: 50}}>
@@ -115,7 +95,7 @@ const StatCard = ({
                             showTooltip
                             xAxis={{
                                 scaleType: 'band',
-                                data: daysInWeek, // Use the correct property 'data' for xAxis
+                                data: dates,
                             }}
                             sx={{
                                 [`& .${areaElementClasses.root}`]: {

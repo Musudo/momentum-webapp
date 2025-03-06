@@ -6,7 +6,7 @@ import CustomizedDataGrid from './CustomizedDataGrid';
 import CustomizedTreeView from './CustomizedTreeView.tsx';
 import ChartUserByCountry from "./ChartUserByCountry.tsx";
 // import Copyright from './Copyright.tsx';
-// import StatCard, { StatCardProps } from './StatCard.tsx';
+// import StatCard, { StatCardProps } from './statCard.tsx';
 
 const data: any = [
     {
