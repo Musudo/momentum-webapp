@@ -30,6 +30,12 @@ export const columns: GridColDef[] = [
         headerName: 'Job Title',
         flex: 1,
         minWidth: 80,
+    },
+    {
+        field: 'institutionName',
+        headerName: 'Institution Name',
+        flex: 1,
+        minWidth: 80,
     }
 ];
 
