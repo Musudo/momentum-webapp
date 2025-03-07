@@ -7,7 +7,7 @@ export type TDashboardRouting = {
 
 const initialState: TDashboardRouting[] = [
     {name: 'HomeView', isVisible: true},
-    {name: 'ContactsDataView', isVisible: false},
+    {name: 'DataView', isVisible: false},
     {name: 'TasksView', isVisible: false},
     {name: 'VoiceMemosView', isVisible: false},
     {name: 'SettingsView', isVisible: false},

@@ -1,7 +1,6 @@
 import Grid from '@mui/material/Grid2';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import HighlightedCard from './HighlightedCard.tsx';
 import StatCard, {TStatCardProps} from './statCard.tsx';
 import {useQuery} from "@tanstack/react-query";
 import {fetchStat} from "../../../utils/axios/configs/statAxios.ts";
@@ -51,21 +50,17 @@ const HomeView = () => {
     });
 
     const {
-        data: lineChart,
+        data: lineChartData,
     } = useQuery({
-        queryKey: ["lineChart"],
+        queryKey: ["lineChartData"],
         queryFn: async () => {
             const res = await fetchStat.get("/line-chart-data/last-month/amounts-per-day");
             return res.data;
         },
     });
 
-    // const statCardData: TStatCardProps[] = [...activitiesAmounts, ...tasksAmounts, ...reviewsAmounts];
-
-    // console.log("test", statCardData)
-
-    if (!activitiesStatCard || !tasksStatCard || !reviewsStatCard || !activityTypesBarChart || !lineChart) {
-        return <>error</>;
+    if (!activitiesStatCard || !tasksStatCard || !reviewsStatCard || !activityTypesBarChart || !lineChartData) {
+        return <div>Error</div>;
     }
 
     const statCards: TStatCardProps[] = [
@@ -73,8 +68,6 @@ const HomeView = () => {
         tasksStatCard,
         reviewsStatCard
     ];
-
-    console.log("test 2", activitiesStatCard)
 
     return (
         <Box sx={{width: '100%', maxWidth: {sm: '100%', md: '1700px'}}}>
@@ -92,11 +85,12 @@ const HomeView = () => {
                         <StatCard {...card} />
                     </Grid>
                 ))}
-                <Grid size={{xs: 12, sm: 6, lg: 3}}>
-                    <HighlightedCard/>
-                </Grid>
+
+                {/*<Grid size={{xs: 12, sm: 6, lg: 3}}>*/}
+                {/*</Grid>*/}
+
                 <Grid size={{xs: 12, md: 6}}>
-                    <LineChart {...lineChart} />
+                    <LineChart {...lineChartData} />
                 </Grid>
                 <Grid size={{xs: 12, md: 6}}>
                     <BarChart {...activityTypesBarChart} />

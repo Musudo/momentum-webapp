@@ -5,7 +5,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
+import TableChartIcon from '@mui/icons-material/TableChart';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
@@ -18,7 +18,7 @@ import {normalizeString} from "../../../utils/stringHelpers.ts";
 
 const mainListItems = [
     {name: 'Home', icon: <HomeRoundedIcon/>},
-    {name: 'Contacts Data', icon: <PeopleRoundedIcon/>},
+    {name: 'Data', icon: <TableChartIcon/>},
     {name: 'Tasks', icon: <AssignmentRoundedIcon/>},
     {name: 'Voice memos', icon: <VoicemailIcon/>},
 ];

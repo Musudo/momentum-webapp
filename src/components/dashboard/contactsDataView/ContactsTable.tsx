@@ -1,17 +1,30 @@
-import { DataGrid } from '@mui/x-data-grid';
-import {columns, rows} from "./gridData.tsx";
+import {DataGrid, GridRowsProp} from '@mui/x-data-grid';
+import {columns} from "./tableData.tsx";
+import {useQuery} from "@tanstack/react-query";
+import {fetchStat} from "../../../utils/axios/configs/statAxios.ts";
 
-export default function CustomizedDataGrid() {
+const ContactsTable = () => {
+
+    const {
+        data: contactsData,
+    } = useQuery<GridRowsProp>({
+        queryKey: ["contactsData"],
+        queryFn: async () => {
+            const res = await fetchStat.get("/contacts-table-data");
+            return res.data;
+        },
+    });
+
     return (
         <DataGrid
             checkboxSelection
-            rows={rows}
+            rows={contactsData}
             columns={columns}
             getRowClassName={(params) =>
                 params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
             }
             initialState={{
-                pagination: { paginationModel: { pageSize: 20 } },
+                pagination: {paginationModel: {pageSize: 20}},
             }}
             pageSizeOptions={[10, 20, 50]}
             disableColumnResize
@@ -26,12 +39,12 @@ export default function CustomizedDataGrid() {
                         columnInputProps: {
                             variant: 'outlined',
                             size: 'small',
-                            sx: { mt: 'auto' },
+                            sx: {mt: 'auto'},
                         },
                         operatorInputProps: {
                             variant: 'outlined',
                             size: 'small',
-                            sx: { mt: 'auto' },
+                            sx: {mt: 'auto'},
                         },
                         valueInputProps: {
                             InputComponentProps: {
@@ -45,3 +58,5 @@ export default function CustomizedDataGrid() {
         />
     );
 }
+
+export default ContactsTable;

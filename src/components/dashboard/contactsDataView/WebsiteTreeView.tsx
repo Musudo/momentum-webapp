@@ -59,7 +59,7 @@ const DotIcon = ({color}: { color: string }) => {
 
 const AnimatedCollapse = animated(Collapse);
 
-function TransitionComponent(props: TransitionProps) {
+const TransitionComponent = (props: TransitionProps) => {
     const style = useSpring({
         to: {
             opacity: props.in ? 1 : 0,
@@ -152,7 +152,7 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(
     );
 });
 
-const CustomizedTreeView = () => {
+const WebsiteTreeView = () => {
     return (
         <Card
             variant="outlined"
@@ -160,7 +160,7 @@ const CustomizedTreeView = () => {
         >
             <CardContent>
                 <Typography component="h2" variant="subtitle2">
-                    Product tree
+                    Website tree
                 </Typography>
                 <RichTreeView
                     items={ITEMS}
@@ -182,4 +182,4 @@ const CustomizedTreeView = () => {
     );
 }
 
-export default CustomizedTreeView;
+export default WebsiteTreeView;
