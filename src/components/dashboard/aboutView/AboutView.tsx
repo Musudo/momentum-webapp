@@ -1,9 +1,7 @@
 const AboutView = () => {
 
     return (
-        <>
-            About
-        </>
+        <>About View</>
     )
 }
 

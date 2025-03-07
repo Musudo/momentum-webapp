@@ -1,7 +1,7 @@
 const SettingsView = () => {
 
     return (
-        <>Settings</>
+        <>Settings view</>
     )
 }
 

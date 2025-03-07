@@ -12,6 +12,7 @@ import DevicesRoundedIcon from '@mui/icons-material/DevicesRounded';
 import SmartphoneRoundedIcon from '@mui/icons-material/SmartphoneRounded';
 import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
 import {useState} from 'react';
+import {Link} from "react-router-dom";
 
 const Avatar = styled(MuiAvatar)(({theme}) => ({
     width: 28,
@@ -56,52 +57,44 @@ const SelectContent = () => {
                 },
             }}
         >
-            <ListSubheader sx={{pt: 0}}>Production</ListSubheader>
+            <ListSubheader sx={{pt: 0}}>Client</ListSubheader>
             <MenuItem value="">
                 <ListItemAvatar>
-                    <Avatar alt="Sitemark web">
+                    <Avatar alt="Client Web Tools">
                         <DevicesRoundedIcon sx={{fontSize: '1rem'}}/>
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary="Sitemark-web" secondary="Web app"/>
+                <ListItemText primary="Client-web-tools" secondary="Web app"/>
             </MenuItem>
             <MenuItem value={10}>
                 <ListItemAvatar>
-                    <Avatar alt="Sitemark App">
+                    <Avatar alt="Client Mobile Tools">
                         <SmartphoneRoundedIcon sx={{fontSize: '1rem'}}/>
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary="Sitemark-app" secondary="Mobile application"/>
+                <ListItemText primary="Client-mobile-tools" secondary="Mobile application"/>
             </MenuItem>
+            <ListSubheader>Admin</ListSubheader>
             <MenuItem value={20}>
                 <ListItemAvatar>
-                    <Avatar alt="Sitemark Store">
-                        <DevicesRoundedIcon sx={{fontSize: '1rem'}}/>
-                    </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Sitemark-Store" secondary="Web app"/>
-            </MenuItem>
-            <ListSubheader>Development</ListSubheader>
-            <MenuItem value={30}>
-                <ListItemAvatar>
-                    <Avatar alt="Sitemark Store">
+                    <Avatar alt="Admin Tools">
                         <ConstructionRoundedIcon sx={{fontSize: '1rem'}}/>
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary="Sitemark-Admin" secondary="Web app"/>
+                <ListItemText primary="Admin-tools" secondary="Web app"/>
             </MenuItem>
             <Divider sx={{mx: -1}}/>
-            <MenuItem value={40}>
+            <MenuItem component={Link} to="/activities/create">
                 <ListItemIcon>
                     <AddRoundedIcon/>
                 </ListItemIcon>
-                <ListItemText primary="Add activity" secondary="Web app"/>
+                <ListItemText primary="Activity" secondary="Create new activity"/>
             </MenuItem>
-            <MenuItem value={40}>
+            <MenuItem component={Link} to="/contacts/create">
                 <ListItemIcon>
                     <AddRoundedIcon/>
                 </ListItemIcon>
-                <ListItemText primary="Add contact" secondary="Web app"/>
+                <ListItemText primary="Contact" secondary="Create new contact"/>
             </MenuItem>
         </Select>
     );

@@ -9,7 +9,6 @@ const initialState: TDashboardRouting[] = [
     {name: 'HomeView', isVisible: true},
     {name: 'DataView', isVisible: false},
     {name: 'TasksView', isVisible: false},
-    {name: 'VoiceMemosView', isVisible: false},
     {name: 'SettingsView', isVisible: false},
     {name: 'AboutView', isVisible: false},
 ];

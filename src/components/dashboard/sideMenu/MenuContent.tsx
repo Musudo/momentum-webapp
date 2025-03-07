@@ -20,7 +20,6 @@ const mainListItems = [
     {name: 'Home', icon: <HomeRoundedIcon/>},
     {name: 'Data', icon: <TableChartIcon/>},
     {name: 'Tasks', icon: <AssignmentRoundedIcon/>},
-    {name: 'Voice memos', icon: <VoicemailIcon/>},
 ];
 
 const secondaryListItems = [
