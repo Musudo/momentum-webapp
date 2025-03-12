@@ -86,8 +86,8 @@ const HomeView = () => {
                     </Grid>
                 ))}
 
-                {/*<Grid size={{xs: 12, sm: 6, lg: 3}}>*/}
-                {/*</Grid>*/}
+                <Grid size={{xs: 12, sm: 6, lg: 3}}>
+                </Grid>
 
                 <Grid size={{xs: 12, md: 6}}>
                     <LineChart {...lineChartData} />
