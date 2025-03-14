@@ -1,4 +1,4 @@
-import React, {SyntheticEvent, useRef, useState} from "react";
+import {SyntheticEvent, useRef, useState} from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import {
@@ -22,7 +22,6 @@ import Grid from "@mui/material/Grid2";
 import {useTranslation} from "react-i18next";
 import {SpeedDialDirectionsEnum,} from "../../../types/enums/ComponentPropsEnums";
 import {IInstitution} from "../../../types/models/IInstitution";
-import {ArchivedActivitiesYearPicker} from "./ArchivedActivitiesYearPicker";
 import {useQuery} from "@tanstack/react-query";
 import {fetchActivity} from "../../../utils/axios/configs/activityAxios";
 import ArchivedActivityCard from "./ArchivedActivityCard";
@@ -30,6 +29,7 @@ import {IActivity} from "../../../types/models/IActivity";
 import ActivitiesColumn from "./ActivitiesColumn";
 import ActivitySpeedDial from "./ActivitySpeedDial";
 import {fetchInstitution} from "../../../utils/axios/configs/institutionAxios.ts";
+import ArchivedActivitiesYearPicker from "./ArchivedActivitiesYearPicker.tsx";
 
 const ActivitiesOverview = () => {
     const [institutionName, setInstitutionName] = useState<string | null>(null);
@@ -40,7 +40,7 @@ const ActivitiesOverview = () => {
     const [open, setOpen] = useState(false);
     const anchorRef = useRef<HTMLDivElement>(null);
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
-    const [archivedYear, setArchivedYear] = useState<Date | null>(new Date());
+    const [archivedYear, setArchivedYear] = useState<string | null>("2025");
 
     const {
         data: institutions,
@@ -57,7 +57,7 @@ const ActivitiesOverview = () => {
         queryFn: async () => {
             const res = await fetchActivity.get("/today");
             if (institutionName) {
-                return res.data.filter((activity) => activity.institution.name === institutionName)
+                return res.data.filter((activity: IActivity) => activity.institution.name === institutionName)
             }
             return res.data;
         }
@@ -70,7 +70,7 @@ const ActivitiesOverview = () => {
         queryFn: async () => {
             const res = await fetchActivity.get("/next-seven-days");
             if (institutionName) {
-                return res.data.filter((activity) => activity.institution.name === institutionName)
+                return res.data.filter((activity: IActivity) => activity.institution.name === institutionName)
             }
             return res.data;
         },
@@ -83,7 +83,7 @@ const ActivitiesOverview = () => {
         queryFn: async () => {
             const res = await fetchActivity.get("/next-thirty-days");
             if (institutionName) {
-                return res.data.filter((activity) => activity.institution.name === institutionName)
+                return res.data.filter((activity: IActivity) => activity.institution.name === institutionName)
             }
             return res.data;
         },
@@ -92,11 +92,11 @@ const ActivitiesOverview = () => {
     const {
         data: archivedActivities,
     } = useQuery<IActivity[]>({
-        queryKey: ["archivedActivities", institutionName],
+        queryKey: ["archivedActivities", archivedYear, institutionName],
         queryFn: async () => {
-            const res = await fetchActivity.get("/archived");
+            const res = await fetchActivity.get(`/archived/${archivedYear}`);
             if (institutionName) {
-                return res.data.filter((activity) => activity.institution.name === institutionName)
+                return res.data.filter((activity: IActivity) => activity.institution.name === institutionName)
             }
             return res.data;
 
@@ -149,8 +149,6 @@ const ActivitiesOverview = () => {
         }
     };
 
-    // console.log("-->", institutionName);
-
     return (
         <Container
             sx={{
@@ -172,14 +170,14 @@ const ActivitiesOverview = () => {
                         <FormControl style={{width: 300}}>
                             <Autocomplete
                                 value={institutionName}
-                                onChange={(event: SyntheticEvent, newValue: string | null) => {
+                                onChange={(_event: SyntheticEvent, newValue: string | null) => {
                                     setInstitutionName(newValue);
                                 }}
                                 inputValue={inputValue}
-                                onInputChange={(event, newInputValue) => {
+                                onInputChange={(_event: SyntheticEvent, newInputValue: string) => {
                                     setInputValue(newInputValue);
                                 }}
-                                options={institutions.map((institution: IInstitutionn) => institution.name)}
+                                options={institutions.map((institution: IInstitution) => institution.name)}
                                 // sx={{ width: 300 }}
                                 renderInput={(params) => <TextField {...params} size="small"
                                                                     label="Filter by institution"/>}
@@ -272,12 +270,13 @@ const ActivitiesOverview = () => {
                             <Grid>
                                 <ArchivedActivitiesYearPicker
                                     archivedYear={archivedYear}
-                                    handleArchivedYearChange={(newValue) => setArchivedYear(newValue)}
+                                    setArchivedYear={(newValue) => setArchivedYear(newValue)}
                                 />
                             </Grid>
                             <Grid display="flex" flexWrap="wrap" width="100%" gap={2}>
                                 {archivedActivities && archivedActivities.map((activity: IActivity) => (
-                                    <ArchivedActivityCard activity={activity}/>
+                                    /*TODO: fix duplicate key error*/
+                                    <ArchivedActivityCard key={activity.id} activity={activity}/>
                                 ))}
                             </Grid>
                         </Grid>

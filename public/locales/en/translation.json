@@ -11,9 +11,9 @@
 	"SignUp": "Sign Up",
 	"Active language": "English",
 	"Activity speed dial": {
-	  "Phone": "Phone conversation",
+	  "Phone": "Phone",
 	  "Online": "Online",
-	  "Physical": "Physical meeting"
+	  "Physical": "Physical"
 	}
   },
   "Dashboard page": {

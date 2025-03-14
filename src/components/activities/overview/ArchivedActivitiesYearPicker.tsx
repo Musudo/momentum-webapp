@@ -1,30 +1,36 @@
-// import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-// import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
-// import {DatePicker} from "@mui/x-date-pickers";
-import {FormControl, TextField} from "@mui/material";
-import React from "react";
+import {FormControl} from "@mui/material";
+import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
-interface Props {
-	archivedYear: Date | null;
-	handleArchivedYearChange: (newValue: Date | null) => void;
+type TProps = {
+    archivedYear: string | null;
+    setArchivedYear: (year: string | null) => void;
 }
 
-export function ArchivedActivitiesYearPicker({archivedYear, handleArchivedYearChange}: Props) {
+const ArchivedActivitiesYearPicker = ({archivedYear, setArchivedYear}: TProps) => {
 
-	return (
-		<FormControl sx={{maxWidth: 210}}>
-			{/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-				<DatePicker
-					views={["year"]}
-					label="Select year"
-					value={archivedYear}
-					onChange={handleArchivedYearChange}
-					openTo="year"
-					minDate={new Date("2022-01-01")}
-					maxDate={new Date()}
-					renderInput={(params) => <TextField {...params} />}
-				/>
-			</LocalizationProvider> */}
-		</FormControl>
-	);
+    return (
+        <FormControl>
+            {/*TODO: try to replace dayjs by date-fns in the future*/}
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                    label={"Select Year"}
+                    views={["year"]}
+                    openTo="year"
+                    defaultValue={dayjs(archivedYear)}
+                    minDate={dayjs("2020-01-01 00:00:00")}
+                    maxDate={dayjs()}
+                    slotProps={{
+                        textField: {size: "small"}
+                    }}
+                    onChange={(value) => {
+                        setArchivedYear(value?.year().toString() ?? archivedYear);
+                    }}
+                />
+            </LocalizationProvider>
+        </FormControl>
+    );
 }
+
+export default ArchivedActivitiesYearPicker;

@@ -49,7 +49,7 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
 }));
 
 const SearchComponent = ({setSearchValue, placeholder = "Search"}: TProps) => {
-    const searchHandler = (event: KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => setSearchValue(event.target.value);
+    const searchHandler = (event: any) => setSearchValue(event.target.value);
     const debouncedSearchHandler = useMemo(
         () => debounce(searchHandler, 300)
         , []);

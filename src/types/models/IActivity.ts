@@ -3,6 +3,7 @@ import {IReview} from "./IReview";
 import {ITag} from "./ITag";
 import {ITask} from "./ITask";
 import {IVoiceMemo} from "./IVoiceMemo";
+import {IInstitution} from "./IInstitution.ts";
 
 export interface IActivity {
   id: string;
@@ -17,6 +18,7 @@ export interface IActivity {
   review?: IReview | null;
   tasks?: ITask[];
   externalParticipants?: IExternalParticipant[];
+  institution: IInstitution;
   emailSentAt: string;
   createdAt: string;
 }
