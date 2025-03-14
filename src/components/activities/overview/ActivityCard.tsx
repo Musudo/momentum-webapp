@@ -4,7 +4,6 @@ import PeopleIcon from "@mui/icons-material/People";
 import PersonIcon from "@mui/icons-material/Person";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import {Box, CardActionArea, Paper, Typography} from "@mui/material";
-import dayjs from "dayjs";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
 import {ActivityTypesEnum} from "../../../types/enums/ActivityTypesEnum";
@@ -45,8 +44,18 @@ const ActivityCard = ({activity}: TProps) => {
                         {renderIcon()}
                         <Box textAlign="center" marginTop={1}>
                             <Typography variant="subtitle2">{activity.subject}</Typography>
-                            <Typography variant="caption" color="textSecondary">
-                                {dayjs(activity.startTime).format("DD MMM YYYY HH:mm")}
+                            <Typography variant="subtitle2" color="textSecondary">
+                                {new Intl.DateTimeFormat('en-GB', {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: 'numeric'
+                                }).format(new Date(activity.startTime))}
+                            </Typography>
+                            <Typography variant="subtitle2" color="textSecondary">
+                                {new Intl.DateTimeFormat('en-GB', {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                }).format(new Date(activity.startTime))}
                             </Typography>
                         </Box>
                     </Box>

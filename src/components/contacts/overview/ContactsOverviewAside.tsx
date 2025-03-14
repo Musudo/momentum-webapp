@@ -4,10 +4,10 @@ import LabelIcon from "@mui/icons-material/Label";
 import Typography from "@mui/material/Typography";
 import {useTranslation} from "react-i18next";
 import {JobTitlesEnum} from "../../../types/enums/JobTitlesEnum.ts";
-import ContactSearchBar from "./ContactSearchBar.tsx";
+import SearchComponent from "../../SearchComponent.tsx";
 
 type TProps = {
-    setSearchValue: Dispatch<SetStateAction<string>>
+    setSearchValue: (value: string) => void;
     handleJobTitleFilter: (value: string) => void;
 }
 
@@ -17,7 +17,7 @@ const ContactsOverviewAside = ({setSearchValue, handleJobTitleFilter}: TProps) =
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', gap: '22px'}}>
-            <ContactSearchBar setSearchValue={setSearchValue}/>
+            <SearchComponent setSearchValue={setSearchValue}/>
             <List dense style={{marginLeft: "22px"}}>
                 <Fragment key={1}>
                     <Stack direction="row" alignItems="center" gap={1}>

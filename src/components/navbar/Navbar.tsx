@@ -119,8 +119,9 @@ export function Navbar() {
               centered
               onChange={handleChange}
             >
-              {navItems.map((item: string) => (
+              {navItems.map((item: string, index: number) => (
                 <Tab
+                  key={index}
                   label={t("Common." + `${item}`)}
                   onClick={() => navigate("/" + unCapitalizeFirstLetter(item))}
                 />

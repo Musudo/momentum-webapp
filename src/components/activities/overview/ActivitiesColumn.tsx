@@ -1,11 +1,10 @@
 import {IActivity} from "../../../types/models/IActivity";
 import {Box, Typography} from "@mui/material";
-import {ActivityColumnsEnum} from "../../../types/enums/ComponentPropsEnums";
 import ActivityCard from "./ActivityCard";
 
 type TProps = {
     activities: IActivity[];
-    columnName: ActivityColumnsEnum | null;
+    columnName: string;
 };
 
 const ActivitiesColumn = ({activities, columnName}: TProps) => {
@@ -26,7 +25,7 @@ const ActivitiesColumn = ({activities, columnName}: TProps) => {
                     paddingTop: "8px",
                     paddingBottom: "16px",
                     bgcolor: "#eaeaee",
-                    "&:first-child": {
+                    "&:first-of-type": {
                         paddingLeft: "5px",
                         borderTopLeftRadius: 5,
                     },
@@ -38,7 +37,7 @@ const ActivitiesColumn = ({activities, columnName}: TProps) => {
             >
                 {activities.length > 0 &&
                     activities.map((activity) => (
-                        <Box mb={2}>
+                        <Box key={activity.id} mb={2}>
                             <ActivityCard key={activity.id} activity={activity}/>
                         </Box>
                     ))}

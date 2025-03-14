@@ -1,11 +1,11 @@
-import {Dispatch, SetStateAction, useMemo} from 'react';
+import {useMemo} from 'react';
 import {alpha, InputBase, styled} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import {debounce} from "lodash";
-import {useTranslation} from "react-i18next";
 
 type TProps = {
-    setSearchValue: Dispatch<SetStateAction<string>>
+    setSearchValue: (value: string) => void;
+    placeholder?: string;
 }
 
 const Search = styled('div')(({theme}) => ({
@@ -13,7 +13,7 @@ const Search = styled('div')(({theme}) => ({
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.black, 0.05),
     '&:hover': {
-        backgroundColor: alpha(theme.palette.common.black, 0.10),
+        backgroundColor: alpha(theme.palette.common.black, 0.075),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
@@ -48,22 +48,19 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     },
 }));
 
-const ContactSearchBar = ({setSearchValue}: TProps) => {
-    const {t} = useTranslation();
-
-    const searchHandler = (event: any) => setSearchValue(event.target.value);
-
+const SearchComponent = ({setSearchValue, placeholder = "Search"}: TProps) => {
+    const searchHandler = (event: KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => setSearchValue(event.target.value);
     const debouncedSearchHandler = useMemo(
         () => debounce(searchHandler, 300)
         , []);
 
     return (
-        <Search>
+        <Search /*style={{width:'100%'}}*/>
             <SearchIconWrapper>
                 <SearchIcon/>
             </SearchIconWrapper>
             <StyledInputBase
-                placeholder={t('Contacts overview page.Search contact')}
+                placeholder={placeholder}
                 inputProps={{'aria-label': 'search'}}
                 onKeyUp={debouncedSearchHandler}
             />
@@ -71,4 +68,4 @@ const ContactSearchBar = ({setSearchValue}: TProps) => {
     );
 }
 
-export default ContactSearchBar;
+export default SearchComponent;

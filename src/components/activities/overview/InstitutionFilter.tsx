@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {Dispatch, SetStateAction, SyntheticEvent, useEffect, useMemo, useState} from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -11,31 +10,34 @@ import {useTranslation} from "react-i18next";
 import {useQuery} from "@tanstack/react-query";
 import {IContact} from "../../../types/models/IContact";
 import ClearIcon from '@mui/icons-material/Clear';
+import {IActivity} from "../../../types/models/IActivity.ts";
+import {fetchActivity} from "../../../utils/axios/configs/activityAxios.ts";
+import {fetchInstitution} from "../../../utils/axios/configs/institutionAxios.ts";
 
-interface Props {
-	setValue: any | null;
+type TProps = {
+	setValue: (value: string) => void;
 	institution: IInstitution | null;
 	setInstitution: Dispatch<SetStateAction<IInstitution | null>>;
 	setContacts: Dispatch<SetStateAction<IContact[]>> | null;
 }
 
-export default function InstitutionSearchBar(props: Props) {
+const InstitutionFilter = (props: TProps) => {
+	const {setValue, institution, setInstitution, setContacts} = props;
 	const [searchValue, setSearchValue] = useState("");
 	const [open, setOpen] = useState(false);
 	const [options, setOptions] = useState<readonly IInstitution[]>([]);
 	let loading = open && options.length === 0;
 	const {t} = useTranslation();
 
-	// const {data: institutions} = useQuery<IInstitution[]>(
-	// 	['institution', searchValue],
-	// 	() => {
-	// 		if (searchValue !== "") {
-	// 			return fetchDataReactQuery(`/institutions/info/${searchValue}`);
-	// 		} else {
-	// 			return [];
-	// 		}
-	// 	}
-	// );
+	const {
+		data: institutions,
+	} = useQuery<IInstitution[]>({
+		queryKey: ["institutions"],
+		queryFn: async () => {
+			const res = await fetchInstitution.get("");
+			return res.data;
+		}
+	});
 
 	useEffect(() => {
 		if (!open) setOptions([]);
@@ -52,12 +54,10 @@ export default function InstitutionSearchBar(props: Props) {
 
 	const debouncedSearchValueChangeHandler = useMemo(() => debounce(handleSearchValueChange, 300), []);
 
-	const handleAutocompleteChange = (event: SyntheticEvent, value: any) => props.setInstitution(value);
-
-	const handleCloseButtonClick = () => {
+	const handleCloseButton = () => {
 		setOpen(false);
-		if (props.setContacts) props.setContacts?.([]);
-		if (props.setValue) props.setValue?.('contacts', []);
+		if (setContacts) setContacts?.([]);
+		if (setValue) setValue?.('contacts', []);
 	}
 
 	const memoizedSearchValue = useMemo(() => {
@@ -69,16 +69,16 @@ export default function InstitutionSearchBar(props: Props) {
 			open={open}
 			onOpen={() => setOpen(true)}
 			onClose={() => setOpen(false)}
-			clearIcon={<ClearIcon color='inherit' fontSize='small' onClick={handleCloseButtonClick}/>}
-			onChange={(event: SyntheticEvent, value: any) => handleAutocompleteChange(event, value)}
+			clearIcon={<ClearIcon color='inherit' fontSize='small' onClick={handleCloseButton}/>}
+			onChange={(event: SyntheticEvent, value: Value | Value[]) => setInstitution(value)}
 			// show needed info from institution objects
-			isOptionEqualToValue={(option, value) => {
-				return `${option.name} - ${option.clientId}, ${option.city} ${option.zipCode}`
-					=== `${value.name} - ${value.clientId}, ${value.city} ${value.zipCode}`
-			}}
+			// isOptionEqualToValue={(option, value) => {
+			// 	return `${option.name} - ${option.clientId}, ${option.city} ${option.zipCode}`
+			// 		=== `${value.name} - ${value.clientId}, ${value.city} ${value.zipCode}`
+			// }}
 			value={memoizedSearchValue}
 			getOptionLabel={(option) => `${option.name} - ${option.clientId}, ${option.city} ${option.zipCode}`}
-			options={options}
+			options={institutions}
 			loading={loading}
 			renderInput={(params: AutocompleteRenderInputParams) => (
 				<TextField
@@ -86,24 +86,26 @@ export default function InstitutionSearchBar(props: Props) {
 					size="small"
 					placeholder={t('Activities overview page.Search institution')}
 					onKeyUp={debouncedSearchValueChangeHandler}
-					InputProps={{
+					slotProps={{
 						...params.InputProps,
 						startAdornment: (
 							<InputAdornment position="start">
-								<SearchIcon/>
+								<SearchIcon />
 							</InputAdornment>
 						),
 						endAdornment: (
 							<>
-								{loading && <CircularProgress color="inherit" size={20}/>}
+								{loading && <CircularProgress color="inherit" size={20} />}
 								{params.InputProps.endAdornment}
 							</>
 						),
 					}}
-					InputLabelProps={{children: null}} // otherwise Textfield gives error because of params
+					label="" // Use an empty label if you don't want one
 				/>
+
 			)}
 		/>
 	);
 }
 
+export default InstitutionFilter;

@@ -4,7 +4,7 @@ import {Controller} from "react-hook-form";
 import {IContact} from "../../../types/models/IContact";
 import {IInstitution} from "../../../types/models/IInstitution";
 import {fetchData, fetchDataReactQuery} from "../../../utils/HttpRequestUtil";
-import InstitutionSearchBar from "../overview/InstitutionSearchBar";
+import InstitutionFilter from "../overview/InstitutionFilter.tsx";
 import {useTranslation} from "react-i18next";
 import {MenuProps} from "../../../props/MUIElementProps";
 import {useQuery} from "@tanstack/react-query";
@@ -53,8 +53,8 @@ export function ParticipantForm(props: Props) {
 		<>
 			<Grid item xs={12}>
 				<FormControl sx={{width: "100%"}}>
-					<InstitutionSearchBar setInstitution={props.setInstitution} institution={props.institution}
-										  setContacts={props.setContacts} setValue={props.setValue}/>
+					<InstitutionFilter setInstitution={props.setInstitution} institution={props.institution}
+									   setContacts={props.setContacts} setValue={props.setValue}/>
 				</FormControl>
 			</Grid>
 			<Grid item xs={12}>
