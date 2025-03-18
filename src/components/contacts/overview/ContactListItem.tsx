@@ -4,11 +4,11 @@ import {stringAvatar, coloredStringAvatar} from "../../../utils/avatarHelpers.ts
 import {dataFieldFormatter, nameFormatter} from "../../../utils/DataFormatterUtil";
 import {IContact} from "../../../types/models/IContact.ts";
 
-type TProps = {
+type TContactListItemProps = {
     contact: IContact;
 }
 
-const ContactListItem = ({contact}: TProps) => {
+const ContactListItem = ({contact}: TContactListItemProps) => {
     const fullName = nameFormatter(contact.firstName, contact.lastName);
     const jobTitle = dataFieldFormatter(contact.jobTitle);
     const phoneNumber = dataFieldFormatter(contact.phone1);
@@ -23,7 +23,7 @@ const ContactListItem = ({contact}: TProps) => {
                 </ListItemAvatar>
                 <ListItemText
                     primary={
-                        <Typography>
+                        <Typography component="div">
                             {`${fullName} `}
                             <Chip label={jobTitle} color="default"/>
                         </Typography>

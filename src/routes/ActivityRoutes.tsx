@@ -13,7 +13,7 @@ const ActivityRoutes = () => {
             <Route>
                 <Route index element={<ActivitiesOverview/>}/>
                 <Route path=":id" element={<ActivityDetails/>}/>
-                <Route path="create" element={<ActivityCreate/>}/>
+                <Route path="create/:activityType" element={<ActivityCreate/>}/>
                 <Route path="edit/:id" element={<ActivityEdit/>}/>
                 <Route path="*" element={<NotFound/>}/>
             </Route>

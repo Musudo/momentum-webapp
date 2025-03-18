@@ -14,8 +14,7 @@ const ContactEdit = () => {
     const {id} = useParams();
 
     const {
-        data: contact,
-        status
+        data: contact
     } = useQuery({
         queryKey: ["contact"],
         queryFn: async () => {
@@ -26,21 +25,21 @@ const ContactEdit = () => {
 
     const {register, handleSubmit, control, setValue, reset, formState: {errors}} = useForm<IContact>({
         defaultValues: {
-            firstName: contact.firstName,
-            lastName: contact.lastName,
-            email1: contact.email1,
-            email2: contact.email2,
-            phone1: contact.phone1,
-            phone2: contact.phone2,
-            jobTitle: contact.jobTitle,
-            institution: contact.institution,
-            institutionId: contact.institutionId,
+            firstName: contact?.firstName,
+            lastName: contact?.lastName,
+            email1: contact?.email1,
+            email2: contact?.email2,
+            phone1: contact?.phone1,
+            phone2: contact?.phone2,
+            jobTitle: contact?.jobTitle,
+            institution: contact?.institution,
+            institutionId: contact?.institutionId,
         }
     });
 
     useEffect(() => {
-        if (status === 'success' && contact) reset(contact);
-    }, [contact, reset, status]);
+        reset(contact);
+    }, [contact, reset]);
 
     const modifyContactMutation = useMutation(
         {
@@ -58,6 +57,10 @@ const ContactEdit = () => {
 
     const onSubmit = (data: object) => {
         modifyContactMutation.mutate(data);
+    }
+
+    if (!contact) {
+        return <div>Error</div>;
     }
 
     return (

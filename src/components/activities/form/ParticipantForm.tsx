@@ -1,99 +1,98 @@
-import React, {Dispatch, SetStateAction, useEffect} from "react";
-import {Box, Chip, FormControl, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select} from "@mui/material";
-import {Controller} from "react-hook-form";
+import {useState} from "react";
+import {Chip, FormControl, FormHelperText, InputLabel, MenuItem, OutlinedInput, Select} from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import {Control, Controller, UseFormSetValue} from "react-hook-form";
 import {IContact} from "../../../types/models/IContact";
-import {IInstitution} from "../../../types/models/IInstitution";
-import {fetchData, fetchDataReactQuery} from "../../../utils/HttpRequestUtil";
-import InstitutionFilter from "../overview/InstitutionFilter.tsx";
 import {useTranslation} from "react-i18next";
 import {MenuProps} from "../../../props/MUIElementProps";
 import {useQuery} from "@tanstack/react-query";
-import {IActivity} from "../../../types/models/IActivity";
+import {fetchContact} from "../../../utils/axios/configs/contactAxios.ts";
+import InstitutionFilter from "../InstitutionFilter.tsx";
 
-interface Props {
-	control: any,
-	errors: any;
-	setValue: any;
-	contacts: IContact[];
-	setContacts: Dispatch<SetStateAction<IContact[]>>;
-	institution: IInstitution | null;
-	setInstitution: Dispatch<SetStateAction<IInstitution | null>>;
+type TProps = {
+    control: Control<any>,
+    errors: any;
+    setValue: UseFormSetValue<any>;
 }
 
-export function ParticipantForm(props: Props) {
-	const {t} = useTranslation();
+const ParticipantForm = (props: TProps) => {
+    const {control, setValue, errors} = props;
+    const [institutionName, setInstitutionName] = useState<string | null>(null);
+    const {t} = useTranslation();
 
-	const {data: contacts, status: contactsStatus} = useQuery<IContact[]>(
-		['contacts', props.institution],
-		() => {
-			if (props.institution) {
-				return fetchDataReactQuery(`/contacts/institution-guid-name/${props.institution?.guid}`);
-			} else {
-				return [];
-			}
-		}
-	);
+    const {
+        data: contacts,
+    } = useQuery<IContact[]>({
+        queryKey: ["contacts", institutionName],
+        queryFn: async () => {
+            if (institutionName) {
+                setValue("institutionName", institutionName);
+                const res = await fetchContact.get(`/by-institution-name/${institutionName}`);
+                return res.data;
+            }
+            const res = await fetchContact.get("");
+            return res.data;
+        }
+    });
 
-	useEffect(() => {
-		if (contactsStatus === 'success') {
-			props.setContacts(contacts);
-			props.setValue('institution', props.institution?.id);
-		}
-	}, [contacts, contactsStatus]);
+    if (!contacts) {
+        return <div>Error</div>;
+    }
 
-	// selected chips data of multiselect
-	let contactsObj: any = [];
-	if (props.contacts && props.contacts.length > 0) {
-		props.contacts?.map((c: IContact) => contactsObj[c.id] = c.firstName + " " + c.lastName);
-	} else {
-		contactsObj = [];
-	}
+    // selected chips data for multiselect
+    let contactIdsObj: any = [];
+    if (contacts && contacts.length > 0) {
+        contacts?.map((c: IContact) => contactIdsObj[c.id] = c.firstName + " " + c.lastName);
+    } else {
+        contactIdsObj = [];
+    }
 
-	return (
-		<>
-			<Grid item xs={12}>
-				<FormControl sx={{width: "100%"}}>
-					<InstitutionFilter setInstitution={props.setInstitution} institution={props.institution}
-									   setContacts={props.setContacts} setValue={props.setValue}/>
-				</FormControl>
-			</Grid>
-			<Grid item xs={12}>
-				<FormControl fullWidth sx={{minWidth: 120}}>
-					<InputLabel id="contactLabelId">{t('Activity form.Participants')}</InputLabel>
-					<Controller
-						name="contacts"
-						control={props.control}
-						rules={{required: "Participants required"}}
-						render={({field}) => (
-							<Select
-								{...field}
-								labelId="contactLabelId"
-								id="contactsId"
-								multiple
-								input={<OutlinedInput label={t('Activity form.Participants')}/>}
-								renderValue={(selected) => (
-									<Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-										{selected.map((value: any) => (
-											contactsObj[value] && <Chip key={value} label={contactsObj[value]}/>
-										))}
-									</Box>
-								)}
-								MenuProps={MenuProps}
-							>
-								{props.contacts.length > 0 && props.contacts.map((contact: IContact) => (
-									<MenuItem
-										key={contact.id}
-										value={contact.id}
-									>
-										{contact.firstName} {contact.lastName}
-									</MenuItem>
-								))}
-							</Select>
-						)}
-					/>
-				</FormControl>
-				<FormHelperText error>{props?.errors?.contacts?.message}</FormHelperText>
-			</Grid>
-		</>
-	);
+    return (
+        <div>
+            <Grid size={12} sx={{mb: 2}}>
+                <FormControl sx={{width: "100%"}}>
+                    <InstitutionFilter institutionName={institutionName} setInstitutionName={setInstitutionName}/>
+                </FormControl>
+            </Grid>
+            <Grid size={12}>
+                <FormControl fullWidth sx={{minWidth: 120}}>
+                    <InputLabel id="contactsLabelId">{t('Activity form.Participants')}</InputLabel>
+                    <Controller
+                        name="contactIds"
+                        control={control}
+                        rules={{required: "Participants required"}}
+                        render={({field}) => (
+                            <Select
+                                {...field}
+                                labelId="contactsLabelId"
+                                id="contactIds"
+                                multiple
+                                input={<OutlinedInput label={t('Activity form.Participants')}/>}
+                                renderValue={(selected) => (
+                                    <div style={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                                        {selected.map((value: any) => (
+                                            contactIdsObj[value] && <Chip key={value} label={contactIdsObj[value]}/>
+                                        ))}
+                                    </div>
+                                )}
+                                MenuProps={MenuProps}
+                            >
+                                {contacts.length > 0 && contacts.map((contact: IContact) => (
+                                    <MenuItem
+                                        key={contact.id}
+                                        value={contact.id}
+                                    >
+                                        {contact.firstName} {contact.lastName}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        )}
+                    />
+                </FormControl>
+                <FormHelperText error>{errors?.contacts?.message}</FormHelperText>
+            </Grid>
+        </div>
+    );
 }
+
+export default ParticipantForm;

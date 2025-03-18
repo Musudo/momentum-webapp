@@ -1,51 +1,113 @@
-import React, {Dispatch, SetStateAction} from 'react';
-import {IconButton, InputAdornment, TextField} from "@mui/material";
-import EmailIcon from "@mui/icons-material/Email";
+import {useState} from 'react';
+import {Card, CardContent, CardHeader, IconButton, InputAdornment, TextField} from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import ClearIcon from "@mui/icons-material/Clear";
-import {useTranslation} from "react-i18next";
+import {IExternalParticipant} from "../../../types/models/IExternalParticipant.ts";
+import AddIcon from "@mui/icons-material/Add";
+import PersonIcon from '@mui/icons-material/Person';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import {UseFormSetValue} from "react-hook-form";
 
-interface IExternal {
-	index: number;
+type TExternalParticipantFormProps = {
+    setValue: UseFormSetValue<any>;
 }
 
-interface Props {
-	external: IExternal;
-	externals: IExternal[];
-	register: any;
-	unRegister: any;
-	setExternals: Dispatch<SetStateAction<IExternal[]>>;
+const ExternalParticipantForm = ({setValue}: TExternalParticipantFormProps) => {
+    const [externalParticipants, setExternalParticipants] = useState<IExternalParticipant[]>([]);
+
+    const addExternalParticipant = () => {
+        const newExternal: IExternalParticipant = {id: Date.now().toString(), name: '', email: ''};
+        setExternalParticipants(prevExternals => [...prevExternals, newExternal]);
+    };
+
+    const removeExternalParticipant = (id: string) => {
+        setExternalParticipants(prevExternals => prevExternals
+            .filter(external => external.id !== id));
+    };
+
+    const handleChange = (
+        id: string,
+        field: keyof Omit<IExternalParticipant, 'id'>,
+        value: string
+    ) => {
+        setExternalParticipants((prevExternals) => {
+            const updatedExternals = prevExternals.map((external) =>
+                external.id === id ? {...external, [field]: value} : external
+            );
+            // Remove the 'id' field from each object before updating the form value.
+            const updatedWithoutId = updatedExternals.map(({id, ...rest}) => rest);
+            setValue("externalParticipants", updatedWithoutId);
+            return updatedExternals;
+        });
+    };
+
+    return (
+        <div>
+            <Grid spacing={2} sx={{marginTop: 2}}>
+                {externalParticipants.map(external => (
+                    <Grid key={external.id}>
+                        <Card sx={{position: 'relative', marginTop: 2}}>
+                            <CardHeader
+                                action={
+                                    <IconButton
+                                        onClick={() => removeExternalParticipant(external.id)}
+                                    >
+                                        <ClearIcon/>
+                                    </IconButton>
+                                }
+                                subheader="Add external participant"
+                            />
+                            <CardContent>
+                                <TextField
+                                    fullWidth
+                                    margin="normal"
+                                    label="Name"
+                                    value={external.name}
+                                    onChange={(e) =>
+                                        handleChange(external.id, 'name', e.target.value)
+                                    }
+                                    slotProps={{
+                                        input: {
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <PersonIcon/>
+                                                </InputAdornment>
+                                            )
+                                        }
+                                    }}
+                                />
+
+                                <TextField
+                                    fullWidth
+                                    margin="normal"
+                                    label="Email"
+                                    value={external.email}
+                                    onChange={(e) =>
+                                        handleChange(external.id, 'email', e.target.value)
+                                    }
+                                    slotProps={{
+                                        input: {
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <AlternateEmailIcon/>
+                                                </InputAdornment>
+                                            )
+                                        }
+                                    }}
+                                />
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
+            <IconButton
+                color="primary"
+                onClick={() => addExternalParticipant()}
+            >
+                <AddIcon/>
+            </IconButton>
+        </div>
+    );
 }
 
-export function ExternalParticipantForm(props: Props) {
-	const {t} = useTranslation();
-
-	return (
-		<TextField
-			key={props.external.index}
-			label={t('Activity form.External participant')}
-			variant="outlined"
-			fullWidth
-			InputProps={{
-				startAdornment: (
-					<InputAdornment position="start">
-						<EmailIcon color="primary"/>
-					</InputAdornment>
-				),
-				endAdornment: (
-					<InputAdornment position="end">
-						<IconButton size="small"
-									onClick={() => {
-										props.setExternals(
-											props.externals.filter((e: IExternal) => e.index !== props.external.index)
-										);
-										props.unRegister("external-" + props.external.index);
-									}}>
-							<ClearIcon/>
-						</IconButton>
-					</InputAdornment>
-				)
-			}}
-			{...props.register(`external-${props.external.index}`)}
-		/>
-	);
-}
+export default ExternalParticipantForm;

@@ -3,13 +3,13 @@ import {Fragment} from "react";
 import {IContact} from "../../../types/models/IContact.ts";
 import ContactListItem from "./ContactListItem.tsx";
 
-type TProps = {
+type TContactListProps = {
     page: number;
     rowsPerPage: number;
     filteredContacts: IContact[] | [];
 }
 
-const ContactList = (props: TProps) => {
+const ContactList = (props: TContactListProps) => {
     const {page, rowsPerPage, filteredContacts} = props;
     return (
         <Paper>

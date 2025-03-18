@@ -1,8 +1,7 @@
-import {SyntheticEvent, useRef, useState} from "react";
+import {useRef, useState} from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import {
-    Autocomplete,
     Box,
     Button,
     ButtonGroup,
@@ -16,24 +15,21 @@ import {
     Paper,
     Popper,
     Switch,
-    TextField,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import {useTranslation} from "react-i18next";
 import {SpeedDialDirectionsEnum,} from "../../../types/enums/ComponentPropsEnums";
-import {IInstitution} from "../../../types/models/IInstitution";
 import {useQuery} from "@tanstack/react-query";
 import {fetchActivity} from "../../../utils/axios/configs/activityAxios";
 import ArchivedActivityCard from "./ArchivedActivityCard";
 import {IActivity} from "../../../types/models/IActivity";
 import ActivitiesColumn from "./ActivitiesColumn";
 import ActivitySpeedDial from "./ActivitySpeedDial";
-import {fetchInstitution} from "../../../utils/axios/configs/institutionAxios.ts";
 import ArchivedActivitiesYearPicker from "./ArchivedActivitiesYearPicker.tsx";
+import InstitutionFilter from "../InstitutionFilter.tsx";
 
 const ActivitiesOverview = () => {
     const [institutionName, setInstitutionName] = useState<string | null>(null);
-    const [inputValue, setInputValue] = useState("");
     const [isArchived, setIsArchived] = useState(false);
     const {t} = useTranslation();
     const options = ["Earliest first", "Latest first"];
@@ -41,16 +37,6 @@ const ActivitiesOverview = () => {
     const anchorRef = useRef<HTMLDivElement>(null);
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [archivedYear, setArchivedYear] = useState<string | null>("2025");
-
-    const {
-        data: institutions,
-    } = useQuery<IInstitution[]>({
-        queryKey: ["institutions"],
-        queryFn: async () => {
-            const res = await fetchInstitution.get("");
-            return res.data;
-        }
-    });
 
     const {data: activitiesToday} = useQuery<IActivity[]>({
         queryKey: ["activitiesToday", institutionName],
@@ -104,7 +90,7 @@ const ActivitiesOverview = () => {
         enabled: isArchived
     });
 
-    if (!activitiesToday || !activitiesNextSevenDays || !activitiesNextThirtyDays || !institutions) {
+    if (!activitiesToday || !activitiesNextSevenDays || !activitiesNextThirtyDays) {
         return <div>Error</div>;
     }
 
@@ -168,20 +154,8 @@ const ActivitiesOverview = () => {
                 >
                     <Box display="flex" flexDirection="row" width="90vh">
                         <FormControl style={{width: 300}}>
-                            <Autocomplete
-                                value={institutionName}
-                                onChange={(_event: SyntheticEvent, newValue: string | null) => {
-                                    setInstitutionName(newValue);
-                                }}
-                                inputValue={inputValue}
-                                onInputChange={(_event: SyntheticEvent, newInputValue: string) => {
-                                    setInputValue(newInputValue);
-                                }}
-                                options={institutions.map((institution: IInstitution) => institution.name)}
-                                // sx={{ width: 300 }}
-                                renderInput={(params) => <TextField {...params} size="small"
-                                                                    label="Filter by institution"/>}
-                            />
+                            <InstitutionFilter institutionName={institutionName}
+                                               setInstitutionName={setInstitutionName}/>
                         </FormControl>
                         <FormControl
                             component="fieldset"

@@ -57,7 +57,7 @@ export const normalizeString = (str: string, partToRemove: string = "") => {
  * @returns
  */
 export const capitalizeFirstLetter = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
 /**
@@ -66,7 +66,7 @@ export const capitalizeFirstLetter = (str: string) => {
  * @returns
  */
 export const unCapitalizeFirstLetter = (str: string) => {
-    return str.charAt(0).toLowerCase() + str.slice(1);
+    return str.charAt(0).toLowerCase() + str.slice(1).toLowerCase();
 };
 
 /**

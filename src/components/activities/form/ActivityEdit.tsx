@@ -1,99 +1,125 @@
-import React, {useEffect, useState} from "react";
-import {ActivityForm} from "./ActivityForm";
-import {Box, Button, Container, Paper, Typography} from "@mui/material";
+import * as React from "react";
+import {useEffect, useState} from "react";
+import {Box, Button, Container, Paper, Snackbar, SnackbarCloseReason, Typography} from "@mui/material";
 import {useForm} from "react-hook-form";
-import dayjs from "dayjs";
 import {useParams} from "react-router-dom";
 import {IActivity} from "../../../types/models/IActivity";
-import {fetchDataReactQuery, patchDataReactQuery} from "../../../utils/HttpRequestUtil";
-import {FormSubmitSnackbar} from "../../FormSubmitSnackbar";
-import {ITag} from "../../../types/models/ITag";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
 import {useMutation, useQuery} from "@tanstack/react-query";
-import LoadingComponent from "../../LoadingComponent";
-import {ErrorComponent} from "../../ErrorComponent";
-import {ErrorTypesEnum} from "../../../types/enums/ErrorTypesEnum";
 import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums";
+import {fetchActivity} from "../../../utils/axios/configs/activityAxios.ts";
+import ActivityForm from "./ActivityForm.tsx";
+import {capitalizeFirstLetter} from "../../../utils/stringHelpers.ts";
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
+const ActivityEdit = () => {
+    const {id} = useParams();
+    const [snackbarState, setSnackbarState] = useState({
+        open: false,
+        message: "",
+    });
 
- const ActivityEdit = () => {
-	const [openSnackbar, setOpenSnackbar] = useState(false);
-	const {guid} = useParams();
+    const {
+        data: activity,
+    } = useQuery<IActivity>({
+        queryKey: ["activity"],
+        queryFn: async () => {
+            const res = await fetchActivity.get(`/${id}`);
+            return res.data;
+        }
+    });
 
-	const {data: activity, status: activityStatus} = useQuery<IActivity>(
-		['activity'],
-		() => fetchDataReactQuery(`/activities/${guid}`),
-	);
+    const {register, control, handleSubmit, reset, setValue, formState: {errors}} = useForm<IActivity>({
+        defaultValues: {
+            type: capitalizeFirstLetter(activity?.type ?? "Online"),
+            subject: activity?.subject,
+            externalNote: activity?.externalNote,
+            internalNote: activity?.internalNote,
+            startTime: activity?.startTime,
+            endTime: activity?.endTime,
+        }
+    });
 
-	useEffect(() => {
-		if (activityStatus === 'success' && activity) reset(activity);
-	}, [activityStatus, activity]);
+    useEffect(() => {
+        if (activity) {
+            reset({
+                ...activity,
+                type: capitalizeFirstLetter(activity?.type ?? "Online"),
+            });
+        }
+    }, [activity, reset]);
 
-	const {data: tags} = useQuery<ITag[]>(
-		['tags'],
-		() => fetchDataReactQuery(`/tags`)
-	);
+    const onSubmit = (data: IActivity) => {
+        data.type = data.type.toUpperCase();
+        delete data.externalParticipants;
 
-	const {register, control, handleSubmit, reset, resetField, setValue, formState: {errors}} = useForm<IActivity>({
-		defaultValues: {
-			subject: activity?.subject ?? "",
-			tags: activity?.tags,
-			externalNote: activity?.externalNote ?? "",
-			internalNote: activity?.internalNote ?? "",
-			type: activity?.type ?? "",
-			start: activity?.start,
-			end: activity?.end
-		}
-	});
+        modifyActivityMutation.mutate(data);
+    }
 
-	function onSubmit(newActivity: IActivity) {
-		// format start date and adjust its timezone
-		newActivity.start = dayjs(newActivity.start).tz('UTC').format('DD-MM-YYYY HH:mm');
-		// format start date and adjust its timezone
-		newActivity.end = dayjs(newActivity.end).tz('UTC').format('DD-MM-YYYY HH:mm');
+    const modifyActivityMutation = useMutation(
+        {
+            mutationFn: (data: IActivity) => fetchActivity.patch(`/${id}`, data),
+            onSuccess: () => {
+                setSnackbarState({
+                    ...snackbarState,
+                    open: true,
+                    message: "Activity edited",
+                });
+            },
+            onError: (err) => {
+                console.log("Error: ", err);
+                setSnackbarState({
+                    ...snackbarState,
+                    open: true,
+                    message: "Failed to edit an activity",
+                });
+            },
+        }
+    );
 
-		modifyActivityMutation.mutate(newActivity);
-	}
+    if (!activity) {
+        return <div>Error</div>;
+    }
 
-	const modifyActivityMutation = useMutation(
-		{
-			mutationFn: (data: IActivity) => patchDataReactQuery(`/activities/${activity?.id}`, data),
-			onSuccess: () => {
-				setOpenSnackbar(true);
-			}
-		}
-	);
-
-	if (activityStatus === 'loading') return <LoadingComponent/>;
-
-	if (activityStatus === 'error') return <ErrorComponent type={ErrorTypesEnum.General}/>;
-
-	return (
-		<Container component="main" maxWidth="sm" sx={{mb: 4}}>
-			<FormSubmitSnackbar setOpen={setOpenSnackbar} open={openSnackbar} message="Activity updated!"/>
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-					<Typography component="h1" variant="h4" align="center">
-						Edit Activity
-					</Typography>
-					{activity && <ActivityForm register={register} controller={control} errors={errors}
-											   tags={tags ?? []} activity={activity} setValue={setValue}
-											   type={FormTypesEnum.Edit}/>}
-					<Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-						<Button
-							type="submit"
-							variant="contained"
-							sx={{mt: 3, ml: 1}}>
-							Save
-						</Button>
-					</Box>
-				</Paper>
-			</form>
-		</Container>
-	);
+    return (
+        <Container component="main" maxWidth="sm" sx={{mb: 4}}>
+            <Snackbar
+                open={snackbarState.open}
+                onClose={(
+                    _event: React.SyntheticEvent<any> | Event,
+                    reason?: SnackbarCloseReason
+                ) => {
+                    if (reason === "clickaway") {
+                        return;
+                    }
+                    setSnackbarState({...snackbarState, open: false});
+                }}
+                autoHideDuration={2000}
+                anchorOrigin={{vertical: "top", horizontal: "center"}}
+                message={snackbarState.message}
+            />
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
+                    <Typography component="h1" variant="h4" align="center">
+                        Edit Activity
+                    </Typography>
+                    <ActivityForm register={register}
+                                  controller={control}
+                                  errors={errors}
+                                  setValue={setValue}
+                                  activity={activity}
+                                  formType={FormTypesEnum.Edit}
+                    />
+                    <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            sx={{mt: 3, ml: 1}}>
+                            Save
+                        </Button>
+                    </Box>
+                </Paper>
+            </form>
+        </Container>
+    );
 }
 
 export default ActivityEdit;

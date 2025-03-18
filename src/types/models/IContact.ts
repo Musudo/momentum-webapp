@@ -11,4 +11,5 @@ export interface IContact {
     jobTitle: string;
     institution: IInstitution;
     institutionId: string;
+    createdAt: string;
 }

@@ -1,282 +1,210 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ActivityForm } from "./ActivityForm";
+import * as React from "react";
+import {ChangeEvent, useState} from "react";
 import {
-  Box,
-  Button,
-  Container,
-  FormControlLabel,
-  FormHelperText,
-  IconButton,
-  Paper,
-  Step,
-  StepLabel,
-  Stepper,
-  Switch,
-  Tooltip,
-  Typography,
+    Box,
+    Button,
+    Container,
+    FormControlLabel,
+    FormHelperText,
+    Paper,
+    Snackbar,
+    SnackbarCloseReason,
+    Step,
+    StepLabel,
+    Stepper,
+    Switch,
+    Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { useForm } from "react-hook-form";
-import { ParticipantForm } from "./ParticipantForm";
-import { useNavigate, useParams } from "react-router-dom";
-import AddIcon from "@mui/icons-material/Add";
-import { ExternalParticipantForm } from "./ExternalParticipantForm";
-import {
-  fetchDataReactQuery,
-  postDataReactQuery,
-} from "../../../utils/HttpRequestUtil";
+import {useForm} from "react-hook-form";
+import {useParams} from "react-router-dom";
 import dayjs from "dayjs";
-import UserContext, { IUserContext } from "../../../context/UserContext";
-import { IContact } from "../../../types/models/IContact";
-import { IInstitution } from "../../../types/models/IInstitution";
-import { ITag } from "../../../types/models/ITag";
-import { useTranslation } from "react-i18next";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { IActivity } from "../../../types/models/IActivity";
-import { FormTypesEnum } from "../../../types/enums/ComponentPropsEnums";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-
-let index = 1;
-
-interface IExternal {
-  index: number;
-}
+import {useTranslation} from "react-i18next";
+import {useMutation} from "@tanstack/react-query";
+import {IActivity} from "../../../types/models/IActivity";
+import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums";
+import ActivityForm from "./ActivityForm.tsx";
+import ParticipantForm from "./ParticipantForm.tsx";
+import {fetchActivity} from "../../../utils/axios/configs/activityAxios.ts";
+import ExternalParticipantForm from "./ExternalParticipantForm.tsx";
 
 const ActivityCreate = () => {
-  const [sendEmail, setSendEmail] = useState(false);
-  const [externals, setExternals] = useState<IExternal[]>([]);
-  // default institution, institutions and contacts should stay outside of participant form for now,
-  // so that its value is not changed after each rerender of participant form
-  const [institution, setInstitution] = useState<IInstitution | null>(null);
-  const [contacts, setContacts] = useState<IContact[]>([]);
-  const navigate = useNavigate();
-  const { type } = useParams();
-  const { user } = useContext<IUserContext>(UserContext);
-  const { t } = useTranslation();
-//   const queryClient = useQueryClient();
-  console.log("create page ");
-
-  const {
-    register,
-    unregister,
-    control,
-    handleSubmit,
-    setValue,
-    trigger,
-    formState: { errors },
-  } = useForm<IActivity>({
-    defaultValues: {
-      subject: "",
-      tags: [],
-      externalNote: "",
-      internalNote: "",
-      type: type,
-      // TODO: this doesn't make sense, but month and day should be flipped here, otherwise datetimepicker acts very weird -> fix this in the future
-    //   start: dayjs().format("MM-DD-YYYY HH:mm"),
-      // TODO: this doesn't make sense, but month and day should be flipped here, otherwise datetimepicker acts very weird -> fix this in the future
-    //   end: dayjs().add(60, "minutes").format("MM-DD-YYYY HH:mm"),
-    //   user: user?.id,
-      contacts: [],
-      institution: null,
-      externalParticipants: [],
-      emailSentAt: null,
-    },
-  });
-
-  // reset user value, otherwise it's undefined
-  useEffect(() => {
-    // setValue("user", user?.id ?? 0);
-  }, [user]);
-
-  // const {data: tags} = useQuery<ITag[]>(
-  // 	['tags'],
-  // 	() => fetchDataReactQuery(`/tags`),
-  // 	{
-  // 		staleTime: 60 * 1000,
-  // 	}
-  // );
-
-  const handleSendEmailChange = (event: any) =>
-    setSendEmail(event.target.checked);
-
-  /* stepper configuration >> */
-  const [activeStep, setActiveStep] = useState(0);
-  const steps = [t("Activity form.Participants"), t("Activity form.Activity")];
-
-  const participantStep = (
-    <Grid container spacing={3}>
-      <ParticipantForm
-        control={control}
-        errors={errors}
-        setValue={setValue}
-        contacts={contacts}
-        setContacts={setContacts}
-        setInstitution={setInstitution}
-        institution={institution}
-      />
-      {externals.length > 0 &&
-        externals.map((external: IExternal) => (
-          <Grid >
-            <ExternalParticipantForm
-              external={external}
-              externals={externals}
-              register={register}
-              unRegister={unregister}
-              setExternals={setExternals}
-            />
-          </Grid>
-        ))}
-      <Grid >
-        <Tooltip title={t("Activity form.Add someone external")}>
-          <IconButton
-            color="primary"
-            aria-label="participants"
-            onClick={() => setExternals([...externals, { index: index++ }])}
-          >
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
-      </Grid>
-    </Grid>
-  );
-
-  const activityStep = (
-    <>
-      {/* <ActivityForm
-        register={register}
-        controller={control}
-        errors={errors}
-        tags={[]}
-        activity={null}
-        setValue={setValue}
-        type={FormTypesEnum.Create}
-      /> */}
-      <Grid mt={2}>
-        <FormControlLabel
-          control={<Switch onChange={handleSendEmailChange} />}
-          label={t("Activity form.Send email")}
-        />
-        <FormHelperText>
-          {t("Activity form.Switch on to immediately send email")}
-        </FormHelperText>
-      </Grid>
-    </>
-  );
-
-  function getStepContent(step: number) {
-    switch (step) {
-      case 0:
-        return participantStep;
-      case 1:
-        return activityStep;
-      default:
-        throw new Error("Unknown step");
-    }
-  }
-
-  const handleNext = () => {
-    // make sure participants are chosen before going to next step
-    trigger(["contacts"]).then(function (result) {
-      if (result) setActiveStep(activeStep + 1);
+    const {t} = useTranslation();
+    const [activeStep, setActiveStep] = useState(0);
+    const steps = [t("Activity form.Participants"), t("Activity form.Activity")];
+    const [snackbarState, setSnackbarState] = useState({
+        open: false,
+        message: "",
     });
-  };
+    const {activityType} = useParams();
 
-  const handleBack = () => setActiveStep(activeStep - 1);
-  /* << stepper configuration */
+    const {
+        register,
+        // unregister,
+        control,
+        handleSubmit,
+        setValue,
+        getValues,
+        trigger,
+        formState: {errors},
+    } = useForm<IActivity>({
+        defaultValues: {
+            subject: "",
+            tagIds: [],
+            externalNote: "",
+            internalNote: "",
+            type: activityType,
+            startTime: dayjs().format('YYYY-MM-DD[T]HH:mm:ss'),
+            endTime: dayjs().add(60, 'minutes').format('YYYY-MM-DD[T]HH:mm:ss'),
+            emailSentAt: "",
+            contactIds: [],
+            institutionName: "",
+            externalParticipants: []
+        },
+    });
 
-  const createActivityMutation = null; /* useMutation({
-    mutationFn: (activity: IActivity) =>
-      postDataReactQuery(`/activities`, activity),
-    onSuccess: (data) => {
-      if (sendEmail) {
-        emailMutation.mutate(data.data.id);
-      }
-      navigate(`/activities`);
-    },
-  }); */
-
-  const emailMutation = null; /* useMutation({
-    mutationFn: (id: number) =>
-      postDataReactQuery(`/email/activity/${id}/confirm`, []),
-  }); */
-
-  function onSubmit(data: any) {
-    // add external participants to activity object
-    for (let i = 0; i < index; i++) {
-      if (data["external-" + i]) {
-        data.externalParticipants.push({ email: data["external-" + i] });
-        delete data["external-" + i];
-      }
+    const onSubmit = (data: IActivity) => {
+        data.type = data.type.toUpperCase();
+        createActivityMutation.mutate(data);
     }
 
-    // format start date and adjust its timezone
-    data.start = dayjs(data.start).tz("UTC").format("DD-MM-YYYY HH:mm");
-    // format start date and adjust its timezone
-    data.end = dayjs(data.end).tz("UTC").format("DD-MM-YYYY HH:mm");
+    const createActivityMutation = useMutation(
+        {
+            mutationFn: (data: object) => fetchActivity.post("", data),
+            onSuccess: () => {
+                setSnackbarState({
+                    ...snackbarState,
+                    open: true,
+                    message: "Activity created",
+                });
 
-    if (sendEmail) {
-      data.emailSentAt = dayjs().tz("UTC").format("DD-MM-YYYY HH:mm");
-    } else {
-      data.emailSentAt = null;
+                setTimeout(() => {
+                    window.location.href = "/activities";
+                }, 2000);
+            },
+            onError: (err) => {
+                console.log("Error: ", err);
+                setSnackbarState({
+                    ...snackbarState,
+                    open: true,
+                    message: "Failed to create an activity",
+                });
+            },
+        }
+    );
+
+    const getStepContent = (step: number) => {
+        switch (step) {
+            case 0:
+                return participantStep;
+            case 1:
+                return activityStep;
+            default:
+                throw new Error("Unknown step");
+        }
     }
 
-    // prepare tags for the backend
-    // data.tags = tags
-    // 	?.filter(tag => data.tags.includes(tag.name))
-    // 	.map(tag => tag.id);
+    const participantStep = (
+        <div>
+            <ParticipantForm
+                control={control}
+                errors={errors}
+                setValue={setValue}
+            />
+            <ExternalParticipantForm setValue={setValue}/>
+        </div>
+    );
 
-    // createActivityMutation.mutate(data);
-  }
+    const activityStep = (
+        <div>
+            <ActivityForm
+                register={register}
+                controller={control}
+                errors={errors}
+                activity={null}
+                setValue={setValue}
+                formType={FormTypesEnum.Create}
+            />
+            <Grid mt={2}>
+                <FormControlLabel
+                    control={<Switch onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                        if (event.target.checked) {
+                            setValue("emailSentAt", dayjs(getValues("startTime")).format('YYYY-MM-DD[T]HH:mm:ss'));
+                        }
+                    }}/>}
+                    label={t("Activity form.Send email")}
+                />
+                <FormHelperText>
+                    {t("Activity form.Switch on to immediately send email")}
+                </FormHelperText>
+            </Grid>
+        </div>
+    );
 
-  return (
-    <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-      TEST create
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Paper
-          variant="outlined"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-        >
-          <Typography component="h1" variant="h4" align="center">
-            {t("Activity form.New activity")}
-          </Typography>
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          {getStepContent(activeStep)}
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            {activeStep !== 0 && (
-              <Button type="button" onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                {t("Activity form.Back")}
-              </Button>
-            )}
-            {activeStep !== steps.length - 1 && (
-              <Button
-                type="button"
-                variant="contained"
-                onClick={handleNext}
-                sx={{ mt: 3, ml: 1 }}
-              >
-                {t("Activity form.Next")}
-              </Button>
-            )}
-            {activeStep === steps.length - 1 && (
-              <Button type="submit" variant="contained" sx={{ mt: 3, ml: 1 }}>
-                {t("Activity form.Save")}
-              </Button>
-            )}
-          </Box>
-        </Paper>
-      </form>
-    </Container>
-  );
+    return (
+        <Container component="main" maxWidth="sm" sx={{mb: 4}}>
+            <Snackbar
+                open={snackbarState.open}
+                onClose={(
+                    _event: React.SyntheticEvent<any> | Event,
+                    reason?: SnackbarCloseReason
+                ) => {
+                    if (reason === "clickaway") {
+                        return;
+                    }
+                    setSnackbarState({...snackbarState, open: false});
+                }}
+                autoHideDuration={2000}
+                anchorOrigin={{vertical: "top", horizontal: "center"}}
+                message={snackbarState.message}
+            />
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <Paper
+                    variant="outlined"
+                    sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}
+                >
+                    <Typography component="h1" variant="h4" align="center">
+                        {t("Activity form.New activity")}
+                    </Typography>
+                    <Stepper activeStep={activeStep} sx={{pt: 3, pb: 5}}>
+                        {steps.map((label) => (
+                            <Step key={label}>
+                                <StepLabel>{label}</StepLabel>
+                            </Step>
+                        ))}
+                    </Stepper>
+                    {getStepContent(activeStep)}
+                    <Box sx={{display: "flex", justifyContent: "flex-end"}}>
+                        {activeStep !== 0 && (
+                            <Button type="button" onClick={() => setActiveStep(activeStep - 1)} sx={{mt: 3, ml: 1}}>
+                                {t("Activity form.Back")}
+                            </Button>
+                        )}
+                        {activeStep !== steps.length - 1 && (
+                            <Button
+                                type="button"
+                                variant="contained"
+                                onClick={() => {
+                                    // make sure participants are chosen before going to next step
+                                    trigger(["contacts"]).then(function (result) {
+                                        if (result) setActiveStep(activeStep + 1);
+                                    });
+                                }}
+                                sx={{mt: 3, ml: 1}}
+                            >
+                                {t("Activity form.Next")}
+                            </Button>
+                        )}
+                        {activeStep === steps.length - 1 && (
+                            <Button type="submit" variant="contained" sx={{mt: 3, ml: 1}}>
+                                {t("Activity form.Save")}
+                            </Button>
+                        )}
+                    </Box>
+                </Paper>
+            </form>
+        </Container>
+    );
 };
 
 export default ActivityCreate;

@@ -1,4 +1,4 @@
-import {Dispatch, Fragment, SetStateAction} from 'react';
+import {Fragment} from 'react';
 import {Chip, List, ListItem, Stack} from "@mui/material";
 import LabelIcon from "@mui/icons-material/Label";
 import Typography from "@mui/material/Typography";
@@ -6,12 +6,12 @@ import {useTranslation} from "react-i18next";
 import {JobTitlesEnum} from "../../../types/enums/JobTitlesEnum.ts";
 import SearchComponent from "../../SearchComponent.tsx";
 
-type TProps = {
+type TContactsOverviewAsideProps = {
     setSearchValue: (value: string) => void;
     handleJobTitleFilter: (value: string) => void;
 }
 
-const ContactsOverviewAside = ({setSearchValue, handleJobTitleFilter}: TProps) => {
+const ContactsOverviewAside = ({setSearchValue, handleJobTitleFilter}: TContactsOverviewAsideProps) => {
     const jobTitles = Object.keys(JobTitlesEnum);
     const {t} = useTranslation();
 
@@ -30,8 +30,8 @@ const ContactsOverviewAside = ({setSearchValue, handleJobTitleFilter}: TProps) =
                             }}/>
                         </ListItem>
                         {
-                            jobTitles.map((jobTitle: string) => (
-                                <ListItem sx={{marginLeft: 2}}>
+                            jobTitles.map((jobTitle: string, index: number) => (
+                                <ListItem key={index} sx={{marginLeft: 2}}>
                                     <Chip label={jobTitle}
                                           onClick={() => handleJobTitleFilter(jobTitle)}/>
                                 </ListItem>

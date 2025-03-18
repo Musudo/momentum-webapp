@@ -1,19 +1,18 @@
-import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {useAudioRecorder} from 'react-audio-voice-recorder';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import {Box, IconButton, Stack, Tooltip, Typography} from "@mui/material";
 import MicIcon from '@mui/icons-material/Mic';
-import {deleteDataReactQuery, postDataReactQuery} from "../../../utils/HttpRequestUtil";
 import {IActivity} from "../../../types/models/IActivity";
 import ClearIcon from '@mui/icons-material/Clear';
 import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {fetchVoiceMemo} from "../../../utils/axios/configs/voiceMemoAxios.ts";
 
-interface Props {
+type TActivityVoiceMemoProps = {
 	activity: IActivity;
 }
 
-export function ActivityVoiceMemo({activity}: Props) {
+const ActivityVoiceMemo = ({activity}: TActivityVoiceMemoProps) => {
 	const recorderControls = useAudioRecorder();
 	const [isDisabled, setIsDisabled] = useState(!!activity.voiceMemo);
 	// recorderControls.recordingBlob is always undefined at first
@@ -42,7 +41,7 @@ export function ActivityVoiceMemo({activity}: Props) {
 
 	const modifyVoiceMemoMutation = useMutation(
 		{
-			mutationFn: (formData: object) => postDataReactQuery(`/file/voice-memo/${activity.id}`, formData),
+			mutationFn: (formData: object) => fetchVoiceMemo.post(`/file/voice-memo/${activity.id}`, formData),
 			onSuccess: () => {
 				queryClient.invalidateQueries({queryKey: ['activity']});
 			}
@@ -58,7 +57,7 @@ export function ActivityVoiceMemo({activity}: Props) {
 
 	const deleteVoiceMemoMutation = useMutation(
 		{
-			mutationFn: () => deleteDataReactQuery(`/file/voice-memo/${activity.id}`),
+			mutationFn: () => fetchVoiceMemo.delete(`/file/voice-memo/${activity.id}`),
 			onSuccess: () => {
 				queryClient.invalidateQueries({queryKey: ['activity']});
 			}
@@ -112,3 +111,5 @@ export function ActivityVoiceMemo({activity}: Props) {
 		</>
 	);
 }
+
+export default ActivityVoiceMemo;

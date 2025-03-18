@@ -1,5 +1,6 @@
-import {IModel} from "./IModel";
-
-export interface IExternalParticipant extends IModel {
-	email: string;
+export interface IExternalParticipant {
+    id: string;
+    email: string;
+    name: string;
+    // createdAt: string;
 }
