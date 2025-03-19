@@ -1,13 +1,24 @@
 import React, {useState} from "react";
 import {IActivity} from "../../../types/models/IActivity";
 import {useParams} from "react-router-dom";
-import {Box, Button, Chip, Container, IconButton, Paper, Tab, Tabs, Typography, useMediaQuery,} from "@mui/material";
+import {
+    Box,
+    Button,
+    Chip,
+    Container,
+    Divider,
+    IconButton,
+    Paper,
+    Tab,
+    Tabs,
+    Typography,
+    useMediaQuery,
+} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
 import PeopleIcon from "@mui/icons-material/People";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
-import {ActivityAside} from "./ActivityAside";
 import EmailIcon from "@mui/icons-material/Email";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {allyProps} from "../../../props/MUIElementProps";
@@ -22,9 +33,9 @@ import ParticipantsList from "./participants/ParticipantsList.tsx";
 import ActivityTasks from "./ActivityTasks.tsx";
 import {ITag} from "../../../types/models/ITag.ts";
 import {capitalizeFirstLetter} from "../../../utils/stringHelpers.ts";
-
-// dayjs.extend(utc);
-// dayjs.extend(timezone);
+import ActivityAside from "./ActivityAside.tsx";
+import AddParticipantsDialog from "./participants/AddParticipantsDialog.tsx";
+import AddExternalParticipantsDialog from "./participants/AddExternalParticipantsDialog.tsx";
 
 type TTabPanelProps = {
     children?: React.ReactNode;
@@ -34,7 +45,6 @@ type TTabPanelProps = {
 
 const ActivityDetails = () => {
     const {id} = useParams();
-    const [isUpdated, setIsUpdated] = useState(true);
     const isMobile = useMediaQuery("(max-width: 600px)");
     const queryClient = useQueryClient();
 
@@ -49,18 +59,9 @@ const ActivityDetails = () => {
     });
 
     console.log("test ", activity, id);
-    /* activity cancellation dialog */
-    const [openDialog, setOpenDialog] = useState(false);
-    const handleClickOpenDialog = () => {
-        setOpenDialog(true);
-    };
-    /* activity cancellation dialog */
+    const [openDeleteActivityDialog, setOpenDeleteActivityDialog] = useState(false);
+    const [tabValue, setTabValue] = useState(0);
 
-    /* tabs */
-    const [value, setValue] = useState(0);
-    const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
-    };
     const TabPanel = (props: TTabPanelProps) => {
         const {children, value, index, ...other} = props;
         return (
@@ -79,7 +80,6 @@ const ActivityDetails = () => {
             </div>
         );
     };
-    /* tabs */
 
     const sendEmailMutation = useMutation({
         mutationFn: (data: object) => fetchActivity.post(`/email/activity/${activity?.id}/confirm`, data),
@@ -106,10 +106,6 @@ const ActivityDetails = () => {
         }
     };
 
-    //   if (status === "loading") return <LoadingComponent />;
-
-    //   if (status === "error") return <ErrorComponent type={ErrorTypesEnum.Fetch} />;
-
     return (
         <Container
             sx={{
@@ -120,177 +116,160 @@ const ActivityDetails = () => {
             maxWidth="lg"
         >
             <Grid container spacing={3}>
-                {activity && (
-                    <>
-                        <Grid>
-                            <Paper
-                                sx={{
-                                    p: 2,
-                                    display: "flex",
-                                    flexDirection: "column",
-                                }}
-                            >
-                                <Grid display="flex" justifyContent="space-between">
-                                    <Grid>
-                                        <Typography variant="h5" marginBottom={1}>
-                                            {activity?.subject}{" "}
-                                            {activity.tags.map((tag: ITag) => (
-                                                <>
-                                                    <Chip
-                                                        variant="outlined"
-                                                        color="success"
-                                                        label={tag.name}
-                                                    />{" "}
-                                                </>
-                                            ))}
-                                        </Typography>
-                                        <Typography
-                                            variant="subtitle2"
-                                            color="textSecondary"
-                                            marginBottom={1}
-                                        >
-                                            {dayjs(activity?.startTime).format("DD MMM YYYY HH:mm")}
-                                        </Typography>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                flexWrap: "wrap",
-                                                marginBottom: 2,
-                                            }}
-                                        >
-                                            {renderIcon()}
-                                            <Typography variant="caption" color="textSecondary">
-                                                {"-"} {activity?.type}
-                                            </Typography>
-                                        </div>
-                                    </Grid>
-                                    <Grid>
-                                        {!activity.emailSentAt && (
-                                            <>
-                                                {!isMobile ? (
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        startIcon={<EmailIcon/>}
-                                                        onClick={handleEmailSend}
-                                                    >
-                                                        Send email
-                                                    </Button>
-                                                ) : (
-                                                    <IconButton
-                                                        color="primary"
-                                                        size="large"
-                                                        onClick={handleEmailSend}
-                                                    >
-                                                        <EmailIcon/>
-                                                    </IconButton>
-                                                )}
-                                            </>
-                                        )}
-                                    </Grid>
-                                </Grid>
-                                <Box sx={{borderBottom: 1, borderColor: "divider"}}>
-                                    <Tabs
-                                        value={value}
-                                        aria-label="activity tabs"
-                                        variant="scrollable"
-                                        scrollButtons="auto"
-                                        allowScrollButtonsMobile
-                                        onChange={handleChange}
-                                    >
-                                        <Tab label="Notes" {...allyProps(0)} />
-                                        <Tab label="Tasks" {...allyProps(1)} />
-                                        <Tab label="Participants" {...allyProps(2)} />
-                                        <Tab label="Review" {...allyProps(3)} />
-                                    </Tabs>
-                                </Box>
-
-                                {/*notes tab*/}
-                                <TabPanel value={value} index={0}>
-                                    <ActivityExternalNote activity={activity}/>
-                                    <ActivityInternalNote activity={activity}/>
-                                    <ActivityVoiceMemo activity={activity}/>
-                                </TabPanel>
-
-                                {/*tasks tab*/}
-                                <TabPanel value={value} index={1}>
-                                    <Grid
-                                        container
-                                        spacing={0}
-                                        alignItems="center"
-                                        justifyContent="center"
-                                    >
-                                        <Grid
-                                            sx={{
-                                                bgcolor: "#edf3f0",
-                                                padding: "0 1em",
-                                                borderRadius: "10px",
-                                                display: "flex",
-                                                alignItems: "stretch",
-                                                marginBottom: 1,
-                                                minHeight: "10em",
-                                                minWidth: "20em",
-                                            }}
-                                        >
-                                            <ActivityTasks activityId={activity.id}/>
-                                        </Grid>
-                                    </Grid>
-                                </TabPanel>
-
-                                {/*participants tab*/}
-                                <TabPanel value={value} index={2}>
-                                    <ParticipantsList
-                                        contacts={activity?.contacts ?? []}
-                                        activityId={activity.id}
-                                    />
-                                    <Box display="flex" justifyContent="center" marginTop={2}>
-                                        {/*<ActivityParticipantsDialog*/}
-                                        {/*  activity={activity}*/}
-                                        {/*  type={ParticipantTypesEnum.Participant}*/}
-                                        {/*  setIsUpdated={setIsUpdated}*/}
-                                        {/*/>*/}
-                                    </Box>
-                                    <ExternalParticipantsList
-                                        externalParticipants={activity?.externalParticipants ?? []}
-                                        activityId={activity.id}
-                                    />
-                                    <Box display="flex" justifyContent="center" marginTop={2}>
-                                        {/*<ActivityParticipantsDialog*/}
-                                        {/*  activity={activity}*/}
-                                        {/*  type={ParticipantTypesEnum.External_Participant}*/}
-                                        {/*  setIsUpdated={setIsUpdated}*/}
-                                        {/*/>*/}
-                                    </Box>
-                                </TabPanel>
-
-                                {/*activity review tab*/}
-                                <TabPanel value={value} index={3}>
-                                    {/*<ActivityReview activity={activity} />*/}
-                                </TabPanel>
-                            </Paper>
-                            <Grid mt={1}>
-                                <Button
-                                    variant="text"
-                                    color="error"
-                                    startIcon={<DeleteIcon/>}
-                                    onClick={handleClickOpenDialog}
+                <Grid size={8}>
+                    <Paper
+                        sx={{
+                            p: 2,
+                            display: "flex",
+                            flexDirection: "column",
+                        }}
+                    >
+                        <Grid display="flex" justifyContent="space-between">
+                            <Grid>
+                                <Typography variant="h5" marginBottom={1}>
+                                    {activity?.subject}{" "}
+                                    {activity.tags.map((tag: ITag) => (
+                                        <>
+                                            <Chip
+                                                variant="outlined"
+                                                color="success"
+                                                label={tag.name}
+                                            />{" "}
+                                        </>
+                                    ))}
+                                </Typography>
+                                <Typography
+                                    variant="subtitle2"
+                                    color="textSecondary"
+                                    marginBottom={1}
                                 >
-                                    Delete
-                                </Button>
-                                {/*<ActivityCancelDialog*/}
-                                {/*  open={openDialog}*/}
-                                {/*  setOpen={setOpenDialog}*/}
-                                {/*  activity={activity}*/}
-                                {/*  setIsUpdated={setIsUpdated}*/}
-                                {/*/>*/}
+                                    {dayjs(activity?.startTime).format("DD MMM YYYY HH:mm")}
+                                </Typography>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        flexWrap: "wrap",
+                                        marginBottom: 2,
+                                    }}
+                                >
+                                    {renderIcon()}
+                                    <Typography variant="caption" color="textSecondary">
+                                        {"-"} {activity?.type}
+                                    </Typography>
+                                </div>
+                            </Grid>
+                            <Grid>
+                                {!activity.emailSentAt && (
+                                    <>
+                                        {!isMobile ? (
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                startIcon={<EmailIcon/>}
+                                                onClick={handleEmailSend}
+                                            >
+                                                Send email
+                                            </Button>
+                                        ) : (
+                                            <IconButton
+                                                color="primary"
+                                                size="large"
+                                                onClick={handleEmailSend}
+                                            >
+                                                <EmailIcon/>
+                                            </IconButton>
+                                        )}
+                                    </>
+                                )}
                             </Grid>
                         </Grid>
-                        <Grid>
-                            <ActivityAside activity={activity}/>
-                        </Grid>
-                    </>
-                )}
+                        <Box sx={{borderBottom: 1, borderColor: "divider"}}>
+                            <Tabs
+                                value={tabValue}
+                                aria-label="activity tabs"
+                                variant="scrollable"
+                                scrollButtons="auto"
+                                allowScrollButtonsMobile
+                                onChange={(_event: React.SyntheticEvent, value: any) => setTabValue(value)}
+                            >
+                                <Tab label="Notes" {...allyProps(0)} />
+                                <Tab label="Tasks" {...allyProps(1)} />
+                                <Tab label="Participants" {...allyProps(2)} />
+                            </Tabs>
+                        </Box>
+
+                        {/*notes tab*/}
+                        <TabPanel value={tabValue} index={0}>
+                            <ActivityExternalNote activity={activity}/>
+                            <ActivityInternalNote activity={activity}/>
+                            <ActivityVoiceMemo activity={activity}/>
+                        </TabPanel>
+
+                        {/*tasks tab*/}
+                        <TabPanel value={tabValue} index={1}>
+                            <Grid
+                                container
+                                spacing={0}
+                                alignItems="center"
+                                justifyContent="center"
+                            >
+                                <Grid
+                                    sx={{
+                                        bgcolor: "#edf3f0",
+                                        padding: "0 1em",
+                                        borderRadius: "10px",
+                                        display: "flex",
+                                        alignItems: "stretch",
+                                        marginBottom: 1,
+                                        minHeight: "10em",
+                                        minWidth: "20em",
+                                    }}
+                                >
+                                    <ActivityTasks activityId={activity.id}/>
+                                </Grid>
+                            </Grid>
+                        </TabPanel>
+
+                        {/*participants tab*/}
+                        <TabPanel value={tabValue} index={2}>
+                            <ParticipantsList
+                                contacts={activity?.contacts}
+                                activityId={activity.id}
+                            />
+                            <Box display="flex" justifyContent="center">
+                                <AddParticipantsDialog activityId={activity.id} />
+                            </Box>
+                            <Divider sx={{marginY: 2}}/>
+                            <ExternalParticipantsList
+                                externalParticipants={activity?.externalParticipants}
+                                activityId={activity.id}
+                            />
+                            <Box display="flex" justifyContent="center">
+                                <AddExternalParticipantsDialog activityId={activity.id}/>
+                            </Box>
+                        </TabPanel>
+                    </Paper>
+                    <Grid mt={1}>
+                        <Button
+                            variant="text"
+                            color="error"
+                            startIcon={<DeleteIcon/>}
+                            onClick={() => setOpenDeleteActivityDialog(true)}
+                        >
+                            Delete
+                        </Button>
+                        {/*<ActivityCancelDialog*/}
+                        {/*  open={openDialog}*/}
+                        {/*  setOpen={setOpenDialog}*/}
+                        {/*  activity={activity}*/}
+                        {/*  setIsUpdated={setIsUpdated}*/}
+                        {/*/>*/}
+                    </Grid>
+                </Grid>
+                <Grid size={4}>
+                    <ActivityAside activity={activity}/>
+                </Grid>
             </Grid>
         </Container>
     );

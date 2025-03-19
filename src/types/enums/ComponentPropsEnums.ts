@@ -4,10 +4,10 @@ export enum ActivityColumnsEnum {
 	Next_30_Days = 'Next 30 days'
 }
 
-export enum ParticipantTypesEnum {
-	Participant = 'Participant',
-	External_Participant = 'External participant'
-}
+// export enum ParticipantTypesEnum {
+// 	Participant = 'Participant',
+// 	External_Participant = 'External participant'
+// }
 
 export enum TaskTypesEnum {
 	Newest = 'Newest',

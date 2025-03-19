@@ -1,28 +1,27 @@
-import * as React from 'react';
 import {Box, Button, Divider, Typography} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import {useNavigate} from "react-router-dom";
 import {IActivity} from "../../../types/models/IActivity";
 import {addressFormatter} from "../../../utils/DataFormatterUtil";
 
-interface Props {
+type TActivityAsideProps = {
 	activity: IActivity;
 }
 
-export function ActivityAside({activity}: Props) {
+const ActivityAside = ({activity}: TActivityAsideProps) => {
 	const navigate = useNavigate();
 
 	let address = "";
 	if (activity.institution) {
-		address = addressFormatter(activity.institution.country, activity.institution.city,
-			activity.institution.zipCode, activity.institution.street, activity.institution.houseNumber);
+		address = addressFormatter(activity.institution.countryCode, activity.institution.city,
+			activity.institution.postalCode, activity.institution.street, activity.institution.buildingNumber);
 	}
 
 	return (
-		<Box ml={4} width={250} minWidth={250}>
+		<Box ml={4} width={300} minWidth={250}>
 			<Box textAlign="left" mb={2}>
 				<Button type="button" startIcon={<EditIcon/>}
-						onClick={() => navigate(`/activities/edit/${activity.guid}`)}>Edit Activity</Button>
+						onClick={() => navigate(`/activities/edit/${activity.id}`)}>Edit Activity</Button>
 			</Box>
 			<Typography variant="subtitle2" fontWeight="bold">Institution info</Typography>
 			<Divider/>
@@ -39,3 +38,5 @@ export function ActivityAside({activity}: Props) {
 		</Box>
 	);
 }
+
+export default ActivityAside;

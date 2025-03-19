@@ -1,23 +1,24 @@
 import {useForm} from "react-hook-form";
 import {Button, Container, Paper, Snackbar, Typography} from "@mui/material";
-import {useParams} from "react-router-dom";
 import {useMutation} from "@tanstack/react-query";
 import {IContact} from "../../../types/models/IContact.ts";
 import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums.ts";
 import ContactForm from "./ContactForm.tsx";
 import {fetchContact} from "../../../utils/axios/configs/contactAxios.ts";
 import {useState} from "react";
+import {useLocation} from "react-router";
 
 const ContactCreate = () => {
-    const {external} = useParams();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
+    const location = useLocation();
+    const {email, name} = location.state || {};
 
     const {register, control, handleSubmit, setValue, formState: {errors}} = useForm<IContact>({
         defaultValues: {
-            firstName: "",
+            firstName: name ?? "",
             lastName: "",
-            email1: external ?? "",
+            email1: email ?? "",
             email2: null,
             phone1: "",
             phone2: null,

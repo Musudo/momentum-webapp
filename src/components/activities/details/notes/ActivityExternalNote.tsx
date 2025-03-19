@@ -20,8 +20,6 @@ const ActivityExternalNote = ({activity}: TActivityExternalNoteProps) => {
         setIsHovering(false);
     };
 
-    const handleNoteUpdate = (note: object) => modifyExternalNoteMutation.mutate(note);
-
     const modifyExternalNoteMutation = useMutation(
         {
             mutationFn: (data: object) => fetchActivity.patch(`/${activity.id}/external-note`, data),
@@ -50,7 +48,7 @@ const ActivityExternalNote = ({activity}: TActivityExternalNoteProps) => {
                 </Typography>
             </Box>
             {isEditing ? (
-                <form onSubmit={handleSubmit(handleNoteUpdate)}>
+                <form onSubmit={handleSubmit((note: object) => modifyExternalNoteMutation.mutate(note))}>
                     <Box>
                         <TextField
                             label="External note"

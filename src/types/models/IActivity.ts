@@ -11,7 +11,7 @@ export interface IActivity {
   subject: string;
   tags: ITag[];
   tagIds: string[];
-  contacts: IContact[];
+  contacts?: IContact[];
   contactIds: string[];
   institutionId: string;
   institutionName: string;

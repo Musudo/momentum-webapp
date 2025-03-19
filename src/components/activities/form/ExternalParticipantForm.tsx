@@ -76,7 +76,6 @@ const ExternalParticipantForm = ({setValue}: TExternalParticipantFormProps) => {
                                         }
                                     }}
                                 />
-
                                 <TextField
                                     fullWidth
                                     margin="normal"

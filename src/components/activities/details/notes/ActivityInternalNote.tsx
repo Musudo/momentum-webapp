@@ -21,10 +21,6 @@ const ActivityInternalNote = ({activity}: TActivityInternalNoteProps) => {
         setIsHovering(false);
     };
 
-    const handleNoteUpdate = (internalNote: object) => {
-        modifyInternalNoteMutation.mutate(internalNote);
-    }
-
     const modifyInternalNoteMutation = useMutation(
         {
             mutationFn: (internalNote: object) => fetchActivity.patch(`/${activity.id}/internal-note`, internalNote),
@@ -53,7 +49,7 @@ const ActivityInternalNote = ({activity}: TActivityInternalNoteProps) => {
                 </Typography>
             </Box>
             {isEditing ? (
-                <form onSubmit={handleSubmit(handleNoteUpdate)}>
+                <form onSubmit={handleSubmit((note: object) => modifyInternalNoteMutation.mutate(note))}>
                     <Box>
                         <TextField
                             label="Internal note"
