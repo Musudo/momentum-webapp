@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Button, Container, TablePagination, useMediaQuery} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import {useQuery} from "@tanstack/react-query";
 import {useTranslation} from "react-i18next";
 import {IContact} from "../../../types/models/IContact.ts";
 import ContactsOverviewAside from "./ContactsOverviewAside.tsx";
@@ -11,48 +10,41 @@ import ContactList from "./ContactList.tsx";
 
 const ContactsOverview = () => {
     const [filteredContacts, setFilteredContacts] = useState<IContact[]>([]);
-    // @ts-expect-error TODO: rework searching mechanism later
+    const [contacts, setContacts] = useState<IContact[]>([]);
     const [searchValue, setSearchValue] = useState<string>("");
     const navigate = useNavigate();
     const isMobile = useMediaQuery('(max-width: 600px)');
     const {t} = useTranslation();
-
-    /* pagination configuration */
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const handleChangePage = (_event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => setPage(newPage);
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-    /* pagination configuration */
 
-    const {
-        data: contacts,
-        status,
-    } = useQuery({
-        queryKey: ["contacts"],
-        queryFn: async () => {
-            const res = await fetchContact.get("");
-            return res.data;
-        },
-    });
+    const fetchContacts = async (searchValue: string) => {
+        const trimmedValue = searchValue.trim();
+        const url = trimmedValue || trimmedValue !== "" ? `/search-contacts/${trimmedValue}` : "";
+        const res = await fetchContact.get(url);
+        return res.data;
+    }
 
     useEffect(() => {
-        if (status === "success" && contacts) {
-            setFilteredContacts(contacts);
-            setPage(0);
-        }
-    }, [contacts, status]);
+        fetchContacts(searchValue)
+            .then((result: IContact[]) => {
+                if (result) {
+                    setContacts(result);
+                    setFilteredContacts(result);
+                    setPage(0);
+                }
+            })
+            .catch(() => {
+                return <div>Error</div>;
+            })
+    }, [searchValue]);
 
     const handleJobTitleFilter = (jobTitle: string) => {
-        if (jobTitle === 'Show all') {
-            setFilteredContacts(contacts as IContact[]);
+        if (jobTitle === 'All') {
+            setFilteredContacts(contacts);
         } else {
-            const contactsTemp = (contacts && contacts.length > 0)
-                ? contacts.filter((contact: IContact) => contact.jobTitle === jobTitle)
-                : '';
-            setFilteredContacts(contactsTemp as IContact[]);
+            const contactsTemp = contacts.filter((contact: IContact) => contact.jobTitle === jobTitle);
+            setFilteredContacts(contactsTemp);
         }
         setPage(0);
     }
@@ -81,9 +73,12 @@ const ContactsOverview = () => {
                     component="div"
                     count={(filteredContacts && filteredContacts.length) ?? 0}
                     page={page}
-                    onPageChange={handleChangePage}
+                    onPageChange={(_event, newPage) => setPage(newPage)}
                     rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    onRowsPerPageChange={(event) => {
+                        setRowsPerPage(parseInt(event.target.value, 10));
+                        setPage(0);
+                    }}
                 />
             </div>
         </Container>

@@ -36,6 +36,7 @@ import {capitalizeFirstLetter} from "../../../utils/stringHelpers.ts";
 import ActivityAside from "./ActivityAside.tsx";
 import AddParticipantsDialog from "./participants/AddParticipantsDialog.tsx";
 import AddExternalParticipantsDialog from "./participants/AddExternalParticipantsDialog.tsx";
+import ActivityCancelDialog from "./ActivityCancelDialog.tsx";
 
 type TTabPanelProps = {
     children?: React.ReactNode;
@@ -259,12 +260,11 @@ const ActivityDetails = () => {
                         >
                             Delete
                         </Button>
-                        {/*<ActivityCancelDialog*/}
-                        {/*  open={openDialog}*/}
-                        {/*  setOpen={setOpenDialog}*/}
-                        {/*  activity={activity}*/}
-                        {/*  setIsUpdated={setIsUpdated}*/}
-                        {/*/>*/}
+                        <ActivityCancelDialog
+                          open={openDeleteActivityDialog}
+                          setOpen={setOpenDeleteActivityDialog}
+                          activity={activity}
+                        />
                     </Grid>
                 </Grid>
                 <Grid size={4}>

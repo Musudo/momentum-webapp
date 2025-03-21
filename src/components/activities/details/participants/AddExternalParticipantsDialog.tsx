@@ -9,13 +9,10 @@ import {useForm} from "react-hook-form";
 import AddIcon from "@mui/icons-material/Add";
 import {FormHelperText, InputAdornment, TextField} from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import {IActivity} from "../../../../types/models/IActivity";
 import PersonIcon from "@mui/icons-material/Person";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import {VALID_EMAIL_REGEXP} from "../../../../constants/constants.ts";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {ITask} from "../../../../types/models/ITask.ts";
-import {fetchTask} from "../../../../utils/axios/configs/taskAxios.ts";
 import {fetchActivity} from "../../../../utils/axios/configs/activityAxios.ts";
 
 type TAddExternalParticipantsDialogProps = {
@@ -37,12 +34,6 @@ const AddExternalParticipantsDialog = ({activityId}: TAddExternalParticipantsDia
             email: "",
         }
     });
-
-    // useEffect(() => {
-    // 	fetchData(`/contacts/institution-guid-name/${activity.institution?.id}`)
-    // 		.then((response) => setContacts(response!.data))
-    // 		.catch(() => console.error('Failed to fetch contacts'));
-    // }, []);
 
     const onSubmit = (data: any) => {
 
@@ -86,10 +77,6 @@ const AddExternalParticipantsDialog = ({activityId}: TAddExternalParticipantsDia
                                 variant="standard"
                                 margin="normal"
                                 label="Name"
-                                // value={external.name}
-                                // onChange={(e) =>
-                                //     handleChange(external.id, 'name', e.target.value)
-                                // }
                                 slotProps={{
                                     input: {
                                         startAdornment: (
@@ -109,10 +96,6 @@ const AddExternalParticipantsDialog = ({activityId}: TAddExternalParticipantsDia
                                 variant="standard"
                                 margin="normal"
                                 label="Email"
-                                // value={external.email}
-                                // onChange={(e) =>
-                                //     handleChange(external.id, 'email', e.target.value)
-                                // }
                                 slotProps={{
                                     input: {
                                         startAdornment: (

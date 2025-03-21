@@ -1,64 +1,62 @@
-import React, {Dispatch, SetStateAction} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import {IActivity} from "../../../types/models/IActivity";
-import {useNavigate} from "react-router-dom";
+import {useMutation} from "@tanstack/react-query";
+import {fetchActivity} from "../../../utils/axios/configs/activityAxios.ts";
 
-interface Props {
-	open: boolean;
-	setOpen: Dispatch<SetStateAction<boolean>>
-	setIsUpdated: Dispatch<SetStateAction<boolean>>
-	activity: IActivity;
+type TActivityCancelDialogProps = {
+    open: boolean;
+    setOpen: (value: boolean) => void;
+    activity: IActivity;
 }
 
-export function ActivityCancelDialog(props: Props) {
-	const navigate = useNavigate();
+const ActivityCancelDialog = (props: TActivityCancelDialogProps) => {
+    const {open, setOpen, activity} = props;
 
-	const cancelActivity = (sendEmail: boolean) => {
-		// prepare activity data object to send it to backend
-		const data = {activity: props.activity}
+    const cancelActivity = (sendEmail: boolean) => {
+        if (sendEmail) {
+            deleteActivityMutation.mutate(activity.id);
+        } else {
+            deleteActivityMutation.mutate(activity.id);
+        }
+    }
 
-		deleteData(`/activities/${props.activity.id}`)
-			.then((response) => {
-				if (response?.status === 200 && sendEmail) {
-					postData(`/email/activity/cancel`, data)
-						.catch(() => console.error("Failed to send email"));
-					props.setIsUpdated(true);
-				}
-			})
-			.then(() => navigate(`/activities`))
-			.catch(() => console.error("Failed to delete activity"));
-	}
+    const deleteActivityMutation = useMutation(
+        {
+            mutationFn: (id: string) => fetchActivity.delete(`/${id}`),
+            onSuccess: () => {
+                window.location.href = "/activities";
+            }
+        }
+    );
 
-	const handleClose = () => props.setOpen(false);
-
-	return (
-		<Dialog
-			open={props.open}
-			onClose={handleClose}
-			aria-labelledby="alert-dialog-title"
-			aria-describedby="alert-dialog-description"
-		>
-			<DialogTitle id="alert-dialog-title">
-				Delete activity '{props.activity.subject}'
-			</DialogTitle>
-			<DialogContent>
-				<DialogContentText id="alert-dialog-description">
-					You are about to delete this activity.
-					<br/>
-					Do you want also to send a cancellation email to participants?
-				</DialogContentText>
-			</DialogContent>
-			<DialogActions>
-				<Button variant="contained" onClick={handleClose} size="small">
-					Don't delete
-				</Button>
-				<Button variant="text" onClick={() => cancelActivity(true)} size="small">
-					Send email
-				</Button>
-				<Button variant="text" onClick={() => cancelActivity(false)} size="small">
-					Just delete
-				</Button>
-			</DialogActions>
-		</Dialog>
-	);
+    return (
+        <Dialog
+            open={open}
+            onClose={() => setOpen(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title">
+                Delete activity '{activity.subject}'
+            </DialogTitle>
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    Do you want also to send a cancellation email to participants?
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="contained" onClick={() => setOpen(false)} size="small">
+                    Cancel
+                </Button>
+                <Button variant="text" onClick={() => cancelActivity(true)} size="small">
+                    Delete and send email
+                </Button>
+                <Button variant="text" onClick={() => cancelActivity(false)} size="small">
+                    Just delete
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
 }
+
+export default ActivityCancelDialog;

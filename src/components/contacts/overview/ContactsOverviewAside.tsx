@@ -24,20 +24,15 @@ const ContactsOverviewAside = ({setSearchValue, handleJobTitleFilter}: TContacts
                         <LabelIcon/>
                         <Typography variant="body1">{t('Contacts overview page.Job title')}</Typography>
                     </Stack>
-                    <>
-                        <ListItem sx={{marginLeft: 2}}>
-                            <Chip label="All" onClick={() => {
-                            }}/>
+                    <ListItem sx={{marginLeft: 2}}>
+                        <Chip label="All" onClick={() => handleJobTitleFilter("All")}/>
+                    </ListItem>
+                    {jobTitles.map((jobTitle: string, index: number) => (
+                        <ListItem key={index} sx={{marginLeft: 2}}>
+                            <Chip label={jobTitle}
+                                  onClick={() => handleJobTitleFilter(jobTitle)}/>
                         </ListItem>
-                        {
-                            jobTitles.map((jobTitle: string, index: number) => (
-                                <ListItem key={index} sx={{marginLeft: 2}}>
-                                    <Chip label={jobTitle}
-                                          onClick={() => handleJobTitleFilter(jobTitle)}/>
-                                </ListItem>
-                            ))
-                        }
-                    </>
+                    ))}
                 </Fragment>
             </List>
         </div>

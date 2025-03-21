@@ -1,5 +1,4 @@
 import {Divider, List, Paper} from "@mui/material";
-import {Fragment} from "react";
 import {IContact} from "../../../types/models/IContact.ts";
 import ContactListItem from "./ContactListItem.tsx";
 
@@ -14,15 +13,17 @@ const ContactList = (props: TContactListProps) => {
     return (
         <Paper>
             <List sx={{width: '100%', minWidth: 800, bgcolor: 'background.paper'}}>
-                {(filteredContacts && filteredContacts.length > 0) && (
+                {filteredContacts.length > 0 ? (
                     filteredContacts
                         ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((contact: IContact, index: number) => (
-                            <Fragment key={index}>
+                            <div key={index}>
                                 <ContactListItem contact={contact}/>
-                                <Divider variant="inset" component="li"/>
-                            </Fragment>
+                                <Divider/>
+                            </div>
                         ))
+                ) : (
+                    <div style={{padding: 10}}>No contacts</div>
                 )}
             </List>
         </Paper>

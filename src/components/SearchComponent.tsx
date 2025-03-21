@@ -3,7 +3,7 @@ import {alpha, InputBase, styled} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import {debounce} from "lodash";
 
-type TProps = {
+type TSearchComponentProps = {
     setSearchValue: (value: string) => void;
     placeholder?: string;
 }
@@ -48,14 +48,15 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     },
 }));
 
-const SearchComponent = ({setSearchValue, placeholder = "Search"}: TProps) => {
-    const searchHandler = (event: any) => setSearchValue(event.target.value);
+const SearchComponent = ({setSearchValue, placeholder = "Search"}: TSearchComponentProps) => {
+    // TODO: here and at other places consider replacing lodash debounce to something better and more performant
     const debouncedSearchHandler = useMemo(
-        () => debounce(searchHandler, 300)
-        , []);
+        () => debounce((event: any) => setSearchValue(event.target.value), 300),
+        [setSearchValue]
+    );
 
     return (
-        <Search /*style={{width:'100%'}}*/>
+        <Search style={{width: '100%'}}>
             <SearchIconWrapper>
                 <SearchIcon/>
             </SearchIconWrapper>
