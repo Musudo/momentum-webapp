@@ -4,13 +4,20 @@ import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
 import EmergencyIcon from '@mui/icons-material/Emergency';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import FlagIcon from '@mui/icons-material/Flag';
+import {SiReact, SiSpringboot} from 'react-icons/si';
 
 const items = [
     {
         icon: <EmergencyIcon sx={{color: 'text.secondary'}}/>,
         title: 'Demo web application',
         description:
-            'This demo application is designed to give a look into capabilities of React and Spring Boot.',
+            <>
+                This demo application is designed to give a look into capabilities
+                of <span style={{display: 'inline-block', alignItems: 'center', margin: '0 4px'}}>{
+                <SiReact/>} React</span>
+                and <span style={{display: 'inline-block', alignItems: 'center', margin: '0 4px'}}>{
+                <SiSpringboot/>} Spring Boot</span>.
+            </>
     },
     {
         icon: <ConstructionRoundedIcon sx={{color: 'text.secondary'}}/>,

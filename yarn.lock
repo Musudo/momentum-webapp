@@ -6272,6 +6272,7 @@ __metadata:
     react-error-boundary: "npm:^5.0.0"
     react-hook-form: "npm:^7.54.2"
     react-i18next: "npm:^15.3.0"
+    react-icons: "npm:^5.5.0"
     react-redux: "npm:^9.2.0"
     react-router: "npm:^7.1.1"
     react-router-dom: "npm:^7.1.1"
@@ -7034,6 +7035,15 @@ __metadata:
     react-native:
       optional: true
   checksum: 10c0/e330da7d8c750f5c7bb7e7e32e8801d033d6456053391169da2461cfb3c6479460d4c61a62da2c1e0f8b8a51c7364570ea0944c29d0e5a29d3db267c4c0f6396
+  languageName: node
+  linkType: hard
+
+"react-icons@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "react-icons@npm:5.5.0"
+  peerDependencies:
+    react: "*"
+  checksum: 10c0/a24309bfc993c19cbcbfc928157e53a137851822779977b9588f6dd41ffc4d11ebc98b447f4039b0d309a858f0a42980f6bfb4477fb19f9f2d1bc2e190fcf79c
   languageName: node
   linkType: hard
 
