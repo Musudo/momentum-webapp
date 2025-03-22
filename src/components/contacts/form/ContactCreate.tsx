@@ -1,5 +1,5 @@
 import {useForm} from "react-hook-form";
-import {Button, Container, Paper, Snackbar, Typography} from "@mui/material";
+import {Button, Snackbar, SnackbarCloseReason, Typography} from "@mui/material";
 import {useMutation} from "@tanstack/react-query";
 import {IContact} from "../../../types/models/IContact.ts";
 import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums.ts";
@@ -7,10 +7,14 @@ import ContactForm from "./ContactForm.tsx";
 import {fetchContact} from "../../../utils/axios/configs/contactAxios.ts";
 import {useState} from "react";
 import {useLocation} from "react-router";
+import {CardContainer} from "../../cardContainer.tsx";
+import * as React from "react";
 
 const ContactCreate = () => {
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarState, setSnackbarState] = useState({
+        open: false,
+        message: "",
+    });
     const location = useLocation();
     const {email, name} = location.state || {};
 
@@ -31,12 +35,22 @@ const ContactCreate = () => {
         {
             mutationFn: (data: object) => fetchContact.post("", data),
             onSuccess: () => {
-                setOpenSnackbar(true);
-                setSnackbarMessage("Contact created");
+                setSnackbarState({
+                    ...snackbarState,
+                    open: true,
+                    message: "Contact created",
+                });
+
+                setTimeout(() => {
+                    window.location.href = "/contacts";
+                }, 2000);
             },
             onError: () => {
-                setOpenSnackbar(true);
-                setSnackbarMessage("Failed to create a contact");
+                setSnackbarState({
+                    ...snackbarState,
+                    open: true,
+                    message: "Failed to create a contact",
+                });
             },
         }
     );
@@ -46,33 +60,43 @@ const ContactCreate = () => {
     }
 
     return (
-        <Container component="main" maxWidth="sm" sx={{mb: 4}}>
-            <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-                <Typography component="h1" variant="h4" align="center">
-                    Create Contact
-                </Typography>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <ContactForm register={register} errors={errors} control={control}
-                                 setValue={setValue} type={FormTypesEnum.Create}
-                                 contact={null}/>
-                    <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            sx={{mt: 4}}>
-                            Save
-                        </Button>
-                    </div>
-                </form>
-            </Paper>
+        <CardContainer variant="outlined">
             <Snackbar
                 anchorOrigin={{vertical: "top", horizontal: "center"}}
-                open={openSnackbar}
-                onClose={() => setOpenSnackbar(false)}
-                message={snackbarMessage}
-                autoHideDuration={3000}
+                open={snackbarState.open}
+                onClose={(
+                    _event: React.SyntheticEvent<any> | Event,
+                    reason?: SnackbarCloseReason
+                ) => {
+                    if (reason === "clickaway") {
+                        return;
+                    }
+                    setSnackbarState({...snackbarState, open: false});
+                }}
+                message={snackbarState.message}
+                autoHideDuration={2000}
             />
-        </Container>
+            <Typography component="h1" variant="h4" align="center">
+                Create Contact
+            </Typography>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <ContactForm register={register}
+                             errors={errors}
+                             control={control}
+                             setValue={setValue}
+                             type={FormTypesEnum.Create}
+                             contact={null}
+                />
+                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        sx={{mt: 4}}>
+                        Save
+                    </Button>
+                </div>
+            </form>
+        </CardContainer>
     );
 }
 

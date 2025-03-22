@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Button, Container, Paper, Snackbar, Typography} from '@mui/material';
+import {Button, Snackbar, Typography} from '@mui/material';
 import {useForm} from 'react-hook-form';
 import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from '@tanstack/react-query';
@@ -7,6 +7,7 @@ import {IContact} from '../../../types/models/IContact';
 import ContactForm from "./ContactForm.tsx";
 import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums.ts";
 import {fetchContact} from "../../../utils/axios/configs/contactAxios.ts";
+import {CardContainer} from "../../cardContainer.tsx";
 
 const ContactEdit = () => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -64,32 +65,30 @@ const ContactEdit = () => {
     }
 
     return (
-        <Container component='main' maxWidth='sm' sx={{mb: 4}}>
-            <Paper variant='outlined' sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-                <Typography component='h1' variant='h4' align='center'>
-                    Edit Contact
-                </Typography>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <ContactForm register={register} errors={errors} control={control}
-                                 setValue={setValue} type={FormTypesEnum.Edit} contact={contact}/>
-                    <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                        <Button
-                            type='submit'
-                            variant="contained"
-                            sx={{mt: 3, ml: 1}}>
-                            Save
-                        </Button>
-                    </div>
-                </form>
-            </Paper>
+        <CardContainer variant="outlined">
             <Snackbar
                 anchorOrigin={{vertical: "top", horizontal: "center"}}
                 open={openSnackbar}
                 onClose={() => setOpenSnackbar(false)}
                 message={snackbarMessage}
-                autoHideDuration={3000}
+                autoHideDuration={2000}
             />
-        </Container>
+            <Typography component='h1' variant='h4' align='center'>
+                Edit Contact
+            </Typography>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <ContactForm register={register} errors={errors} control={control}
+                             setValue={setValue} type={FormTypesEnum.Edit} contact={contact}/>
+                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                    <Button
+                        type='submit'
+                        variant="contained"
+                        sx={{mt: 3, ml: 1}}>
+                        Save
+                    </Button>
+                </div>
+            </form>
+        </CardContainer>
     );
 }
 

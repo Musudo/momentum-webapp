@@ -19,7 +19,7 @@ const axiosServices = [
 
 export const initAxiosServices = (/* queryParams: TGenericObject = {} */) => {
     axiosServices.forEach((/*service*/) => {
-        // service.defaults.headers.common["Content-Type"] = "application/json";
+        // service.defaults.headers.common["SideContent-Type"] = "application/json";
         // service.defaults.headers.common.Authorization = `Bearer ${AuthProvider.authToken}`;
         //
         // service.interceptors.request.use(async (config) => {

@@ -15,7 +15,7 @@ const ContactListItem = ({contact}: TContactListItemProps) => {
 
     return (
         <ListItem disablePadding>
-            <ListItemButton component={Link} to={`/contacts/${contact.id}`}>
+            <ListItemButton component={Link} to={`/contacts/${contact.id}`} style={{padding: 16}}>
                 <ListItemAvatar>
                     <Avatar {...coloredStringAvatar(fullName)} />
                 </ListItemAvatar>

@@ -1,13 +1,16 @@
 import {useParams} from "react-router-dom";
-import {Avatar, ListItem, ListItemAvatar, ListItemText, Paper, Typography} from "@mui/material";
+import {Avatar, ListItem, ListItemAvatar, ListItemText, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import {useQuery} from "@tanstack/react-query";
 import ContactDetailsAside from "./ContactDetailsAside.tsx";
 import {fetchContact} from "../../../utils/axios/configs/contactAxios.ts";
 import {coloredStringAvatar} from "../../../utils/avatarHelpers.ts";
+import {CardContainer} from "../../cardContainer.tsx";
+import {useTheme} from "@mui/material/styles";
 
 const ContactDetails = () => {
     const {id} = useParams();
+    const theme = useTheme();
 
     const {
         data: contact,
@@ -19,39 +22,39 @@ const ContactDetails = () => {
         },
     });
 
+    if (!contact) {
+        return <div>Error</div>;
+    }
+
     return (
-        <Grid container spacing={8} p={4}>
+        <Grid container spacing={12}>
             <Grid size={{xs: 6, md: 8}}>
-                <Paper sx={{
-                    p: 4,
-                    display: "flex",
-                    flexDirection: 'column',
-                    minHeight: "18vh",
-                }}>
-                    <Typography variant="h5" marginBottom={1} noWrap>
-                        <ListItem alignItems="flex-start" disablePadding>
-                            {contact && (
-                                <>
-                                    <ListItemAvatar>
-                                        <Avatar {...coloredStringAvatar(`${contact.firstName} ${contact.lastName}`)} />
-                                    </ListItemAvatar>
-                                    <ListItemText id={contact?.id}
-                                                  primary={<Typography
-                                                      variant="h5">{`${contact.firstName} ${contact.lastName}`}</Typography>}
-                                                  secondary={
-                                                      <Typography autoCapitalize="words" variant="body1">
-                                                          {`${contact.jobTitle} at ${contact.institution.name}`}
-                                                      </Typography>
-                                                  }
-                                    />
-                                </>
-                            )}
-                        </ListItem>
-                    </Typography>
-                </Paper>
+                <CardContainer variant="outlined"
+                               customStyles={{
+                                   [theme.breakpoints.up('sm')]: {
+                                       width: '650px',
+                                   },
+                               }}>
+                    <ListItem alignItems="flex-start" disablePadding>
+                        <ListItemAvatar>
+                            <Avatar {...coloredStringAvatar(`${contact.firstName} ${contact.lastName}`)} />
+                        </ListItemAvatar>
+                        <ListItemText id={contact?.id}
+                                      primary={
+                                          <Typography variant="h5"
+                                                      noWrap>{`${contact.firstName} ${contact.lastName}`}</Typography>
+                                      }
+                                      secondary={
+                                          <Typography autoCapitalize="words" variant="body1" noWrap>
+                                              {`${contact.jobTitle} at ${contact.institution.name}`}
+                                          </Typography>
+                                      }
+                        />
+                    </ListItem>
+                </CardContainer>
             </Grid>
             <Grid size={{xs: 6, md: 4}}>
-                {contact && <ContactDetailsAside contact={contact}/>}
+                <ContactDetailsAside contact={contact}/>
             </Grid>
         </Grid>
     );

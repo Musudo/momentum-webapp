@@ -48,7 +48,6 @@ const ContactForm = (props: TProps) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            margin: "16px",
             gap: "16px",
         }}>
             <TextField
@@ -56,7 +55,6 @@ const ContactForm = (props: TProps) => {
                 label="First name"
                 fullWidth
                 autoComplete="given-name"
-                variant="standard"
                 {...register("firstName", {
                     required: "First name is required",
                     minLength: {value: 2, message: "Name must be longer than 1 character"}
@@ -68,7 +66,6 @@ const ContactForm = (props: TProps) => {
                 label="Last name"
                 fullWidth
                 autoComplete="family-name"
-                variant="standard"
                 {...register("lastName", {
                     required: "Last name is required",
                     minLength: {value: 2, message: "Last name must be longer than 1 character"}
@@ -80,7 +77,6 @@ const ContactForm = (props: TProps) => {
                 label="Email 1"
                 fullWidth
                 autoComplete="shipping address-line1"
-                variant="standard"
                 {...register("email1", {
                     required: "Email 1 is required",
                     pattern: {
@@ -95,7 +91,6 @@ const ContactForm = (props: TProps) => {
                 label="Email 2"
                 fullWidth
                 autoComplete="shipping address-line2"
-                variant="standard"
                 {...register("email2", {
                     pattern: {
                         value: VALID_EMAIL_REGEXP,
@@ -109,7 +104,6 @@ const ContactForm = (props: TProps) => {
                 label="Phone number 1"
                 fullWidth
                 autoComplete="shipping address-level2"
-                variant="standard"
                 {...register("phone1", {
                     required: "Phone number 1 is required",
                     minLength: {value: 6, message: "Phone number 1 is too short"}
@@ -120,7 +114,6 @@ const ContactForm = (props: TProps) => {
                 id="phone2"
                 label="Phone number 2"
                 fullWidth
-                variant="standard"
                 {...register("phone2", {
                     minLength: {value: 6, message: "Phone number 2 is too short"}
                 })}
@@ -186,7 +179,6 @@ const ContactForm = (props: TProps) => {
                                     <TextField
                                         {...params}
                                         label="Institution"
-                                        variant="standard"
                                         error={!!error}
                                         helperText={error ? error.message : ''}
                                     />

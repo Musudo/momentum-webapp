@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {Box, Button, Container, Paper, Snackbar, SnackbarCloseReason, Typography} from "@mui/material";
+import {Box, Button, Snackbar, SnackbarCloseReason, Typography} from "@mui/material";
 import {useForm} from "react-hook-form";
 import {useParams} from "react-router-dom";
 import {IActivity} from "../../../types/models/IActivity";
@@ -9,6 +9,7 @@ import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums";
 import {fetchActivity} from "../../../utils/axios/configs/activityAxios.ts";
 import ActivityForm from "./ActivityForm.tsx";
 import {capitalizeFirstLetter} from "../../../utils/stringHelpers.ts";
+import {CardContainer} from "../../cardContainer.tsx";
 
 const ActivityEdit = () => {
     const {id} = useParams();
@@ -27,6 +28,7 @@ const ActivityEdit = () => {
         }
     });
 
+    // TODO: fix validation
     const {register, control, handleSubmit, reset, setValue, formState: {errors}} = useForm<IActivity>({
         defaultValues: {
             type: capitalizeFirstLetter(activity?.type ?? "Online"),
@@ -80,7 +82,7 @@ const ActivityEdit = () => {
     }
 
     return (
-        <Container component="main" maxWidth="sm" sx={{mb: 4}}>
+        <CardContainer variant="outlined">
             <Snackbar
                 open={snackbarState.open}
                 onClose={(
@@ -97,28 +99,26 @@ const ActivityEdit = () => {
                 message={snackbarState.message}
             />
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-                    <Typography component="h1" variant="h4" align="center">
-                        Edit Activity
-                    </Typography>
-                    <ActivityForm register={register}
-                                  controller={control}
-                                  errors={errors}
-                                  setValue={setValue}
-                                  activity={activity}
-                                  formType={FormTypesEnum.Edit}
-                    />
-                    <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            sx={{mt: 3, ml: 1}}>
-                            Save
-                        </Button>
-                    </Box>
-                </Paper>
+                <Typography component="h1" variant="h4" align="center">
+                    Edit Activity
+                </Typography>
+                <ActivityForm register={register}
+                              controller={control}
+                              errors={errors}
+                              setValue={setValue}
+                              activity={activity}
+                              formType={FormTypesEnum.Edit}
+                />
+                <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        sx={{mt: 3, ml: 1}}>
+                        Save
+                    </Button>
+                </Box>
             </form>
-        </Container>
+        </CardContainer>
     );
 }
 

@@ -3,7 +3,7 @@ import AppLayout from "../AppLayout.tsx";
 import {lazy, Suspense} from "react";
 import ProtectedRoute from "./protectedRoute.tsx";
 
-const SignIn = lazy(() => import("../components/authentication/signIn/SignIn"));
+const SignIn = lazy(() => import("../components/authentication/signIn/SignIn.tsx"));
 const SignUP = lazy(() => import("../components/authentication/signUp/SignUp"));
 const Dashboard = lazy(() => import("../components/dashboard/Dashboard"));
 const ActivityRoutes = lazy(() => import("./ActivityRoutes"));

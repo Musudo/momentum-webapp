@@ -1,12 +1,10 @@
 import * as React from "react";
-import {ChangeEvent, useState} from "react";
+import {useState} from "react";
 import {
     Box,
     Button,
-    Container,
     FormControlLabel,
     FormHelperText,
-    Paper,
     Snackbar,
     SnackbarCloseReason,
     Step,
@@ -15,8 +13,7 @@ import {
     Switch,
     Typography,
 } from "@mui/material";
-import Grid from "@mui/material/Grid2";
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import {useParams} from "react-router-dom";
 import dayjs from "dayjs";
 import {useTranslation} from "react-i18next";
@@ -27,17 +24,19 @@ import ActivityForm from "./ActivityForm.tsx";
 import ParticipantForm from "./ParticipantForm.tsx";
 import {fetchActivity} from "../../../utils/axios/configs/activityAxios.ts";
 import ExternalParticipantForm from "./ExternalParticipantForm.tsx";
+import {CardContainer} from "../../cardContainer.tsx";
 
 const ActivityCreate = () => {
     const {t} = useTranslation();
     const [activeStep, setActiveStep] = useState(0);
-    const steps = [t("Activity form.Participants"), t("Activity form.Activity")];
+    const steps = [t("Activity form.Activity"), t("Activity form.Participants")];
     const [snackbarState, setSnackbarState] = useState({
         open: false,
         message: "",
     });
     const {activityType} = useParams();
 
+    // TODO: fix validation
     const {
         register,
         // unregister,
@@ -96,9 +95,9 @@ const ActivityCreate = () => {
     const getStepContent = (step: number) => {
         switch (step) {
             case 0:
-                return participantStep;
-            case 1:
                 return activityStep;
+            case 1:
+                return participantStep;
             default:
                 throw new Error("Unknown step");
         }
@@ -108,7 +107,6 @@ const ActivityCreate = () => {
         <div>
             <ParticipantForm
                 control={control}
-                errors={errors}
                 setValue={setValue}
             />
             <ExternalParticipantForm setValue={setValue}/>
@@ -125,24 +123,37 @@ const ActivityCreate = () => {
                 setValue={setValue}
                 formType={FormTypesEnum.Create}
             />
-            <Grid mt={2}>
-                <FormControlLabel
-                    control={<Switch onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                        if (event.target.checked) {
-                            setValue("emailSentAt", dayjs(getValues("startTime")).format('YYYY-MM-DD[T]HH:mm:ss'));
-                        }
-                    }}/>}
-                    label={t("Activity form.Send email")}
+            <div style={{marginTop: 16}}>
+                <Controller
+                    name="emailSentAt"
+                    control={control}
+                    render={({field: {value, onChange}}) => (
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={!!value}
+                                    onChange={(e) =>
+                                        onChange(
+                                            e.target.checked
+                                                ? dayjs(getValues("startTime")).format("YYYY-MM-DD[T]HH:mm:ss")
+                                                : ""
+                                        )
+                                    }
+                                />
+                            }
+                            label={t("Activity form.Send email")}
+                        />
+                    )}
                 />
                 <FormHelperText>
                     {t("Activity form.Switch on to immediately send email")}
                 </FormHelperText>
-            </Grid>
+            </div>
         </div>
     );
 
     return (
-        <Container component="main" maxWidth="sm" sx={{mb: 4}}>
+        <CardContainer variant="outlined">
             <Snackbar
                 open={snackbarState.open}
                 onClose={(
@@ -159,51 +170,45 @@ const ActivityCreate = () => {
                 message={snackbarState.message}
             />
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Paper
-                    variant="outlined"
-                    sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}
-                >
-                    <Typography component="h1" variant="h4" align="center">
-                        {t("Activity form.New activity")}
-                    </Typography>
-                    <Stepper activeStep={activeStep} sx={{pt: 3, pb: 5}}>
-                        {steps.map((label) => (
-                            <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        ))}
-                    </Stepper>
-                    {getStepContent(activeStep)}
-                    <Box sx={{display: "flex", justifyContent: "flex-end"}}>
-                        {activeStep !== 0 && (
-                            <Button type="button" onClick={() => setActiveStep(activeStep - 1)} sx={{mt: 3, ml: 1}}>
-                                {t("Activity form.Back")}
-                            </Button>
-                        )}
-                        {activeStep !== steps.length - 1 && (
-                            <Button
-                                type="button"
-                                variant="contained"
-                                onClick={() => {
-                                    // make sure participants are chosen before going to next step
-                                    trigger(["contacts"]).then(function (result) {
-                                        if (result) setActiveStep(activeStep + 1);
-                                    });
-                                }}
-                                sx={{mt: 3, ml: 1}}
-                            >
-                                {t("Activity form.Next")}
-                            </Button>
-                        )}
-                        {activeStep === steps.length - 1 && (
-                            <Button type="submit" variant="contained" sx={{mt: 3, ml: 1}}>
-                                {t("Activity form.Save")}
-                            </Button>
-                        )}
-                    </Box>
-                </Paper>
+                <Typography component="h1" variant="h4" align="center">
+                    {t("Activity form.New activity")}
+                </Typography>
+                <Stepper activeStep={activeStep} sx={{pt: 3, pb: 5}}>
+                    {steps.map((label) => (
+                        <Step key={label}>
+                            <StepLabel>{label}</StepLabel>
+                        </Step>
+                    ))}
+                </Stepper>
+                {getStepContent(activeStep)}
+                <Box sx={{display: "flex", justifyContent: "flex-end"}}>
+                    {activeStep !== 0 && (
+                        <Button type="button" onClick={() => setActiveStep(activeStep - 1)} sx={{mt: 3, ml: 1}}>
+                            {t("Activity form.Back")}
+                        </Button>
+                    )}
+                    {activeStep !== steps.length - 1 && (
+                        <Button
+                            type="button"
+                            variant="contained"
+                            onClick={() => {
+                                trigger(["contacts"]).then(function (result) {
+                                    if (result) setActiveStep(activeStep + 1);
+                                });
+                            }}
+                            sx={{mt: 3, ml: 1}}
+                        >
+                            {t("Activity form.Next")}
+                        </Button>
+                    )}
+                    {activeStep === steps.length - 1 && (
+                        <Button type="submit" variant="contained" sx={{mt: 3, ml: 1}}>
+                            {t("Activity form.Save")}
+                        </Button>
+                    )}
+                </Box>
             </form>
-        </Container>
+        </CardContainer>
     );
 };
 

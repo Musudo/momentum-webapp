@@ -1,12 +1,15 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {Button, Container, TablePagination, useMediaQuery} from "@mui/material";
+import {Button, TablePagination, useMediaQuery} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import {useTranslation} from "react-i18next";
 import {IContact} from "../../../types/models/IContact.ts";
 import ContactsOverviewAside from "./ContactsOverviewAside.tsx";
 import {fetchContact} from "../../../utils/axios/configs/contactAxios.ts";
 import ContactList from "./ContactList.tsx";
+import {CardContainer} from "../../cardContainer.tsx";
+import Grid from "@mui/material/Grid2";
+import {useTheme} from "@mui/material/styles";
 
 const ContactsOverview = () => {
     const [filteredContacts, setFilteredContacts] = useState<IContact[]>([]);
@@ -17,6 +20,7 @@ const ContactsOverview = () => {
     const {t} = useTranslation();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const theme = useTheme();
 
     const fetchContacts = async (searchValue: string) => {
         const trimmedValue = searchValue.trim();
@@ -50,13 +54,7 @@ const ContactsOverview = () => {
     }
 
     return (
-        <Container sx={{
-            display: 'flex',
-            flexGrow: 1,
-            overflow: 'auto',
-            py: 2,
-            gap: 6
-        }} maxWidth='lg'>
+        <Grid container spacing={12}>
             <ContactsOverviewAside setSearchValue={setSearchValue}
                                    handleJobTitleFilter={handleJobTitleFilter}/>
             <div>
@@ -68,7 +66,15 @@ const ContactsOverview = () => {
                         {t('Contacts overview page.New contact')}
                     </Button>
                 </div>
-                <ContactList page={page} rowsPerPage={rowsPerPage} filteredContacts={filteredContacts}/>
+                <CardContainer variant="outlined"
+                               customStyles={{
+                                   padding: 0,
+                                   [theme.breakpoints.up('sm')]: {
+                                       width: '700px',
+                                   },
+                               }}>
+                    <ContactList page={page} rowsPerPage={rowsPerPage} filteredContacts={filteredContacts}/>
+                </CardContainer>
                 <TablePagination
                     component="div"
                     count={(filteredContacts && filteredContacts.length) ?? 0}
@@ -81,7 +87,7 @@ const ContactsOverview = () => {
                     }}
                 />
             </div>
-        </Container>
+        </Grid>
     );
 }
 

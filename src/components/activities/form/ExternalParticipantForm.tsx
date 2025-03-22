@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {Card, CardContent, CardHeader, IconButton, InputAdornment, TextField} from "@mui/material";
+import {Card, CardContent, CardHeader, IconButton, InputAdornment, TextField, Tooltip} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import ClearIcon from "@mui/icons-material/Clear";
 import {IExternalParticipant} from "../../../types/models/IExternalParticipant.ts";
@@ -42,70 +42,70 @@ const ExternalParticipantForm = ({setValue}: TExternalParticipantFormProps) => {
     };
 
     return (
-        <div>
-            <Grid spacing={2} sx={{marginTop: 2}}>
-                {externalParticipants.map(external => (
-                    <Grid key={external.id}>
-                        <Card sx={{position: 'relative', marginTop: 2}}>
-                            <CardHeader
-                                action={
-                                    <IconButton
-                                        onClick={() => removeExternalParticipant(external.id)}
-                                    >
-                                        <ClearIcon/>
-                                    </IconButton>
+        <>
+            {externalParticipants.map(external => (
+                <Grid key={external.id}>
+                    <Card sx={{position: 'relative', mt: 4}}>
+                        <CardHeader
+                            action={
+                                <IconButton
+                                    onClick={() => removeExternalParticipant(external.id)}
+                                >
+                                    <ClearIcon/>
+                                </IconButton>
+                            }
+                            subheader="Add external participant"
+                        />
+                        <CardContent>
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                label="Name"
+                                value={external.name}
+                                onChange={(e) =>
+                                    handleChange(external.id, 'name', e.target.value)
                                 }
-                                subheader="Add external participant"
+                                slotProps={{
+                                    input: {
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <PersonIcon/>
+                                            </InputAdornment>
+                                        )
+                                    }
+                                }}
                             />
-                            <CardContent>
-                                <TextField
-                                    fullWidth
-                                    margin="normal"
-                                    label="Name"
-                                    value={external.name}
-                                    onChange={(e) =>
-                                        handleChange(external.id, 'name', e.target.value)
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                label="Email"
+                                value={external.email}
+                                onChange={(e) =>
+                                    handleChange(external.id, 'email', e.target.value)
+                                }
+                                slotProps={{
+                                    input: {
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <AlternateEmailIcon/>
+                                            </InputAdornment>
+                                        )
                                     }
-                                    slotProps={{
-                                        input: {
-                                            startAdornment: (
-                                                <InputAdornment position="start">
-                                                    <PersonIcon/>
-                                                </InputAdornment>
-                                            )
-                                        }
-                                    }}
-                                />
-                                <TextField
-                                    fullWidth
-                                    margin="normal"
-                                    label="Email"
-                                    value={external.email}
-                                    onChange={(e) =>
-                                        handleChange(external.id, 'email', e.target.value)
-                                    }
-                                    slotProps={{
-                                        input: {
-                                            startAdornment: (
-                                                <InputAdornment position="start">
-                                                    <AlternateEmailIcon/>
-                                                </InputAdornment>
-                                            )
-                                        }
-                                    }}
-                                />
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
-            <IconButton
-                color="primary"
-                onClick={() => addExternalParticipant()}
-            >
-                <AddIcon/>
-            </IconButton>
-        </div>
+                                }}
+                            />
+                        </CardContent>
+                    </Card>
+                </Grid>
+            ))}
+            <Tooltip title="Add External Participant" sx={{mt: 2}}>
+                <IconButton
+                    color="primary"
+                    onClick={() => addExternalParticipant()}
+                >
+                    <AddIcon/>
+                </IconButton>
+            </Tooltip>
+        </>
     );
 }
 
