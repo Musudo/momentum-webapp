@@ -11,7 +11,7 @@ import {FormHelperText, InputAdornment, TextField} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import PersonIcon from "@mui/icons-material/Person";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import {VALID_EMAIL_REGEXP} from "../../../../constants/constants.ts";
+import {VALID_EMAIL_REGEXP} from "../../../../constants/commonConstants.ts";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {fetchActivity} from "../../../../utils/axios/configs/activityAxios.ts";
 

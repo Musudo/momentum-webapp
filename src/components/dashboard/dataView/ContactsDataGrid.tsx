@@ -3,7 +3,7 @@ import {columns} from "./contactsData.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {fetchStat} from "../../../utils/axios/configs/statAxios.ts";
 import {useTheme} from "@mui/material/styles";
-import {gray} from "../../../shared-theme/themePrimitives.ts";
+import {gray} from "../../../theme/theme.ts";
 
 const ContactsDataGrid = () => {
     const theme = useTheme();

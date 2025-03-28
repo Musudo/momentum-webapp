@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import ForgotPassword from './ForgotPassword';
 import {FacebookIcon, GoogleIcon} from './CustomIcons';
 import {CardContainer} from "../../cardContainer.tsx";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
 import axios from "axios";
 import {AuthProvider} from "../../../utils/auth/authProvider.ts";
@@ -25,7 +25,6 @@ import IconButton from "@mui/material/IconButton";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import {useTheme} from "@mui/material/styles";
-import {RootState} from "../../../redux/store.ts";
 
 const signInSchema = z.object({
     email: z
@@ -60,8 +59,6 @@ const SignInCard = () => {
     const dispatch = useDispatch();
     const theme = useTheme();
 
-    const user = useSelector((state: RootState) => state.user);
-
     const signInMutation = useMutation({
         mutationFn: async (data: object) => {
             const res = await axios.post(
@@ -89,7 +86,7 @@ const SignInCard = () => {
             });
         },
     });
-    console.log(user)
+
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newEmail = event.target.value;
         setEmail(newEmail);

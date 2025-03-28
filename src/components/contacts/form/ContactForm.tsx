@@ -9,7 +9,7 @@ import {
     SelectChangeEvent,
     TextField
 } from "@mui/material";
-import {VALID_EMAIL_REGEXP} from '../../../constants/constants';
+import {VALID_EMAIL_REGEXP} from '../../../constants/commonConstants.ts';
 import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums.ts";
 import {IInstitution} from "../../../types/models/IInstitution.ts";
 import {JobTitlesEnum} from "../../../types/enums/JobTitlesEnum.ts";

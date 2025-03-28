@@ -66,7 +66,7 @@ const AddParticipantsDialog = ({activityId}: TAddParticipantsDialogProps) => {
     }
 
     return (
-        <div>
+        <>
             <Button variant="contained"
                     size="small"
                     onClick={() => setOpenParticipantDialog(true)}
@@ -121,7 +121,7 @@ const AddParticipantsDialog = ({activityId}: TAddParticipantsDialogProps) => {
                     </DialogActions>
                 </form>
             </Dialog>
-        </div>
+        </>
     );
 }
 

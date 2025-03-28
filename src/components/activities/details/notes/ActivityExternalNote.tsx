@@ -5,7 +5,7 @@ import {IActivity} from "../../../../types/models/IActivity";
 import {useForm} from "react-hook-form";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {fetchActivity} from "../../../../utils/axios/configs/activityAxios.ts";
-import {gray} from "../../../../shared-theme/themePrimitives.ts";
+import {gray} from "../../../../theme/theme.ts";
 
 type TActivityExternalNoteProps = {
     activity: IActivity;

@@ -2,7 +2,7 @@ import {DataGrid, GridRowsProp} from '@mui/x-data-grid';
 import {useQuery} from "@tanstack/react-query";
 import {fetchStat} from "../../../utils/axios/configs/statAxios.ts";
 import {useTheme} from "@mui/material/styles";
-import {gray} from "../../../shared-theme/themePrimitives.ts";
+import {gray} from "../../../theme/theme.ts";
 import {columns} from "./institutionsData.tsx";
 
 const InstitutionsDataGrid = () => {

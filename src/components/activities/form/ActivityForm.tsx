@@ -22,7 +22,7 @@ import {useQuery} from "@tanstack/react-query";
 import {fetchTag} from "../../../utils/axios/configs/tagAxios.ts";
 import {DateTimePicker} from "@mui/x-date-pickers";
 
-type TProps = {
+type TActivityFormProps = {
     register: UseFormRegister<IActivity>;
     controller: any;
     errors: any;
@@ -32,7 +32,7 @@ type TProps = {
 
 }
 
-const ActivityForm = (props: TProps) => {
+const ActivityForm = (props: TActivityFormProps) => {
     const {register, controller, errors, activity, setValue, formType} = props;
     const activityTypes = Object.keys(ActivityTypesEnum);
     const [endTimeValue, setEndTimeValue] = useState(activity ? dayjs(activity?.endTime) : dayjs());

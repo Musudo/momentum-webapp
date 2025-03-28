@@ -4,7 +4,7 @@ import {RootState} from "../redux/store.ts";
 import {Box, Button, FormHelperText, Snackbar, SnackbarCloseReason, TextField, Typography} from "@mui/material";
 import React, {useState} from "react";
 import {useForm} from "react-hook-form";
-import {VALID_EMAIL_REGEXP} from "../constants/constants.ts";
+import {VALID_EMAIL_REGEXP} from "../constants/commonConstants.ts";
 import Stack from "@mui/material/Stack";
 import EditIcon from "@mui/icons-material/Edit";
 import {useMutation} from "@tanstack/react-query";
@@ -110,7 +110,7 @@ const Profile = () => {
                         })}
                     />
                     <FormHelperText error>{errors?.email?.message}</FormHelperText>
-                    <Box>
+                    {/*<Box>
                         <Button
                             variant="text"
                             onClick={() => {
@@ -123,7 +123,7 @@ const Profile = () => {
                         >
                             Change password
                         </Button>
-                    </Box>
+                    </Box>*/}
                     <Box sx={{display: "flex", justifyContent: "end", gap: 1}}>
                         {isEditMode ? (
                             <>

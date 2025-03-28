@@ -34,8 +34,8 @@ const Dashboard = () => {
                         const Component = componentMapper[route.name];
                         return Component ? <Component key={route.name}/> : null;
                     })}
-                    <Copyright sx={{my: 8}}/>
                 </Stack>
+                <Copyright/>
             </Box>
         </Box>
     );

@@ -1,11 +1,9 @@
 import {configureStore, Middleware} from "@reduxjs/toolkit";
-import languageSlice, {TLanguage} from "./slice/languageSlice.ts";
 import userSlice, {TUser} from "./slice/userSlice.ts";
 import dashboardRoutingSlice, {TDashboardRouting} from "./slice/dashboardRoutingSlice.ts";
 
 export type RootState = {
     dashboardRouting: TDashboardRouting[];
-    language: TLanguage;
     user: TUser;
 };
 
@@ -22,7 +20,7 @@ const localStorageMiddleware: Middleware = ({getState}: TStorageProps) => {
 };
 
 const reHydrateStore = (): RootState | string | undefined => {
-    const storedValue = localStorage.getItem("applicationState1");
+    const storedValue = localStorage.getItem("applicationState");
     if (storedValue) {
         return JSON.parse(storedValue || "");
     }
@@ -31,7 +29,6 @@ const reHydrateStore = (): RootState | string | undefined => {
 export const store = configureStore({
     reducer: {
         dashboardRouting: dashboardRoutingSlice,
-        language: languageSlice,
         user: userSlice,
     },
     preloadedState: reHydrateStore(),

@@ -27,44 +27,43 @@ const ParticipantsList = ({contacts, activityId}: TParticipantsListProps) => {
     }
 
     return (
-        <>
+        <List
+            sx={{
+                width: '100%',
+                maxWidth: 800,
+                bgcolor: 'background.paper',
+                borderRadius: 4,
+                padding: 2,
+                mb: 2,
+                gap: 2
+            }}
+        >
             {contacts?.map((contact: IContact, index: number) => (
-                <List
-                    sx={{
-                        width: '100%',
-                        maxWidth: 800,
-                        bgcolor: 'background.paper',
-                        borderRadius: 4,
-                        padding: 2,
-                        mb: 2
-                    }}
-                >
-                    <ListItem key={index}
-                              secondaryAction={
-                                  <Tooltip title="Remove">
-                                      <IconButton edge="end"
-                                                  aria-label="Remove"
-                                                  color="default"
-                                                  disableRipple
-                                                  disableFocusRipple
-                                                  onClick={() => deleteParticipantMutation.mutate(contact.id)}
-                                      >
-                                          <ClearIcon/>
-                                      </IconButton>
-                                  </Tooltip>
-                              }
-                              disablePadding>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <AccountCircleIcon/>
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary={<Typography>{`${contact.firstName} ${contact.lastName}`}</Typography>}
-                                      secondary={<span>{`${contact.email1}, ${contact.phone1}`}</span>}/>
-                    </ListItem>
-                </List>
+                <ListItem key={index}
+                          secondaryAction={
+                              <Tooltip title="Remove">
+                                  <IconButton edge="end"
+                                              aria-label="Remove"
+                                              color="default"
+                                              disableRipple
+                                              disableFocusRipple
+                                              onClick={() => deleteParticipantMutation.mutate(contact.id)}
+                                  >
+                                      <ClearIcon/>
+                                  </IconButton>
+                              </Tooltip>
+                          }
+                          disablePadding>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <AccountCircleIcon/>
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={<Typography>{`${contact.firstName} ${contact.lastName}`}</Typography>}
+                                  secondary={<span>{`${contact.email1}, ${contact.phone1}`}</span>}/>
+                </ListItem>
             ))}
-        </>
+        </List>
     );
 }
 

@@ -66,7 +66,7 @@ const ActivityEdit = () => {
                     message: "Activity edited",
                 });
             },
-            onError: (err) => {
+            onError: () => {
                 setSnackbarState({
                     ...snackbarState,
                     open: true,

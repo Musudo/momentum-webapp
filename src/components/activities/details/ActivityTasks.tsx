@@ -8,7 +8,7 @@ import {debounce} from 'lodash';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {ITask} from '../../../types/models/ITask';
 import {fetchTask} from '../../../utils/axios/configs/taskAxios';
-import {gray} from "../../../shared-theme/themePrimitives.ts";
+import {gray} from "../../../theme/theme.ts";
 
 type TActivityTasksProps = {
     activityId: string;

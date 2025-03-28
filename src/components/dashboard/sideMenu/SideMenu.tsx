@@ -18,12 +18,12 @@ import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import TableChartIcon from "@mui/icons-material/TableChart";
 // import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 // import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
-import HiveIcon from '@mui/icons-material/Hive';
+import ArchitectureIcon from '@mui/icons-material/Architecture';
 
 const mainListItems = [
     {name: 'Home', icon: <HomeRoundedIcon/>},
     {name: 'Data Grid', icon: <TableChartIcon/>},
-    {name: 'Misc', icon: <HiveIcon/>},
+    {name: 'Misc', icon: <ArchitectureIcon/>},
 ];
 
 // const secondaryListItems = [

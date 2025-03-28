@@ -1,5 +1,5 @@
 import { alpha, Theme, Components } from "@mui/material/styles";
-import { gray } from "../themePrimitives";
+import { gray } from "../theme.ts";
 
 /* eslint-disable import/prefer-default-export */
 export const surfacesCustomizations: Components<Theme> = {

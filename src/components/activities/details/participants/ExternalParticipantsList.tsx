@@ -39,64 +39,63 @@ const ExternalParticipantsList = ({externalParticipants, activityId}: TExternalP
     }
 
     return (
-        <>
+        <List
+            sx={{
+                width: '100%',
+                maxWidth: 800,
+                bgcolor: 'background.paper',
+                borderRadius: 4,
+                padding: 2,
+                mb: 2,
+                gap: 2
+            }}
+        >
             {externalParticipants.map((externalParticipant: IExternalParticipant, index: number) => (
-                <List
-                    sx={{
-                        width: '100%',
-                        maxWidth: 800,
-                        bgcolor: 'background.paper',
-                        borderRadius: 4,
-                        padding: 2,
-                        mb: 2
-                    }}
-                >
-                    <ListItem key={index} sx={{marginBottom: 1}}
-                              secondaryAction={
-                                  <Box sx={{display: "flex"}}>
-                                      <Tooltip title="Add as a contact">
-                                          <IconButton
-                                              edge="end"
-                                              aria-label="Add as a contact"
-                                              color="primary"
-                                              disableRipple
-                                              disableFocusRipple
-                                              sx={{marginRight: 1, textDecoration: 'none'}}
-                                              component={Link}
-                                              to="/contacts/create"
-                                              state={{
-                                                  email: externalParticipant.email,
-                                                  name: externalParticipant.name
-                                              }}
-                                          >
-                                              <PersonAddOutlinedIcon/>
-                                          </IconButton>
-                                      </Tooltip>
-                                      <Tooltip title="Remove">
-                                          <IconButton edge="end"
-                                                      aria-label="Remove"
-                                                      color="default"
-                                                      disableRipple
-                                                      disableFocusRipple
-                                                      onClick={() => deleteExternalParticipantMutation.mutate(externalParticipant.id)}
-                                          >
-                                              <ClearIcon/>
-                                          </IconButton>
-                                      </Tooltip>
-                                  </Box>
-                              }
-                              disablePadding>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <AccountCircleIcon/>
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText id={externalParticipant.email}
-                                      primary={<Typography>{externalParticipant.email}</Typography>}/>
-                    </ListItem>
-                </List>
+                <ListItem key={index} sx={{marginBottom: 1}}
+                          secondaryAction={
+                              <Box sx={{display: "flex"}}>
+                                  <Tooltip title="Add as a contact">
+                                      <IconButton
+                                          edge="end"
+                                          aria-label="Add as a contact"
+                                          color="primary"
+                                          disableRipple
+                                          disableFocusRipple
+                                          sx={{marginRight: 1, textDecoration: 'none'}}
+                                          component={Link}
+                                          to="/contacts/create"
+                                          state={{
+                                              email: externalParticipant.email,
+                                              name: externalParticipant.name
+                                          }}
+                                      >
+                                          <PersonAddOutlinedIcon/>
+                                      </IconButton>
+                                  </Tooltip>
+                                  <Tooltip title="Remove">
+                                      <IconButton edge="end"
+                                                  aria-label="Remove"
+                                                  color="default"
+                                                  disableRipple
+                                                  disableFocusRipple
+                                                  onClick={() => deleteExternalParticipantMutation.mutate(externalParticipant.id)}
+                                      >
+                                          <ClearIcon/>
+                                      </IconButton>
+                                  </Tooltip>
+                              </Box>
+                          }
+                          disablePadding>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <AccountCircleIcon/>
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText id={externalParticipant.email}
+                                  primary={<Typography>{externalParticipant.email}</Typography>}/>
+                </ListItem>
             ))}
-        </>
+        </List>
     );
 }
 

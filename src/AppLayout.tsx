@@ -3,7 +3,7 @@
 import {ErrorBoundary} from "react-error-boundary";
 import {Outlet} from "react-router-dom";
 import {MainContainer} from "./components/mainContainer.tsx";
-import AppTheme from "./shared-theme/AppTheme.tsx";
+import AppTheme from "./theme/AppTheme.tsx";
 import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from "./components/navbar/Navbar.tsx";
 import {useMediaQuery, useTheme} from "@mui/material";

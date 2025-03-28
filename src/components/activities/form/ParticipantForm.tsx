@@ -8,12 +8,12 @@ import {useQuery} from "@tanstack/react-query";
 import {fetchContact} from "../../../utils/axios/configs/contactAxios.ts";
 import InstitutionFilter from "../InstitutionFilter.tsx";
 
-type TProps = {
+type TParticipantFormProps = {
     control: Control<any>,
     setValue: UseFormSetValue<any>;
 }
 
-const ParticipantForm = (props: TProps) => {
+const ParticipantForm = (props: TParticipantFormProps) => {
     const {control, setValue} = props;
     const [institutionName, setInstitutionName] = useState<string | null>(null);
     const {t} = useTranslation();

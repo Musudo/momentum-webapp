@@ -1,16 +1,15 @@
 import React, {useState} from "react";
 import {IActivity} from "../../../types/models/IActivity";
 import {useParams} from "react-router-dom";
-import {Box, Button, Chip, Divider, IconButton, Tab, Tabs, Typography, useMediaQuery,} from "@mui/material";
+import {Box, Button, Chip, Divider, Tab, Tabs, Typography,} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
 import PeopleIcon from "@mui/icons-material/People";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
-import EmailIcon from "@mui/icons-material/Email";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {allyProps} from "../../../props/MUIElementProps";
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import {ActivityTypesEnum} from "../../../types/enums/ActivityTypesEnum";
 import {fetchActivity} from "../../../utils/axios/configs/activityAxios";
 import ActivityExternalNote from "./notes/ActivityExternalNote";
@@ -37,8 +36,10 @@ type TTabPanelProps = {
 const ActivityDetails = () => {
     const {id} = useParams();
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-    const queryClient = useQueryClient();
+    // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    // const queryClient = useQueryClient();
+    const [openDeleteActivityDialog, setOpenDeleteActivityDialog] = useState(false);
+    const [tabValue, setTabValue] = useState(0);
 
     const {
         data: activity,
@@ -49,9 +50,6 @@ const ActivityDetails = () => {
             return res.data;
         }
     });
-
-    const [openDeleteActivityDialog, setOpenDeleteActivityDialog] = useState(false);
-    const [tabValue, setTabValue] = useState(0);
 
     const TabPanel = (props: TTabPanelProps) => {
         const {children, value, index, ...other} = props;
@@ -65,23 +63,19 @@ const ActivityDetails = () => {
             >
                 {value === index && (
                     <Box sx={{p: 3}}>
-                        <Typography>{children}</Typography>
+                        <Typography component="div">{children}</Typography>
                     </Box>
                 )}
             </div>
         );
     };
 
-    const sendEmailMutation = useMutation({
-        mutationFn: (data: object) => fetchActivity.post(`/email/activity/${activity?.id}/confirm`, data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["activity"]});
-        },
-    });
-
-    const handleEmailSend = () => {
-        sendEmailMutation.mutate([]);
-    };
+    // const sendEmailMutation = useMutation({
+    //     mutationFn: (data: object) => fetchActivity.post(`/email/activity/${activity?.id}/confirm`, data),
+    //     onSuccess: () => {
+    //         queryClient.invalidateQueries({queryKey: ["activity"]});
+    //     },
+    // });
 
     if (!activity) {
         return <div>Error</div>;
@@ -112,14 +106,14 @@ const ActivityDetails = () => {
                         <Grid>
                             <Typography variant="h5" marginBottom={1}>
                                 {activity?.subject}{" "}
-                                {activity.tags.map((tag: ITag) => (
-                                    <>
+                                {activity.tags.map((tag: ITag, index: number) => (
+                                    <React.Fragment key={index}>
                                         <Chip
                                             variant="outlined"
                                             color="success"
                                             label={tag.name}
                                         />{" "}
-                                    </>
+                                    </React.Fragment>
                                 ))}
                             </Typography>
                             <Typography
@@ -143,7 +137,7 @@ const ActivityDetails = () => {
                                 </Typography>
                             </div>
                         </Grid>
-                        <Grid>
+                        {/*<Grid>
                             {!activity.emailSentAt && (
                                 <>
                                     {!isMobile ? (
@@ -151,7 +145,7 @@ const ActivityDetails = () => {
                                             variant="contained"
                                             color="primary"
                                             startIcon={<EmailIcon/>}
-                                            onClick={handleEmailSend}
+                                            onClick={() => sendEmailMutation.mutate([])}
                                         >
                                             Send email
                                         </Button>
@@ -159,14 +153,14 @@ const ActivityDetails = () => {
                                         <IconButton
                                             color="primary"
                                             size="large"
-                                            onClick={handleEmailSend}
+                                            onClick={() => sendEmailMutation.mutate([])}
                                         >
                                             <EmailIcon/>
                                         </IconButton>
                                     )}
                                 </>
                             )}
-                        </Grid>
+                        </Grid>*/}
                     </Grid>
                     <Box sx={{borderBottom: 1, borderColor: "divider"}}>
                         <Tabs

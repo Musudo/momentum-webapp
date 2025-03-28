@@ -1,5 +1,5 @@
-import {IModel} from "./IModel";
-
-export interface IAttachment extends IModel {
-	path: string;
+export interface IAttachment {
+    id: string;
+    path: string;
+    createdAt: string;
 }

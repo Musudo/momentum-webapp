@@ -1,30 +1,37 @@
+import { useTheme } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
+import {brand, gray} from "../../../theme/theme.ts";
 
-export const MomentumIcon = ({ height = 22, width = 130 }) => {
+export const MomentumIcon = ({
+                                 height = 22,
+                                 width = 130,
+                             }) => {
+    const theme = useTheme();
+    const primaryStroke = theme.palette.mode === 'dark' ? gray[200] : brand[900];
+    const secondaryStroke = theme.palette.mode === 'dark' ? brand[300] : brand[500];
+
     return (
-        <SvgIcon sx={{ height, width }}>
+        <SvgIcon sx={{height, width}}>
             <svg width="1400" height="250" viewBox="0 0 1400 250" xmlns="http://www.w3.org/2000/svg">
                 {/*Pendulum lines*/}
-                <line x1="60" y1="30" x2="60" y2="170" stroke="#061629" strokeWidth="24"/>
-                <line x1="160" y1="30" x2="160" y2="170" stroke="#061629" strokeWidth="24"/>
-                <line x1="260" y1="30" x2="340" y2="110" stroke="#4876EE" strokeWidth="24"/>
+                <line x1="60" y1="30" x2="60" y2="170" stroke={primaryStroke} strokeWidth="24"/>
+                <line x1="160" y1="30" x2="160" y2="170" stroke={primaryStroke} strokeWidth="24"/>
+                <line x1="260" y1="30" x2="340" y2="110" stroke={secondaryStroke} strokeWidth="24"/>
 
                 {/*Pendulum balls*/}
-                <circle cx="60" cy="190" r="32" fill="#061629"/>
-                <circle cx="160" cy="190" r="32" fill="#061629"/>
-                <circle cx="355" cy="125" r="32" fill="#4876EE"/>
+                <circle cx="60" cy="190" r="32" fill={primaryStroke}/>
+                <circle cx="160" cy="190" r="32" fill={primaryStroke}/>
+                <circle cx="355" cy="125" r="32" fill={secondaryStroke}/>
 
                 {/*Top bar*/}
-                <line x1="20" y1="30" x2="280" y2="30" stroke="#061629" strokeWidth="24"/>
+                <line x1="20" y1="30" x2="280" y2="30" stroke={primaryStroke} strokeWidth="24"/>
 
                 {/*Text*/}
-                <text x="420" y="165" fontFamily="Arial Rounded MT Bold" fontSize="180" fill="#4876EE"
-                      fontWeight="bold">
+                <text x="420" y="165" fontFamily="Arial Rounded MT Bold" fontSize="180" fontWeight="bold"
+                      fill={secondaryStroke}>
                     Momentum
                 </text>
             </svg>
-
-
         </SvgIcon>
     );
 }

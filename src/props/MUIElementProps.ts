@@ -1,3 +1,4 @@
+// TODO: consider removing this in the future
 /**
  * MUI tab element props helper function
  * @param index

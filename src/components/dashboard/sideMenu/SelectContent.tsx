@@ -65,7 +65,7 @@ const SelectContent = () => {
                 <ListItemText primary="Client-web-tools" secondary="Web app"/>
             </MenuItem>
             <Divider sx={{mx: -1}}/>
-            <MenuItem component={Link} to="/activities/create">
+            <MenuItem component={Link} to="/activities/create/Online">
                 <ListItemIcon>
                     <AddRoundedIcon/>
                 </ListItemIcon>

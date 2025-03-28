@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useAudioRecorder} from 'react-audio-voice-recorder';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
-import {Box, IconButton, Stack, Tooltip, Typography} from "@mui/material";
+import {Box, IconButton, Stack, Tooltip} from "@mui/material";
 import MicIcon from '@mui/icons-material/Mic';
 import {IActivity} from "../../../types/models/IActivity";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -50,11 +50,11 @@ const ActivityVoiceMemo = ({activity}: TActivityVoiceMemoProps) => {
     // );
 
     return (
-        <div>
+        <>
             <Box mb={1} color="text.secondary">
-                <Typography component="span" variant="body1">
-                    Voice memo
-                </Typography>
+                {/*<Typography component="span" variant="body1">*/}
+                {/*    Voice memo*/}
+                {/*</Typography>*/}
             </Box>
             <Box mb={1}>
                 {recorderControls.isRecording ? (
@@ -93,17 +93,17 @@ const ActivityVoiceMemo = ({activity}: TActivityVoiceMemoProps) => {
                                 disableRipple
                                 disableFocusRipple
                                 onClick={() => {
-                                setIsDisabled(false);
-                                setRecording(undefined);
-                                // deleteVoiceMemoMutation.mutate();
-                            }}>
+                                    setIsDisabled(false);
+                                    setRecording(undefined);
+                                    // deleteVoiceMemoMutation.mutate();
+                                }}>
                                 <ClearIcon/>
                             </IconButton>
                         </Tooltip>
                     </Stack>
                 )}
             </Box>
-        </div>
+        </>
     );
 }
 

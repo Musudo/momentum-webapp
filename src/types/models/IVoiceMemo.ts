@@ -1,7 +1,5 @@
-import {IActivity} from "./IActivity";
-import {IModel} from "./IModel";
-
-export interface IVoiceMemo extends IModel {
-	path: string;
-	activity: IActivity | null;
+export interface IVoiceMemo {
+    id: string;
+    path: string;
+    createdAt: string;
 }

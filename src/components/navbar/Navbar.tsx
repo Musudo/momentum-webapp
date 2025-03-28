@@ -16,7 +16,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import {resetUser} from "../../redux/slice/userSlice.ts";
 import {AuthProvider} from "../../utils/auth/authProvider.ts";
 import LoginIcon from "@mui/icons-material/Login";
-import {Languages} from "../../constants/constants.ts";
+import {Languages} from "../../constants/commonConstants.ts";
 import Cookies from "js-cookie";
 import SettingsIcon from '@mui/icons-material/Settings';
 import ContrastIcon from '@mui/icons-material/Contrast';
@@ -90,7 +90,7 @@ export const UserMenu = () => {
                         </MenuItem>
                         <Menu
                             id="color-mode-appbar"
-                            anchorEl={anchorEl}
+                            anchorEl={anchorElColorMode}
                             anchorOrigin={{
                                 vertical: isMobile ? "bottom" : "top",
                                 horizontal: 'right',
@@ -123,7 +123,7 @@ export const UserMenu = () => {
                         </MenuItem>
                         <Menu
                             id="languages-appbar"
-                            anchorEl={anchorEl}
+                            anchorEl={anchorElLocales}
                             anchorOrigin={{
                                 vertical: isMobile ? "bottom" : "top",
                                 horizontal: 'right',
