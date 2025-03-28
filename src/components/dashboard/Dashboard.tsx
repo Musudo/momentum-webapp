@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import SideMenu from "./sideMenu/SideMenu.tsx";
 import {useSelector} from "react-redux";
 import {RootState} from "../../redux/store.ts";
-import {componentMapper} from "../../utils/mappers/componentMapper.ts";
+import {componentMapper} from "../../utils/componentMapper.ts";
 import Copyright from "./Copyright.tsx";
 
 const Dashboard = () => {

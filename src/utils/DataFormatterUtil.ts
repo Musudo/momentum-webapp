@@ -4,18 +4,18 @@
  * @param lastName
  */
 export function nameFormatter(firstName: string, lastName: string): string {
-	const isFirstNameValid = validateField(firstName);
-	const isLastNameValid = validateField(lastName);
+    const isFirstNameValid = validateField(firstName);
+    const isLastNameValid = validateField(lastName);
 
-	if (!isFirstNameValid && !isLastNameValid) {
-		return 'na';
-	} else if (!isLastNameValid) {
-		return `${firstName} na`;
-	} else if (!isFirstNameValid) {
-		return `na ${lastName}`;
-	}
+    if (!isFirstNameValid && !isLastNameValid) {
+        return 'na';
+    } else if (!isLastNameValid) {
+        return `${firstName} na`;
+    } else if (!isFirstNameValid) {
+        return `na ${lastName}`;
+    }
 
-	return `${firstName} ${lastName}`;
+    return `${firstName} ${lastName}`;
 }
 
 /**
@@ -23,13 +23,13 @@ export function nameFormatter(firstName: string, lastName: string): string {
  * @param dataField
  */
 export function dataFieldFormatter(dataField: string): string {
-	const isDataFieldValid = validateField(dataField);
+    const isDataFieldValid = validateField(dataField);
 
-	if (!isDataFieldValid) {
-		return 'na';
-	}
+    if (!isDataFieldValid) {
+        return 'na';
+    }
 
-	return dataField;
+    return dataField;
 }
 
 /**
@@ -42,15 +42,15 @@ export function dataFieldFormatter(dataField: string): string {
  * @param postBox
  */
 export function addressFormatter(country: string, city: string, zipCode: string, street: string,
-								 houseNumber: string, postBox: string = ""): string {
-	const isHouseNumberValid = validateField(houseNumber);
-	const isPostBoxValid = validateField(postBox);
+                                 houseNumber: string, postBox: string = ""): string {
+    const isHouseNumberValid = validateField(houseNumber);
+    const isPostBoxValid = validateField(postBox);
 
-	if (!isHouseNumberValid || !isPostBoxValid) {
-		return `${country}, ${city} ${zipCode}, ${street}`;
-	}
+    if (!isHouseNumberValid || !isPostBoxValid) {
+        return `${country}, ${city} ${zipCode}, ${street}`;
+    }
 
-	return `${country}, ${city} ${zipCode}, ${street} ${houseNumber} ${postBox}`;
+    return `${country}, ${city} ${zipCode}, ${street} ${houseNumber} ${postBox}`;
 }
 
 /**
@@ -58,5 +58,5 @@ export function addressFormatter(country: string, city: string, zipCode: string,
  * @param param
  */
 function validateField(param: string): boolean {
-	return param !== 'empty' && param !== '--' && param !== '';
+    return param !== 'empty' && param !== '--' && param !== '';
 }
