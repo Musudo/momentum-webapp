@@ -28,7 +28,7 @@ const ContactListItem = ({contact}: TContactListItemProps) => {
                     }
                     secondary={
                         <>
-                            <span style={{color: "black"}}>{`${contact.email1} - ${phoneNumber}`}</span>
+                            <span>{`${contact.email1} - ${phoneNumber}`}</span>
                             <br/>
                             <span key={contact.institution.id}>{contact.institution.name}<br/></span>
                         </>

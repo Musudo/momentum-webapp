@@ -40,7 +40,7 @@ const ActivityInternalNote = ({activity}: TActivityInternalNoteProps) => {
     });
 
     return (
-        <Box mb={2}
+        <Box component="div" mb={2}
              onMouseEnter={() => setIsHovering(true)}
              onMouseLeave={() => setIsHovering(false)}>
             <Box mb={1} color="text.secondary">
@@ -87,7 +87,7 @@ const ActivityInternalNote = ({activity}: TActivityInternalNoteProps) => {
                     marginBottom: 1,
                     minHeight: '4em'
                 }}>
-                    <Box flex={1}>
+                    <Box component="div" flex={1}>
                         {activity?.internalNote
                             ?.split('\n')
                             .map((paragraph: string, index: number) => (

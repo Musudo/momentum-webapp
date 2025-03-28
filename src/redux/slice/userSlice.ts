@@ -5,8 +5,8 @@ export type TUser = {
     firstName: string;
     lastName: string;
     email: string;
-    password: string;
     roles: string[];
+    createdAt: string;
 };
 
 const initialState: TUser = {
@@ -14,8 +14,8 @@ const initialState: TUser = {
     firstName: "",
     lastName: "",
     email: "",
-    password: "",
     roles: [],
+    createdAt: "",
 };
 
 const userSlice = createSlice({

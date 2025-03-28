@@ -11,9 +11,15 @@ type TSearchComponentProps = {
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.black, 0.05),
+    backgroundColor:
+        theme.palette.mode === 'light'
+            ? alpha(theme.palette.common.black, 0.05)
+            : alpha(theme.palette.common.white, 0.1),
     '&:hover': {
-        backgroundColor: alpha(theme.palette.common.black, 0.075),
+        backgroundColor:
+            theme.palette.mode === 'light'
+                ? alpha(theme.palette.common.black, 0.075)
+                : alpha(theme.palette.common.white, 0.15),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
@@ -56,7 +62,10 @@ const SearchComponent = ({setSearchValue, placeholder = "Search"}: TSearchCompon
     );
 
     return (
-        <Search style={{width: '100%'}}>
+        <Search
+            sx={{
+                width: {xs: '100vw', sm: '100%'},
+            }}>
             <SearchIconWrapper>
                 <SearchIcon/>
             </SearchIconWrapper>

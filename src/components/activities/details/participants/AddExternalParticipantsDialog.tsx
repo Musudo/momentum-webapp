@@ -36,8 +36,6 @@ const AddExternalParticipantsDialog = ({activityId}: TAddExternalParticipantsDia
     });
 
     const onSubmit = (data: any) => {
-
-        console.log(data);
         addParticipantMutation.mutate(data);
     }
 

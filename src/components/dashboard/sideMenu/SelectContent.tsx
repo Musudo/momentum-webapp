@@ -9,8 +9,6 @@ import Divider from '@mui/material/Divider';
 import {styled} from '@mui/material/styles';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DevicesRoundedIcon from '@mui/icons-material/DevicesRounded';
-import SmartphoneRoundedIcon from '@mui/icons-material/SmartphoneRounded';
-import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
 import {useState} from 'react';
 import {Link} from "react-router-dom";
 
@@ -65,23 +63,6 @@ const SelectContent = () => {
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary="Client-web-tools" secondary="Web app"/>
-            </MenuItem>
-            <MenuItem value={10}>
-                <ListItemAvatar>
-                    <Avatar alt="Client Mobile Tools">
-                        <SmartphoneRoundedIcon sx={{fontSize: '1rem'}}/>
-                    </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Client-mobile-tools" secondary="Mobile application"/>
-            </MenuItem>
-            <ListSubheader>Admin</ListSubheader>
-            <MenuItem value={20}>
-                <ListItemAvatar>
-                    <Avatar alt="Admin Tools">
-                        <ConstructionRoundedIcon sx={{fontSize: '1rem'}}/>
-                    </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Admin-tools" secondary="Web app"/>
             </MenuItem>
             <Divider sx={{mx: -1}}/>
             <MenuItem component={Link} to="/activities/create">

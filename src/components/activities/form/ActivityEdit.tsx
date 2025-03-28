@@ -67,7 +67,6 @@ const ActivityEdit = () => {
                 });
             },
             onError: (err) => {
-                console.log("Error: ", err);
                 setSnackbarState({
                     ...snackbarState,
                     open: true,

@@ -16,7 +16,7 @@ const ContactsOverviewAside = ({setSearchValue, handleJobTitleFilter}: TContacts
     const {t} = useTranslation();
 
     return (
-        <div style={{display: 'flex', flexDirection: 'column', gap: '22px'}}>
+        <div style={{display: 'flex', flexDirection: 'column', rowGap: '22px'}}>
             <SearchComponent setSearchValue={setSearchValue}/>
             <List dense style={{marginLeft: "22px"}}>
                 <Fragment key={1}>

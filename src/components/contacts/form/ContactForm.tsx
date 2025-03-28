@@ -18,7 +18,7 @@ import {Control, Controller, UseFormRegister, UseFormSetValue} from "react-hook-
 import {useQuery} from "@tanstack/react-query";
 import {fetchInstitution} from "../../../utils/axios/configs/institutionAxios.ts";
 
-type TProps = {
+type TContactFormProps = {
     register: UseFormRegister<IContact>;
     errors: any;
     setValue: UseFormSetValue<IContact>;
@@ -28,7 +28,7 @@ type TProps = {
     contact: IContact | null;
 }
 
-const ContactForm = (props: TProps) => {
+const ContactForm = (props: TContactFormProps) => {
     const {register, setValue, control, type, contact, errors} = props;
     const [title, setTitle] = useState("");
     const jobTitles = Object.keys(JobTitlesEnum);
@@ -51,10 +51,10 @@ const ContactForm = (props: TProps) => {
             gap: "16px",
         }}>
             <TextField
-                id="firstName2"
+                id="firstName"
                 label="First name"
                 fullWidth
-                autoComplete="given-name"
+                autoComplete="first name"
                 {...register("firstName", {
                     required: "First name is required",
                     minLength: {value: 2, message: "Name must be longer than 1 character"}
@@ -65,7 +65,7 @@ const ContactForm = (props: TProps) => {
                 id="lastName"
                 label="Last name"
                 fullWidth
-                autoComplete="family-name"
+                autoComplete="last name"
                 {...register("lastName", {
                     required: "Last name is required",
                     minLength: {value: 2, message: "Last name must be longer than 1 character"}
@@ -76,7 +76,7 @@ const ContactForm = (props: TProps) => {
                 id="email1"
                 label="Email 1"
                 fullWidth
-                autoComplete="shipping address-line1"
+                autoComplete="email1"
                 {...register("email1", {
                     required: "Email 1 is required",
                     pattern: {
@@ -90,7 +90,7 @@ const ContactForm = (props: TProps) => {
                 id="email2"
                 label="Email 2"
                 fullWidth
-                autoComplete="shipping address-line2"
+                autoComplete="email2"
                 {...register("email2", {
                     pattern: {
                         value: VALID_EMAIL_REGEXP,
@@ -103,7 +103,7 @@ const ContactForm = (props: TProps) => {
                 id="phone1"
                 label="Phone number 1"
                 fullWidth
-                autoComplete="shipping address-level2"
+                autoComplete="phone1"
                 {...register("phone1", {
                     required: "Phone number 1 is required",
                     minLength: {value: 6, message: "Phone number 1 is too short"}
@@ -114,6 +114,7 @@ const ContactForm = (props: TProps) => {
                 id="phone2"
                 label="Phone number 2"
                 fullWidth
+                autoComplete="phone2"
                 {...register("phone2", {
                     minLength: {value: 6, message: "Phone number 2 is too short"}
                 })}
@@ -126,6 +127,7 @@ const ContactForm = (props: TProps) => {
                         id="jobTitle"
                         labelId="jobTitleLabel"
                         value={title}
+                        autoComplete="job title"
                         {...register("jobTitle", {required: "Job title is required"})}
                         onChange={(event) => setTitle(event.target.value as string)}
                     >
@@ -140,6 +142,7 @@ const ContactForm = (props: TProps) => {
                     <Select
                         id="jobTitle"
                         labelId="jobTitleLabel"
+                        autoComplete="job title"
                         displayEmpty
                         defaultValue={contact?.jobTitle}
                         {...register("jobTitle", {required: "Job title is required"})}

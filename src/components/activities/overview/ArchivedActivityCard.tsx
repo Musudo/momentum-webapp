@@ -1,4 +1,4 @@
-import {Card, CardActionArea, CardContent, Typography} from "@mui/material";
+import {CardActionArea, CardContent, Paper, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 import {IActivity} from "../../../types/models/IActivity";
 
@@ -9,12 +9,24 @@ type TProps = {
 const ArchivedActivityCard = ({activity}: TProps) => {
 
     return (
-        <Card
-            sx={{width: 210, height: 120, textDecoration: 'none'}}
+        <Paper
+            sx={{
+                width: {xs: 290, md: 230},
+                height: 130,
+                textDecoration: 'none',
+                borderRadius: 4,
+            }}
             component={Link}
             to={`/activities/${activity.id}`}
+            elevation={2}
         >
-            <CardActionArea sx={{width: 210, height: 120}}>
+            <CardActionArea
+                sx={{
+                    width: 230,
+                    height: 130,
+                    padding: 2
+                }}
+            >
                 <CardContent>
                     <Typography sx={{fontSize: 12}} color="text.secondary" gutterBottom>
                         {activity.type}
@@ -33,7 +45,7 @@ const ArchivedActivityCard = ({activity}: TProps) => {
                     </Typography>
                 </CardContent>
             </CardActionArea>
-        </Card>
+        </Paper>
     );
 };
 

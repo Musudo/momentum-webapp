@@ -26,8 +26,8 @@ export default function UserProvider({children}: UserContextProviderProps) {
 
 				setUser(userData);
 			}
-		} catch (error) {
-			console.error('Error fetching data:', error);
+		} catch {
+			console.error('Error fetching data');
 		}
 	};
 

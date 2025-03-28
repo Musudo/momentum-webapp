@@ -81,8 +81,7 @@ const ActivityCreate = () => {
                     window.location.href = "/activities";
                 }, 2000);
             },
-            onError: (err) => {
-                console.log("Error: ", err);
+            onError: () => {
                 setSnackbarState({
                     ...snackbarState,
                     open: true,

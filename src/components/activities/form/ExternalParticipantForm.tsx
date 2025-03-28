@@ -45,7 +45,7 @@ const ExternalParticipantForm = ({setValue}: TExternalParticipantFormProps) => {
         <>
             {externalParticipants.map(external => (
                 <Grid key={external.id}>
-                    <Card sx={{position: 'relative', mt: 4}}>
+                    <Card sx={{position: 'relative', mt: 4, borderRadius: 4}}>
                         <CardHeader
                             action={
                                 <IconButton

@@ -56,15 +56,12 @@ const ActivityTasks = ({activityId}: TActivityTasksProps) => {
         }
     );
 
-    const handleChangeTask = (event: any, task: ITask) => {
-        task.description = event.target;
-
-        modifyTaskMutation.mutate(task);
-    }
-
     const debouncedChangeTaskHandler = useMemo(
-        () => debounce(handleChangeTask, 300)
-        , []);
+        () => debounce((event: any, task: ITask) => {
+            task.description = event.target.value;
+            modifyTaskMutation.mutate(task)
+        }, 300)
+        , [modifyTaskMutation]);
 
     const deleteTaskMutation = useMutation(
         {
@@ -81,61 +78,70 @@ const ActivityTasks = ({activityId}: TActivityTasksProps) => {
 
     return (
         <List sx={{width: '100%'}}>
-            <div>
-                <TextField placeholder="New task"
-                           fullWidth
-                           variant="standard"
-                           sx={{marginBottom: 2}}
-                           slotProps={{
-                               input: {
-                                   endAdornment: (
-                                       <InputAdornment position="start">
-                                           <IconButton onClick={(event) => handleSubmit(handleCreateTask)(event)}>
-                                               <SendIcon/>
-                                           </IconButton>
-                                       </InputAdornment>
-                                   )
-                               }
-                           }}
-                           {...register("description")}
-                           onKeyDown={(event) => {
-                               if (event.key === "Enter") {
-                                   handleSubmit(handleCreateTask)(event);
-                               }
-                           }}
-                />
-                {tasks.map((task: ITask) => (
-                    <ListItem
-                        secondaryAction={
-                            <IconButton edge="end" aria-label="delete task">
-                                <DeleteIcon sx={{opacity: 0.5}} onClick={() => deleteTaskMutation.mutate(task.id)}/>
-                            </IconButton>
-                        }
-                        disablePadding
-                        divider
-                    >
-                        <ListItemIcon>
-                            <Checkbox
-                                edge="start"
-                                checked={task.completed}
-                                color="success"
-                                disableRipple
-                                onChange={() => {
-                                    task.completed = !task.completed;
-                                    modifyTaskMutation.mutate(task);
-                                }}
-                            />
-                        </ListItemIcon>
-                        <TextField variant="standard"
-                                   slotProps={{
-                                       input: {disableUnderline: true}
-                                   }}
-                                   defaultValue={task.description}
-                                   sx={{opacity: task.completed ? "0.6" : "1", minWidth: "75%", marginLeft: "-25px"}}
-                                   onKeyDown={(event) => debouncedChangeTaskHandler(event, task)}/>
-                    </ListItem>
-                ))}
-            </div>
+            <TextField placeholder="New task"
+                       fullWidth
+                       variant="standard"
+                       sx={{marginBottom: 2}}
+                       slotProps={{
+                           input: {
+                               endAdornment: (
+                                   <InputAdornment position="start">
+                                       <IconButton onClick={(event) => handleSubmit(handleCreateTask)(event)}>
+                                           <SendIcon/>
+                                       </IconButton>
+                                   </InputAdornment>
+                               )
+                           }
+                       }}
+                       {...register("description")}
+                       onKeyDown={(event) => {
+                           if (event.key === "Enter") {
+                               handleSubmit(handleCreateTask)(event);
+                           }
+                       }}
+            />
+            {tasks.map((task: ITask) => (
+                <ListItem
+                    secondaryAction={
+                        <IconButton edge="end" aria-label="delete task">
+                            <DeleteIcon sx={{opacity: 0.5}} onClick={() => deleteTaskMutation.mutate(task.id)}/>
+                        </IconButton>
+                    }
+                    disablePadding
+                    divider
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    <ListItemIcon>
+                        {/*TODO: fix checkbox layout*/}
+                        <Checkbox
+                            edge="start"
+                            checked={task.completed}
+                            color="success"
+                            disableRipple
+                            disableFocusRipple
+                            sx={{
+                                '&.Mui-focusVisible': {
+                                    outline: 'none',
+                                },
+                            }}
+                            onChange={() => {
+                                task.completed = !task.completed;
+                                modifyTaskMutation.mutate(task);
+                            }}
+                        />
+                    </ListItemIcon>
+                    <TextField variant="standard"
+                               slotProps={{
+                                   input: {disableUnderline: true}
+                               }}
+                               defaultValue={task.description}
+                               sx={{opacity: task.completed ? "0.6" : "1", width: "100%"}}
+                               onKeyDown={(event) => debouncedChangeTaskHandler(event, task)}/>
+                </ListItem>
+            ))}
         </List>
     );
 }

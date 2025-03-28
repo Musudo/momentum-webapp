@@ -3,12 +3,12 @@ import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 
-type TProps = {
+type TArchivedActivitiesYearPickerProps = {
     archivedYear: string | null;
     setArchivedYear: (year: string | null) => void;
 }
 
-const ArchivedActivitiesYearPicker = ({archivedYear, setArchivedYear}: TProps) => {
+const ArchivedActivitiesYearPicker = ({archivedYear, setArchivedYear}: TArchivedActivitiesYearPickerProps) => {
 
     return (
         <FormControl>

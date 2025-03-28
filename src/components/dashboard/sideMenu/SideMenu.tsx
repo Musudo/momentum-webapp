@@ -6,6 +6,7 @@ import MenuContent from './MenuContent.tsx';
 import SelectContent from "./SelectContent.tsx";
 
 const drawerWidth = 240;
+const navHeight = 'var(--template-frame-height, 45px)';
 
 const Drawer = styled(MuiDrawer)({
     width: drawerWidth,
@@ -23,15 +24,20 @@ const SideMenu = () => {
             variant="permanent"
             sx={{
                 display: {xs: 'none', md: 'block'},
+                top: navHeight,
+                height: `calc(100% - ${navHeight})`,
+                zIndex: (theme) => theme.zIndex.appBar - 1,
                 [`& .${drawerClasses.paper}`]: {
                     backgroundColor: 'background.paper',
+                    top: navHeight,
+                    height: `calc(100% - ${navHeight})`,
                 },
             }}
         >
             <Box
                 sx={{
                     display: 'flex',
-                    mt: 'calc(var(--template-frame-height, 60px) + 4px)',
+                    // mt: 'calc(var(--template-frame-height, 60px) + 4px)',
                     p: 1.5,
                 }}
             >

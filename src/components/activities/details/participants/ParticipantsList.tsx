@@ -1,9 +1,9 @@
 import {Avatar, IconButton, List, ListItem, ListItemAvatar, ListItemText, Tooltip, Typography} from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import {IContact} from "../../../../types/models/IContact";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {fetchActivity} from "../../../../utils/axios/configs/activityAxios.ts";
+import ClearIcon from '@mui/icons-material/Clear';
 
 type TParticipantsListProps = {
     activityId: string;
@@ -27,18 +27,29 @@ const ParticipantsList = ({contacts, activityId}: TParticipantsListProps) => {
     }
 
     return (
-        <div>
-            {contacts?.map((contact: IContact) => (
-                <List sx={{width: '100%', maxWidth: 800, bgcolor: 'background.paper'}}>
-                    <ListItem key={contact.id}
+        <>
+            {contacts?.map((contact: IContact, index: number) => (
+                <List
+                    sx={{
+                        width: '100%',
+                        maxWidth: 800,
+                        bgcolor: 'background.paper',
+                        borderRadius: 4,
+                        padding: 2,
+                        mb: 2
+                    }}
+                >
+                    <ListItem key={index}
                               secondaryAction={
                                   <Tooltip title="Remove">
                                       <IconButton edge="end"
                                                   aria-label="Remove"
                                                   color="default"
+                                                  disableRipple
+                                                  disableFocusRipple
                                                   onClick={() => deleteParticipantMutation.mutate(contact.id)}
                                       >
-                                          <HighlightOffIcon/>
+                                          <ClearIcon/>
                                       </IconButton>
                                   </Tooltip>
                               }
@@ -53,7 +64,7 @@ const ParticipantsList = ({contacts, activityId}: TParticipantsListProps) => {
                     </ListItem>
                 </List>
             ))}
-        </div>
+        </>
     );
 }
 

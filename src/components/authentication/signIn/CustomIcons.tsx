@@ -1,13 +1,13 @@
 import SvgIcon from '@mui/material/SvgIcon';
 
-export const MomentumIcon = () => {
+export const MomentumIcon = ({ height = 22, width = 130 }) => {
     return (
-        <SvgIcon sx={{height: 22, width: 130}}>
+        <SvgIcon sx={{ height, width }}>
             <svg width="1400" height="250" viewBox="0 0 1400 250" xmlns="http://www.w3.org/2000/svg">
                 {/*Pendulum lines*/}
-                <line x1="60" y1="30" x2="60" y2="170" stroke="#061629" stroke-width="24"/>
-                <line x1="160" y1="30" x2="160" y2="170" stroke="#061629" stroke-width="24"/>
-                <line x1="260" y1="30" x2="340" y2="110" stroke="#4876EE" stroke-width="24"/>
+                <line x1="60" y1="30" x2="60" y2="170" stroke="#061629" strokeWidth="24"/>
+                <line x1="160" y1="30" x2="160" y2="170" stroke="#061629" strokeWidth="24"/>
+                <line x1="260" y1="30" x2="340" y2="110" stroke="#4876EE" strokeWidth="24"/>
 
                 {/*Pendulum balls*/}
                 <circle cx="60" cy="190" r="32" fill="#061629"/>
@@ -15,11 +15,11 @@ export const MomentumIcon = () => {
                 <circle cx="355" cy="125" r="32" fill="#4876EE"/>
 
                 {/*Top bar*/}
-                <line x1="20" y1="30" x2="280" y2="30" stroke="#061629" stroke-width="24"/>
+                <line x1="20" y1="30" x2="280" y2="30" stroke="#061629" strokeWidth="24"/>
 
                 {/*Text*/}
-                <text x="420" y="165" font-family="Arial Rounded MT Bold" font-size="180" fill="#4876EE"
-                      font-weight="bold">
+                <text x="420" y="165" fontFamily="Arial Rounded MT Bold" fontSize="180" fill="#4876EE"
+                      fontWeight="bold">
                     Momentum
                 </text>
             </svg>

@@ -100,8 +100,7 @@ const SignUp = () => {
                 window.location.href = `/signIn?email=${encodeURIComponent(res.email)}`;
             }, 2000);
         },
-        onError: (err) => {
-            console.log("Error: ", err);
+        onError: () => {
             setSnackbarState({
                 ...snackbarState,
                 open: true,

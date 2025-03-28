@@ -1,11 +1,21 @@
-import {Avatar, IconButton, List, ListItem, ListItemAvatar, ListItemText, Tooltip, Typography} from "@mui/material";
+import {
+    Avatar,
+    Box,
+    IconButton,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Tooltip,
+    Typography
+} from "@mui/material";
 import {IExternalParticipant} from "../../../../types/models/IExternalParticipant";
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import {Link} from "react-router-dom";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {fetchActivity} from "../../../../utils/axios/configs/activityAxios.ts";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ClearIcon from '@mui/icons-material/Clear';
 
 type TExternalParticipantsListProps = {
     externalParticipants: IExternalParticipant[] | undefined;
@@ -29,24 +39,35 @@ const ExternalParticipantsList = ({externalParticipants, activityId}: TExternalP
     }
 
     return (
-        <div>
+        <>
             {externalParticipants.map((externalParticipant: IExternalParticipant, index: number) => (
-                <List key={index} sx={{width: '100%', maxWidth: 800, bgcolor: 'background.paper'}}>
-                    <ListItem key={externalParticipant.id} sx={{marginBottom: 1}}
+                <List
+                    sx={{
+                        width: '100%',
+                        maxWidth: 800,
+                        bgcolor: 'background.paper',
+                        borderRadius: 4,
+                        padding: 2,
+                        mb: 2
+                    }}
+                >
+                    <ListItem key={index} sx={{marginBottom: 1}}
                               secondaryAction={
-                                  <div>
+                                  <Box sx={{display: "flex"}}>
                                       <Tooltip title="Add as a contact">
                                           <IconButton
                                               edge="end"
                                               aria-label="Add as a contact"
                                               color="primary"
-                                              sx={{marginRight: 1}}
+                                              disableRipple
+                                              disableFocusRipple
+                                              sx={{marginRight: 1, textDecoration: 'none'}}
                                               component={Link}
                                               to="/contacts/create"
                                               state={{
                                                   email: externalParticipant.email,
                                                   name: externalParticipant.name
-                                          }}
+                                              }}
                                           >
                                               <PersonAddOutlinedIcon/>
                                           </IconButton>
@@ -55,12 +76,14 @@ const ExternalParticipantsList = ({externalParticipants, activityId}: TExternalP
                                           <IconButton edge="end"
                                                       aria-label="Remove"
                                                       color="default"
+                                                      disableRipple
+                                                      disableFocusRipple
                                                       onClick={() => deleteExternalParticipantMutation.mutate(externalParticipant.id)}
                                           >
-                                              <HighlightOffIcon/>
+                                              <ClearIcon/>
                                           </IconButton>
                                       </Tooltip>
-                                  </div>
+                                  </Box>
                               }
                               disablePadding>
                         <ListItemAvatar>
@@ -73,7 +96,7 @@ const ExternalParticipantsList = ({externalParticipants, activityId}: TExternalP
                     </ListItem>
                 </List>
             ))}
-        </div>
+        </>
     );
 }
 

@@ -27,10 +27,10 @@ const ContactDetails = () => {
     }
 
     return (
-        <Grid container spacing={12}>
-            <Grid size={{xs: 6, md: 8}}>
+        <Grid container spacing={4}>
+            <Grid>
                 <CardContainer variant="outlined"
-                               customStyles={{
+                               sx={{
                                    [theme.breakpoints.up('sm')]: {
                                        width: '650px',
                                    },
@@ -53,7 +53,7 @@ const ContactDetails = () => {
                     </ListItem>
                 </CardContainer>
             </Grid>
-            <Grid size={{xs: 6, md: 4}}>
+            <Grid>
                 <ContactDetailsAside contact={contact}/>
             </Grid>
         </Grid>

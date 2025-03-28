@@ -9,11 +9,11 @@ import {Link} from "react-router-dom";
 import {ActivityTypesEnum} from "../../../types/enums/ActivityTypesEnum";
 import {IActivity} from "../../../types/models/IActivity";
 
-type TProps = {
+type TActivityCardProps = {
     activity: IActivity;
 };
 
-const ActivityCard = ({activity}: TProps) => {
+const ActivityCard = ({activity}: TActivityCardProps) => {
     const {t} = useTranslation();
 
     const renderIcon = () => {
@@ -27,36 +27,42 @@ const ActivityCard = ({activity}: TProps) => {
     };
 
     return (
-        <CardActionArea component={Link} to={`/activities/${activity.id}`}>
-            <Paper
-                sx={{
-                    height: 140,
-                    width: 265,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    padding: "1em",
-                }}
-                elevation={1}
-            >
-                <Box display="flex" flexDirection="column" alignItems="center">
-                    {renderIcon()}
-                    <Box textAlign="center" marginTop={1}>
-                        <Typography variant="subtitle2">{activity.subject}</Typography>
-                        <Typography variant="subtitle2" color="textSecondary">
-                            {new Intl.DateTimeFormat('en-GB', {
-                                day: '2-digit',
-                                month: 'short',
-                                year: 'numeric'
-                            }).format(new Date(activity.startTime))}
-                        </Typography>
-                        <Typography variant="subtitle2" color="textSecondary">
-                            {new Intl.DateTimeFormat('en-GB', {
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            }).format(new Date(activity.startTime))}
-                        </Typography>
-                    </Box>
+        <Paper
+            component={Link}
+            to={`/activities/${activity.id}`}
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                borderRadius: 4,
+                textDecoration: "none",
+                marginY: 1
+            }}
+            elevation={2}
+        >
+            <CardActionArea sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                height: 170,
+                width: 290,
+            }}>
+                {renderIcon()}
+                <Box textAlign="center" mb={4}>
+                    <Typography variant="subtitle2">{activity.subject}</Typography>
+                    <Typography variant="subtitle2" color="textSecondary">
+                        {new Intl.DateTimeFormat('en-GB', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric'
+                        }).format(new Date(activity.startTime))}
+                    </Typography>
+                    <Typography variant="subtitle2" color="textSecondary">
+                        {new Intl.DateTimeFormat('en-GB', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }).format(new Date(activity.startTime))}
+                    </Typography>
                 </Box>
                 <Box display="flex" justifyContent="space-around" width="100%">
                     <Box display="flex" alignItems="center">
@@ -68,12 +74,13 @@ const ActivityCard = ({activity}: TProps) => {
                     <Box display="flex" alignItems="center">
                         <TaskAltIcon color="disabled" sx={{mr: 1}}/>
                         <Typography variant="caption" color="textSecondary">
+                            {activity.tasks?.length}
                             {t("Activities overview page.Card.Tasks")}
                         </Typography>
                     </Box>
                 </Box>
-            </Paper>
-        </CardActionArea>
+            </CardActionArea>
+        </Paper>
     );
 };
 

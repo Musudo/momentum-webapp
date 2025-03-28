@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Button, Snackbar, Typography} from '@mui/material';
+import {Button, Snackbar, SnackbarCloseReason, Typography} from '@mui/material';
 import {useForm} from 'react-hook-form';
 import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from '@tanstack/react-query';
@@ -8,10 +8,13 @@ import ContactForm from "./ContactForm.tsx";
 import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums.ts";
 import {fetchContact} from "../../../utils/axios/configs/contactAxios.ts";
 import {CardContainer} from "../../cardContainer.tsx";
+import * as React from "react";
 
 const ContactEdit = () => {
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarState, setSnackbarState] = useState({
+        open: false,
+        message: "",
+    });
     const {id} = useParams();
 
     const {
@@ -46,12 +49,18 @@ const ContactEdit = () => {
         {
             mutationFn: (data: object) => fetchContact.patch(`/${contact?.id}`, data),
             onSuccess: () => {
-                setOpenSnackbar(true);
-                setSnackbarMessage("Contact updated");
+                setSnackbarState({
+                    ...snackbarState,
+                    open: true,
+                    message: "Contact updated",
+                });
             },
             onError: () => {
-                setOpenSnackbar(true);
-                setSnackbarMessage("Failed to update a contact");
+                setSnackbarState({
+                    ...snackbarState,
+                    open: true,
+                    message: "Failed to update a contact",
+                });
             },
         }
     );
@@ -67,11 +76,19 @@ const ContactEdit = () => {
     return (
         <CardContainer variant="outlined">
             <Snackbar
-                anchorOrigin={{vertical: "top", horizontal: "center"}}
-                open={openSnackbar}
-                onClose={() => setOpenSnackbar(false)}
-                message={snackbarMessage}
+                open={snackbarState.open}
+                onClose={(
+                    _event: React.SyntheticEvent<any> | Event,
+                    reason?: SnackbarCloseReason
+                ) => {
+                    if (reason === "clickaway") {
+                        return;
+                    }
+                    setSnackbarState({...snackbarState, open: false});
+                }}
                 autoHideDuration={2000}
+                anchorOrigin={{vertical: "top", horizontal: "center"}}
+                message={snackbarState.message}
             />
             <Typography component='h1' variant='h4' align='center'>
                 Edit Contact

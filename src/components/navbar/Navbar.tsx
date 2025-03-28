@@ -1,206 +1,244 @@
-import MenuIcon from "@mui/icons-material/Menu";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import PublicIcon from "@mui/icons-material/Public";
-import { Avatar, Tab, Tabs } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {Divider, ListItemIcon, Menu, MenuItem, Tab, Tabs, useMediaQuery, useTheme} from "@mui/material";
 import AppBar from "@mui/material/AppBar/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import * as React from "react";
-import { SyntheticEvent, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { RootState } from "../../redux/store";
-import { NavbarTypesEnum } from "../../types/enums/ComponentPropsEnums";
-import { stringAvatar } from "../../utils/avatarHelpers.ts";
-import CustomDrawer from "./CustomDrawer";
-import DesktopMenu from "./DesktopMenu";
-import MobileMenu from "./MobileMenu";
-import ReleaseVersion from "./ReleaseVersion";
-import Locales from "./Locales";
+import React, {useState} from "react";
+import {useTranslation} from "react-i18next";
+import {useDispatch} from "react-redux";
+import {Link, useLocation} from "react-router-dom";
 import '../../i18n';
 import {unCapitalizeFirstLetter} from "../../utils/stringHelpers.ts";
+import {matchPath} from "react-router";
+import {AccountCircle, Logout} from "@mui/icons-material";
+import LanguageIcon from "@mui/icons-material/Language";
+import {resetUser} from "../../redux/slice/userSlice.ts";
+import {AuthProvider} from "../../utils/auth/authProvider.ts";
+import LoginIcon from "@mui/icons-material/Login";
+import {Languages} from "../../constants/constants.ts";
+import Cookies from "js-cookie";
+import SettingsIcon from '@mui/icons-material/Settings';
+import ContrastIcon from '@mui/icons-material/Contrast';
+import {useColorScheme} from "@mui/material/styles";
 
-export function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
-  const user = useSelector((state: RootState) => state.user);
+export const UserMenu = () => {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [anchorElColorMode, setAnchorElColorMode] = useState<null | HTMLElement>(null);
+    const [anchorElLocales, setAnchorElLocales] = useState<null | HTMLElement>(null);
+    const dispatch = useDispatch();
+    const {t, i18n} = useTranslation();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const {mode, setMode} = useColorScheme();
 
-  /* drawer menu */
-  const navItems = ["Dashboard", "Activities", "Contacts"];
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-  /* drawer menu */
-
-  /* locale menu */
-  const localeMenuId = "primary-locale-menu";
-  const [anchorElLocaleMenu, setAnchorElLocale] = useState<null | HTMLElement>(
-    null
-  );
-  const handleLocaleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElLocale(event.currentTarget);
-  };
-  const handleLocaleMenuClose = () => {
-    setAnchorElLocale(null);
-  };
-  /* locale menu */
-
-  /* profile icon and main menu */
-  const mainMenuId = "primary-account-menu";
-  const mobileMenuId = "primary-account-menu-mobile";
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    useState<null | HTMLElement>(null);
-  const isMainMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-  const handleMainMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-  /* profile icon and main menu */
-
-  /* nav tabs highlighting */
-  const getInitialTab = () => {
-    if (window.location.pathname.includes("dashboard")) {
-      return 0;
-    } else if (window.location.pathname.includes("activities")) {
-      return 1;
-    } else if (window.location.pathname.includes("contacts")) {
-      return 2;
-    } else {
-      return 0;
+    if (!mode) {
+        return null;
     }
-  };
-  const [activeTab, setActiveTab] = useState(getInitialTab());
-  const handleChange = (_event: SyntheticEvent, newValue: number) => {
-    setActiveTab(newValue);
-  };
-  /* nav tabs highlighting */
 
-  return (
-    <Box sx={{ display: "flex" }}>
-      <AppBar component="nav">
-        <Toolbar>
-          <Box sx={{ flexGrow: { xs: 1, sm: 0 } }}>
+    const handleLocaleMenuChange = (event: React.MouseEvent<HTMLElement>) => {
+        i18n.changeLanguage(event.currentTarget.dataset.lang);
+        Cookies.set("lang", event.currentTarget.dataset.lang ?? "en", {
+            expires: 7,
+        });
+    };
+
+    return (
+        <>
             <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={(event) => setAnchorEl(event.currentTarget)}
+                // color="inherit"
             >
-              <MenuIcon />
+                {isMobile ? <><MoreVertIcon/></> : <><AccountCircle/></>}
             </IconButton>
-          </Box>
-          <Box sx={{ flexGrow: 0.75, display: { xs: "none", sm: "block" } }}>
-            <Typography variant="h6" component="div">
-              Sales Activity Manager
-            </Typography>
-            <ReleaseVersion type={NavbarTypesEnum.Main} />
-          </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
-            <Tabs
-              value={activeTab}
-              indicatorColor="secondary"
-              textColor="inherit"
-              centered
-              onChange={handleChange}
+            <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                    vertical: isMobile ? "bottom" : "top",
+                    horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                    vertical: isMobile ? "bottom" : "top",
+                    horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={() => setAnchorEl(null)}
             >
-              {navItems.map((item: string, index: number) => (
-                <Tab
-                  key={index}
-                  label={t("Common." + `${item}`)}
-                  onClick={() => navigate("/" + unCapitalizeFirstLetter(item))}
-                />
-              ))}
-            </Tabs>
-          </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}></Box>
-          <Box sx={{ display: { xs: "none", md: "block" } }}>
-            <IconButton
-              size="large"
-              aria-label="change language"
-              aria-controls={localeMenuId}
-              onClick={handleLocaleMenuOpen}
-              color="inherit"
-            >
-              <PublicIcon />
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={mainMenuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              {user.email != "" ? (
-                <Avatar>
-                  {stringAvatar(
-                    `${user.firstName} ${user.lastName}`
-                  ).children.toString()}
-                </Avatar>
-              ) : (
-                <Avatar />
-              )}
-            </IconButton>
-          </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <Locales
-        localeMenuAnchorEl={anchorElLocaleMenu}
-        handleLocaleMenuClose={handleLocaleMenuClose}
-        language={i18n.language}
-        localeMenuId={localeMenuId}
-      />
-      <MobileMenu
-        mobileMoreAnchorEl={mobileMoreAnchorEl}
-        handleMobileMenuClose={handleMobileMenuClose}
-        handleLocaleMenuOpen={handleLocaleMenuOpen}
-        isMobileMenuOpen={isMobileMenuOpen}
-        mobileMenuId={mobileMenuId}
-      />
-      <DesktopMenu
-        mainMenuAnchorEl={anchorEl}
-        handleMainMenuClose={handleMainMenuClose}
-        isMainMenuOpen={isMainMenuOpen}
-        mainMenuId={mainMenuId}
-      />
-      <Box component="nav">
-        <CustomDrawer
-          mobileOpen={mobileOpen}
-          setMobileOpen={setMobileOpen}
-          handleDrawerToggle={handleDrawerToggle}
-          navItems={navItems}
-        />
-      </Box>
-      <Toolbar />
-    </Box>
-  );
+                {AuthProvider.isAuthenticated ? (
+                    <>
+                        <MenuItem
+                            component={Link}
+                            to="/profile"
+                            onFocus={() => setAnchorEl(null)}
+                        >
+                            <ListItemIcon>
+                                <SettingsIcon fontSize="small"/>
+                            </ListItemIcon>
+                            Profile
+                        </MenuItem>
+                        <MenuItem onClick={(event) => setAnchorElColorMode(event.currentTarget)}>
+                            <ListItemIcon>
+                                <ContrastIcon fontSize="small"/>
+                            </ListItemIcon>
+                            Color mode
+                        </MenuItem>
+                        <Menu
+                            id="color-mode-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: isMobile ? "bottom" : "top",
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: isMobile ? "bottom" : "top",
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElColorMode)}
+                            onClose={() => setAnchorElColorMode(null)}
+                            onFocus={() => setAnchorEl(null)}
+                        >
+                            {["system", "light", "dark"].map((item, index) => (
+                                <MenuItem
+                                    key={index}
+                                    value={item}
+                                    selected={theme.palette.mode === item}
+                                    onClick={() => setMode(item as "system" | "light" | "dark")}
+                                >
+                                    {item}
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                        <MenuItem onClick={(event) => setAnchorElLocales(event.currentTarget)}>
+                            <ListItemIcon>
+                                <LanguageIcon fontSize="small"/>
+                            </ListItemIcon>
+                            {t("Common.Active language")}
+                        </MenuItem>
+                        <Menu
+                            id="languages-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: isMobile ? "bottom" : "top",
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: isMobile ? "bottom" : "top",
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElLocales)}
+                            onClose={() => setAnchorElLocales(null)}
+                            onFocus={() => setAnchorEl(null)}
+                        >
+                            {Languages.map(
+                                (
+                                    lang: {
+                                        shorthand: string;
+                                        longhand: string;
+                                    },
+                                    index: number
+                                ) => (
+                                    <MenuItem
+                                        key={index}
+                                        data-lang={lang.shorthand}
+                                        onClick={handleLocaleMenuChange}
+                                        selected={i18n.language === lang.shorthand}
+                                    >
+                                        {lang.longhand}
+                                    </MenuItem>
+                                )
+                            )}
+                        </Menu>
+                        <Divider/>
+                        <MenuItem
+                            onClick={() => {
+                                dispatch(resetUser());
+                                window.location.href = AuthProvider.signOut();
+                            }}
+                        >
+                            <ListItemIcon>
+                                <Logout fontSize="small"/>
+                            </ListItemIcon>
+                            {t("Common.Logout")}
+                        </MenuItem>
+                    </>
+                ) : (
+                    <MenuItem
+                        key="signIn"
+                        onClick={() => {
+                            window.location.href = `${window.location.origin}${import.meta.env.VITE_AUTH_SIGNIN_URL}`;
+                        }}
+                    >
+                        <ListItemIcon>
+                            <LoginIcon fontSize="small"/>
+                        </ListItemIcon>
+                        {t("Common.Login")}
+                    </MenuItem>
+                )}
+            </Menu>
+        </>
+    );
+};
+
+const Navbar = () => {
+    const {t} = useTranslation();
+    const navItems = ["Dashboard", "Activities", "Contacts"];
+    const location = useLocation();
+
+    let currentPath: string | boolean = '/';
+    if (matchPath('/', location.pathname)) {
+        currentPath = '/';
+    } else if (matchPath('/dashboard', location.pathname)) {
+        currentPath = '/dashboard';
+    } else if (matchPath('/activities/*', location.pathname)) {
+        currentPath = '/activities';
+    } else if (matchPath('/contacts/*', location.pathname)) {
+        currentPath = '/contacts';
+    } else {
+        currentPath = false;
+    }
+
+    return (
+        <Box component="nav" sx={{flexGrow: 1}}>
+            <AppBar position="fixed">
+                <Toolbar variant="dense">
+                    <Box flex={1} display="flex" justifyContent="space-between">
+                        <Box width="200px">
+                            {/* Placeholder to balance the layout */}
+                        </Box>
+                        <Box display="flex" justifyContent="center" alignItems="center">
+                            <Tabs
+                                value={currentPath}
+                                aria-label="Navigation Tabs"
+                                indicatorColor="secondary"
+                                centered
+                            >
+                                {navItems.map((item: string, index: number) => (
+                                    <Tab
+                                        key={index}
+                                        label={t("Common." + item)}
+                                        component={Link}
+                                        to={unCapitalizeFirstLetter(item)}
+                                        value={`/${unCapitalizeFirstLetter(item)}`}
+                                    />
+                                ))}
+                            </Tabs>
+                        </Box>
+                        <Box display="flex" alignItems="center" width="200px" justifyContent="flex-end">
+                            <UserMenu/>
+                        </Box>
+                    </Box>
+                </Toolbar>
+            </AppBar>
+        </Box>
+    );
 }
+
+export default Navbar;

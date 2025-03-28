@@ -86,6 +86,7 @@ const ActivityExternalNote = ({activity}: TActivityExternalNoteProps) => {
                     marginBottom: 1,
                     minHeight: '4em'
                 }}>
+                    {/*TODO: fix react DOM errors*/}
                     <Box flex={1}>
                         {activity?.externalNote
                             ?.split('\n')

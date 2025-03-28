@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {Button, TablePagination, useMediaQuery} from "@mui/material";
+import {Box, Button, TablePagination, useMediaQuery} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import {useTranslation} from "react-i18next";
 import {IContact} from "../../../types/models/IContact.ts";
@@ -16,11 +16,11 @@ const ContactsOverview = () => {
     const [contacts, setContacts] = useState<IContact[]>([]);
     const [searchValue, setSearchValue] = useState<string>("");
     const navigate = useNavigate();
-    const isMobile = useMediaQuery('(max-width: 600px)');
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const {t} = useTranslation();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const theme = useTheme();
 
     const fetchContacts = async (searchValue: string) => {
         const trimmedValue = searchValue.trim();
@@ -54,18 +54,18 @@ const ContactsOverview = () => {
     }
 
     return (
-        <Grid container spacing={12}>
+        <Grid container spacing={6}>
             <ContactsOverviewAside setSearchValue={setSearchValue}
                                    handleJobTitleFilter={handleJobTitleFilter}/>
-            <div>
-                <div style={{display: "flex", justifyContent: "end", marginBottom: 16}}>
+            <Box>
+                <Box sx={{display: "flex", justifyContent: "end", marginBottom: 4}}>
                     <Button variant='contained'
                             startIcon={<AddIcon/>}
                             fullWidth={isMobile}
                             onClick={() => navigate(`/contacts/create`)}>
                         {t('Contacts overview page.New contact')}
                     </Button>
-                </div>
+                </Box>
                 <CardContainer variant="outlined"
                                customStyles={{
                                    padding: 0,
@@ -86,7 +86,7 @@ const ContactsOverview = () => {
                         setPage(0);
                     }}
                 />
-            </div>
+            </Box>
         </Grid>
     );
 }
