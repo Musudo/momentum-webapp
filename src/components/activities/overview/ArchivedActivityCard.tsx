@@ -2,16 +2,16 @@ import {CardActionArea, CardContent, Paper, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 import {IActivity} from "../../../types/models/IActivity";
 
-type TProps = {
+type TArchivedActivityCardProps = {
     activity: IActivity;
 };
 
-const ArchivedActivityCard = ({activity}: TProps) => {
+const ArchivedActivityCard = ({activity}: TArchivedActivityCardProps) => {
 
     return (
         <Paper
             sx={{
-                width: {xs: 290, md: 230},
+                width: {xs: 280, md: 220},
                 height: 130,
                 textDecoration: 'none',
                 borderRadius: 4,

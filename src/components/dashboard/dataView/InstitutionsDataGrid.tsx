@@ -1,16 +1,19 @@
 import {DataGrid, GridRowsProp} from '@mui/x-data-grid';
-import {columns} from "./tableData.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {fetchStat} from "../../../utils/axios/configs/statAxios.ts";
+import {useTheme} from "@mui/material/styles";
+import {gray} from "../../../shared-theme/themePrimitives.ts";
+import {columns} from "./institutionsData.tsx";
 
-const ContactsTable = () => {
+const InstitutionsDataGrid = () => {
+    const theme = useTheme();
 
     const {
-        data: contactsData,
+        data: institutionsData,
     } = useQuery<GridRowsProp>({
-        queryKey: ["contactsData"],
+        queryKey: ["institutionsData"],
         queryFn: async () => {
-            const res = await fetchStat.get("/contacts-table-data");
+            const res = await fetchStat.get("/institutions-table-data");
             return res.data;
         },
     });
@@ -18,7 +21,7 @@ const ContactsTable = () => {
     return (
         <DataGrid
             checkboxSelection
-            rows={contactsData}
+            rows={institutionsData}
             columns={columns}
             getRowClassName={(params) =>
                 params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
@@ -29,6 +32,9 @@ const ContactsTable = () => {
             pageSizeOptions={[10, 20, 50]}
             disableColumnResize
             density="compact"
+            sx={{
+                background: theme.palette.mode === "dark" ? gray[800] : gray[50],
+            }}
             slotProps={{
                 filterPanel: {
                     filterFormProps: {
@@ -59,4 +65,4 @@ const ContactsTable = () => {
     );
 }
 
-export default ContactsTable;
+export default InstitutionsDataGrid;

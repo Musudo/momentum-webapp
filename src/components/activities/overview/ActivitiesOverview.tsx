@@ -376,7 +376,15 @@ const ActivitiesOverview = () => {
                                         setArchivedYear={(newValue) => setArchivedYear(newValue)}
                                     />
                                 </Grid>
-                                <Grid display="flex" flexWrap="wrap" width="100%" gap={2}>
+                                <Grid
+                                    display="flex"
+                                    flexWrap="wrap"
+                                    width="100%"
+                                    gap={2}
+                                    overflow="auto"
+                                    height="65vh"
+                                    p={1}
+                                >
                                     {archivedActivities && archivedActivities.map((activity: IActivity) => (
                                         <ArchivedActivityCard key={activity.id} activity={activity}/>
                                     ))}

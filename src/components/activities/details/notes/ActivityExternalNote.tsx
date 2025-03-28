@@ -1,10 +1,11 @@
 import {useState} from 'react';
-import {Box, Button, IconButton, TextField, Tooltip, Typography} from "@mui/material";
+import {Box, Button, IconButton, TextField, Tooltip, Typography, useTheme} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import {IActivity} from "../../../../types/models/IActivity";
 import {useForm} from "react-hook-form";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {fetchActivity} from "../../../../utils/axios/configs/activityAxios.ts";
+import {gray} from "../../../../shared-theme/themePrimitives.ts";
 
 type TActivityExternalNoteProps = {
     activity: IActivity;
@@ -14,6 +15,7 @@ const ActivityExternalNote = ({activity}: TActivityExternalNoteProps) => {
     const [isHovering, setIsHovering] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const queryClient = useQueryClient();
+    const theme = useTheme();
 
     const handleCancelEditMode = () => {
         setIsEditing(false);
@@ -78,7 +80,7 @@ const ActivityExternalNote = ({activity}: TActivityExternalNoteProps) => {
                 </form>
             ) : (
                 <Box sx={{
-                    bgcolor: '#edf3f0',
+                    bgcolor: theme.palette.mode === "dark" ? gray[800] : "#edf3f0",
                     padding: '0 1em',
                     borderRadius: '10px',
                     display: 'flex',

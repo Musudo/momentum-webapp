@@ -38,11 +38,10 @@ const ITEMS: TreeViewBaseItem<TExtendedTreeItemProps>[] = [
         label: 'Dashboard',
         children: [
             {id: '2.1', label: 'Home', color: 'green'},
-            {id: '2.2', label: 'Contacts Data', color: 'green'},
-            {id: '2.3', label: 'Tasks', color: 'green'},
-            {id: '2.4', label: 'Voice Memos', color: 'green'},
-            {id: '2.5', label: 'Settings', color: 'green'},
-            {id: '2.6', label: 'About', color: 'green'},
+            {id: '2.2', label: 'Data Grid', color: 'green'},
+            {id: '2.3', label: 'Misc', color: 'green'},
+            {id: '2.4', label: 'Settings', color: 'green'},
+            {id: '2.5', label: 'About', color: 'green'},
         ],
     }
 ];

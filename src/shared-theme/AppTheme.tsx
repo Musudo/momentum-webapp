@@ -7,7 +7,6 @@ import {feedbackCustomizations} from "./customizations/feedback";
 import {navigationCustomizations} from "./customizations/navigation";
 import {surfacesCustomizations} from "./customizations/surfaces";
 import {brand, colorSchemes, gray, shadows, shape, typography} from "./themePrimitives";
-import {palette} from "remirror/extensions";
 
 interface AppThemeProps {
     children: React.ReactNode;

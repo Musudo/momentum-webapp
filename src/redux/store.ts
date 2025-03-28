@@ -22,7 +22,7 @@ const localStorageMiddleware: Middleware = ({getState}: TStorageProps) => {
 };
 
 const reHydrateStore = (): RootState | string | undefined => {
-    const storedValue = localStorage.getItem("applicationState");
+    const storedValue = localStorage.getItem("applicationState1");
     if (storedValue) {
         return JSON.parse(storedValue || "");
     }

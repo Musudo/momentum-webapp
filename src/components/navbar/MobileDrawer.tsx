@@ -61,7 +61,6 @@ const MobileDrawer = (props: TCustomDrawerProps) => {
                                 disablePadding
                                 sx={{
                                     textDecoration: "none",
-                                    color: "black",
                                     display: "flex",
                                     alignItems: "center",
                                 }}

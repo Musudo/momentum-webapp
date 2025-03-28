@@ -8,9 +8,9 @@ export type TDashboardRouting = {
 const initialState: TDashboardRouting[] = [
     {name: 'HomeView', isVisible: true},
     {name: 'DataView', isVisible: false},
-    {name: 'TasksView', isVisible: false},
-    {name: 'SettingsView', isVisible: false},
-    {name: 'AboutView', isVisible: false},
+    {name: 'MiscView', isVisible: false},
+    // {name: 'SettingsView', isVisible: false},
+    // {name: 'AboutView', isVisible: false},
 ];
 
 const dashboardRoutingSlice = createSlice({

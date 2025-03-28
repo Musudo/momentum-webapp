@@ -198,19 +198,7 @@ const ActivityDetails = () => {
                             alignItems="center"
                             justifyContent="center"
                         >
-                            <Grid
-                                sx={{
-                                    bgcolor: "#edf3f0",
-                                    padding: "0 1em",
-                                    borderRadius: 2,
-                                    display: "flex",
-                                    alignItems: "stretch",
-                                    minHeight: "15em",
-                                    minWidth: "25em",
-                                }}
-                            >
-                                <ActivityTasks activityId={activity.id}/>
-                            </Grid>
+                            <ActivityTasks activityId={activity.id}/>
                         </Grid>
                     </TabPanel>
 

@@ -87,6 +87,7 @@ const HomeView = () => {
                 ))}
 
                 <Grid size={{xs: 12, sm: 6, lg: 3}}>
+                    {/*Placeholder*/}
                 </Grid>
 
                 <Grid size={{xs: 12, md: 6}}>

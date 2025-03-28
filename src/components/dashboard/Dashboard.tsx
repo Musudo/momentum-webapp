@@ -10,36 +10,34 @@ const Dashboard = () => {
     const dashboardRouting = useSelector((state: RootState) => state.dashboardRouting);
 
     return (
-        <>
-            <Box sx={{display: 'flex'}}>
-                {/*TODO: consider creating solid navbar+side for dashboard only*/}
-                <SideMenu/>
-                <Box
-                    component="main"
-                    sx={() => ({
-                        flexGrow: 1,
-                        overflow: 'auto',
-                    })}
+        <Box sx={{display: 'flex'}}>
+            {/*TODO: consider creating solid navbar+side for dashboard only*/}
+            <SideMenu/>
+            <Box
+                component="main"
+                sx={() => ({
+                    flexGrow: 1,
+                    overflow: 'auto',
+                })}
+            >
+                <Stack
+                    spacing={2}
+                    sx={{
+                        alignItems: 'center',
+                        mx: 3,
+                        pb: 5,
+                        mt: {xs: 8, md: 0},
+                    }}
                 >
-                    <Stack
-                        spacing={2}
-                        sx={{
-                            alignItems: 'center',
-                            mx: 3,
-                            pb: 5,
-                            mt: {xs: 8, md: 0},
-                        }}
-                    >
-                        {dashboardRouting.map((route) => {
-                            if (!route.isVisible) return null;
-                            const Component = componentMapper[route.name];
-                            return Component ? <Component key={route.name}/> : null;
-                        })}
-                        <Copyright sx={{my: 8}}/>
-                    </Stack>
-                </Box>
+                    {dashboardRouting.map((route) => {
+                        if (!route.isVisible) return null;
+                        const Component = componentMapper[route.name];
+                        return Component ? <Component key={route.name}/> : null;
+                    })}
+                    <Copyright sx={{my: 8}}/>
+                </Stack>
             </Box>
-        </>
+        </Box>
     );
 }
 
