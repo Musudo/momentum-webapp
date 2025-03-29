@@ -20,7 +20,7 @@ const AppLayout = (props: { disableCustomTheme?: boolean }) => {
                 {/*TODO: find out what this does*/}
                 {isMobile ? <MobileNavbar/> : <Navbar/>}
                 <MainContainer parentStyles={{marginTop: '40px'}}>
-                    <ErrorBoundary fallback={<div>Error...</div>}>
+                    <ErrorBoundary fallback={<div>Error</div>}>
                         <Outlet/>
                     </ErrorBoundary>
                 </MainContainer>

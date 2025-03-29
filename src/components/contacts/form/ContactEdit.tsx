@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {Button, Snackbar, SnackbarCloseReason, Typography} from '@mui/material';
 import {useForm} from 'react-hook-form';
@@ -8,7 +9,6 @@ import ContactForm from "./ContactForm.tsx";
 import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums.ts";
 import {fetchContact} from "../../../utils/axios/configs/contactAxios.ts";
 import {CardContainer} from "../../cardContainer.tsx";
-import * as React from "react";
 
 const ContactEdit = () => {
     const [snackbarState, setSnackbarState] = useState({
@@ -95,7 +95,7 @@ const ContactEdit = () => {
             </Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <ContactForm register={register} errors={errors} control={control}
-                             setValue={setValue} type={FormTypesEnum.Edit} contact={contact}/>
+                             setValue={setValue} contact={contact} formType={FormTypesEnum.Edit}/>
                 <div style={{display: 'flex', justifyContent: 'flex-end'}}>
                     <Button
                         type='submit'

@@ -2,7 +2,6 @@ import {useForm} from "react-hook-form";
 import {Button, Snackbar, SnackbarCloseReason, Typography} from "@mui/material";
 import {useMutation} from "@tanstack/react-query";
 import {IContact} from "../../../types/models/IContact.ts";
-import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums.ts";
 import ContactForm from "./ContactForm.tsx";
 import {fetchContact} from "../../../utils/axios/configs/contactAxios.ts";
 import {useState} from "react";
@@ -84,7 +83,6 @@ const ContactCreate = () => {
                              errors={errors}
                              control={control}
                              setValue={setValue}
-                             type={FormTypesEnum.Create}
                              contact={null}
                 />
                 <div style={{display: 'flex', justifyContent: 'flex-end'}}>

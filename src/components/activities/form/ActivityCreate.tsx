@@ -1,25 +1,12 @@
 import * as React from "react";
 import {useState} from "react";
-import {
-    Box,
-    Button,
-    FormControlLabel,
-    FormHelperText,
-    Snackbar,
-    SnackbarCloseReason,
-    Step,
-    StepLabel,
-    Stepper,
-    Switch,
-    Typography,
-} from "@mui/material";
-import {Controller, useForm} from "react-hook-form";
+import {Box, Button, Snackbar, SnackbarCloseReason, Step, StepLabel, Stepper, Typography,} from "@mui/material";
+import {useForm} from "react-hook-form";
 import {useParams} from "react-router-dom";
 import dayjs from "dayjs";
 import {useTranslation} from "react-i18next";
 import {useMutation} from "@tanstack/react-query";
 import {IActivity} from "../../../types/models/IActivity";
-import {FormTypesEnum} from "../../../types/enums/ComponentPropsEnums";
 import ActivityForm from "./ActivityForm.tsx";
 import ParticipantForm from "./ParticipantForm.tsx";
 import {fetchActivity} from "../../../utils/axios/configs/activityAxios.ts";
@@ -39,11 +26,9 @@ const ActivityCreate = () => {
     // TODO: fix validation
     const {
         register,
-        // unregister,
         control,
         handleSubmit,
         setValue,
-        getValues,
         trigger,
         formState: {errors},
     } = useForm<IActivity>({
@@ -103,41 +88,47 @@ const ActivityCreate = () => {
     }
 
     const participantStep = (
-        <div>
+        <>
             <ParticipantForm
                 control={control}
                 setValue={setValue}
             />
             <ExternalParticipantForm setValue={setValue}/>
-        </div>
+        </>
     );
 
     const activityStep = (
-        <div>
+        <>
             <ActivityForm
                 register={register}
                 controller={control}
                 errors={errors}
                 activity={null}
                 setValue={setValue}
-                formType={FormTypesEnum.Create}
             />
-            <div style={{marginTop: 16}}>
+            {/*<Box style={{marginTop: 16}}>
                 <Controller
                     name="emailSentAt"
                     control={control}
-                    render={({field: {value, onChange}}) => (
+                    render={({field}) => (
                         <FormControlLabel
                             control={
                                 <Switch
-                                    checked={!!value}
-                                    onChange={(e) =>
-                                        onChange(
-                                            e.target.checked
-                                                ? dayjs(getValues("startTime")).format("YYYY-MM-DD[T]HH:mm:ss")
-                                                : ""
-                                        )
-                                    }
+                                    {...field}
+                                    checked={!!field.value}
+                                    onChange={(e) => {
+                                        const isChecked = e.target.checked;
+                                        field.onChange(isChecked);
+                                        if (isChecked) {
+                                            setValue(
+                                                "emailSentAt",
+                                                dayjs(getValues("startTime")).format("YYYY-MM-DD[T]HH:mm:ss")
+                                            );
+                                        } else {
+                                            // Clear the value when unchecked
+                                            setValue("emailSentAt", "");
+                                        }
+                                    }}
                                 />
                             }
                             label={t("Activity form.Send email")}
@@ -145,10 +136,10 @@ const ActivityCreate = () => {
                     )}
                 />
                 <FormHelperText>
-                    {t("Activity form.Switch on to immediately send email")}
+                    {t("Activity form.Switch to send email")}
                 </FormHelperText>
-            </div>
-        </div>
+            </Box>*/}
+        </>
     );
 
     return (

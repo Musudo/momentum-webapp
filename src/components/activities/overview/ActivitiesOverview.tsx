@@ -352,7 +352,7 @@ const ActivitiesOverview = () => {
                             </FormControl>
                         </Box>
                         <Box sx={{
-                            mt: {xs: 0, md: 6},
+                            mt: {xs: 0, sm: 6, md: 6},
                             mb: {xs: 6, md: 0},
                         }}>
                             <ActivitySpeedDial direction={SpeedDialDirectionsEnum.Left}/>

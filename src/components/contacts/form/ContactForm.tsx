@@ -24,12 +24,12 @@ type TContactFormProps = {
     setValue: UseFormSetValue<IContact>;
     control: Control<IContact>;
     currentInstitutions?: IInstitution[];
-    type: FormTypesEnum;
     contact: IContact | null;
+    formType?: FormTypesEnum;
 }
 
 const ContactForm = (props: TContactFormProps) => {
-    const {register, setValue, control, type, contact, errors} = props;
+    const {register, setValue, control, contact, errors, formType = FormTypesEnum.Create} = props;
     const [title, setTitle] = useState("");
     const jobTitles = Object.keys(JobTitlesEnum);
 
@@ -122,7 +122,7 @@ const ContactForm = (props: TContactFormProps) => {
             <FormHelperText error>{errors?.phone2?.message}</FormHelperText>
             <FormControl variant="standard" sx={{minWidth: 120}} fullWidth>
                 <InputLabel id="jobTitleLabel" shrink>Job title</InputLabel>
-                {type === FormTypesEnum.Create && (
+                {formType === FormTypesEnum.Create && (
                     <Select
                         id="jobTitle"
                         labelId="jobTitleLabel"
@@ -138,7 +138,7 @@ const ContactForm = (props: TContactFormProps) => {
                         ))}
                     </Select>
                 )}
-                {(type === FormTypesEnum.Edit && contact) && (
+                {(contact && formType === FormTypesEnum.Edit) && (
                     <Select
                         id="jobTitle"
                         labelId="jobTitleLabel"
@@ -162,7 +162,7 @@ const ContactForm = (props: TContactFormProps) => {
                 )}
                 <FormHelperText error>{errors?.jobTitle?.message}</FormHelperText>
             </FormControl>
-            {institutions && (
+            {(institutions && formType === FormTypesEnum.Create) && (
                 <Controller
                     name="institutionId"
                     control={control}

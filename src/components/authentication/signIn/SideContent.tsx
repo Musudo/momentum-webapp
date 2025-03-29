@@ -30,7 +30,7 @@ const items = [
         title: 'Try it out as a guest user',
         description:
             <>
-                If you just want to have a brief introduction you can use guest user username (<strong>guest</strong>)
+                If you just want to have a brief introduction you can use guest user email (<strong>guest@email.com</strong>)
                 and password (<strong>1Password</strong>) to sign in. You will then have fake data and all the
                 functionality of the app at your disposal.
             </>
@@ -39,7 +39,10 @@ const items = [
         icon: <FlagIcon sx={{color: 'text.secondary'}}/>,
         title: 'Create your own account',
         description:
-            'You can as well sign up and create your personal account and begin to use the app for your normal stuff.',
+            <>
+                You can as well sign up and create your personal account and begin to use the app for your normal stuff.
+                But keep in mind that this is still only a demo app and not everything will work as expected.
+            </>
     },
 ];
 

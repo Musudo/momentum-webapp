@@ -5,7 +5,7 @@ import StatCard, {TStatCardProps} from './statCard.tsx';
 import {useQuery} from "@tanstack/react-query";
 import {fetchStat} from "../../../utils/axios/configs/statAxios.ts";
 import BarChart from "./barChart.tsx";
-import LineChart from './lineChart.tsx';
+// import LineChart from './lineChart.tsx';
 
 const HomeView = () => {
 
@@ -68,7 +68,7 @@ const HomeView = () => {
         tasksStatCard,
         reviewsStatCard
     ];
-
+    console.log(lineChartData)
     return (
         <Box sx={{width: '100%', maxWidth: {sm: '100%', md: '1700px'}}}>
             <Typography component="h2" variant="h5" sx={{mb: 2}}>
@@ -91,7 +91,7 @@ const HomeView = () => {
                 </Grid>
 
                 <Grid size={{xs: 12, md: 6}}>
-                    <LineChart {...lineChartData} />
+                    {/*<LineChart {...lineChartData} />*/}
                 </Grid>
                 <Grid size={{xs: 12, md: 6}}>
                     <BarChart {...activityTypesBarChart} />

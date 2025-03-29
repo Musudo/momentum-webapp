@@ -10,6 +10,7 @@ import {fetchActivity} from "../../../utils/axios/configs/activityAxios.ts";
 import ActivityForm from "./ActivityForm.tsx";
 import {capitalizeFirstLetter} from "../../../utils/stringHelpers.ts";
 import {CardContainer} from "../../cardContainer.tsx";
+import {ITag} from "../../../types/models/ITag.ts";
 
 const ActivityEdit = () => {
     const {id} = useParams();
@@ -46,8 +47,9 @@ const ActivityEdit = () => {
                 ...activity,
                 type: capitalizeFirstLetter(activity?.type ?? "Online"),
             });
+            setValue("tagIds", activity.tags.map((t: ITag) => t.id));
         }
-    }, [activity, reset]);
+    }, [activity, reset, setValue]);
 
     const onSubmit = (data: IActivity) => {
         data.type = data.type.toUpperCase();

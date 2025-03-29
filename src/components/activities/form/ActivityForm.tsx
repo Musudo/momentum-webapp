@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Controller, UseFormRegister, UseFormSetValue} from "react-hook-form";
 import {
     Chip,
@@ -28,12 +28,12 @@ type TActivityFormProps = {
     errors: any;
     activity: IActivity | null;
     setValue: UseFormSetValue<any>;
-    formType: FormTypesEnum;
+    formType?: FormTypesEnum;
 
 }
 
 const ActivityForm = (props: TActivityFormProps) => {
-    const {register, controller, errors, activity, setValue, formType} = props;
+    const {register, controller, errors, activity, setValue, formType = FormTypesEnum.Create} = props;
     const activityTypes = Object.keys(ActivityTypesEnum);
     const [endTimeValue, setEndTimeValue] = useState(activity ? dayjs(activity?.endTime) : dayjs());
     const {t, /*i18n*/} = useTranslation();
@@ -43,12 +43,6 @@ const ActivityForm = (props: TActivityFormProps) => {
     // useEffect(() => {
     //     setLocale(getLocale(i18n.language));
     // }, [i18n.language]);
-
-    useEffect(() => {
-        if (activity) {
-            setValue("tagIds", activity.tags.map((t: ITag) => t.id));
-        }
-    }, [activity, setValue]);
 
     const {
         data: tags,
@@ -65,12 +59,8 @@ const ActivityForm = (props: TActivityFormProps) => {
     }
 
     // Array of tags for select
-    let tagIdsObj: any = [];
-    if (tags) {
-        tags?.map((t: ITag) => tagIdsObj[t.id] = t.name);
-    } else {
-        tagIdsObj = [];
-    }
+    const tagIdsObj: any = [];
+    tags?.map((t: ITag) => tagIdsObj[t.id] = t.name);
 
     // Array to hold the IDs for defaultValue
     const preselectedTagIds: string[] = activity?.tags ? activity.tags.map((t: ITag) => t.id) : [];
