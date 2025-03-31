@@ -9,7 +9,7 @@ import { IActivity } from "../../../types/models/IActivity";
 import { useTranslation } from "react-i18next";
 import { allyProps } from "../../../props/MUIElementProps";
 import ActivitiesColumn from "./ActivitiesColumn";
-import SwipeableViews from "react-swipeable-views";
+// import SwipeableViews from "react-swipeable-views";
 
 type TProps = {
   activitiesToday: IActivity[];
@@ -46,9 +46,9 @@ const ActivitiesSwipeableMobile = (props: TProps) => {
   const [value, setValue] = React.useState(0);
   const { t } = useTranslation();
 
-  const handleChange = (event: unknown, newValue: number) => setValue(newValue);
+  const handleChange = (_event: unknown, newValue: number) => setValue(newValue);
 
-  const handleChangeIndex = (index: number) => setValue(index);
+  // const handleChangeIndex = (index: number) => setValue(index);
 
   return (
     <Box
@@ -80,30 +80,30 @@ const ActivitiesSwipeableMobile = (props: TProps) => {
         </Tabs>
       </AppBar>
       {/* TODO: fix this error */}
-      <SwipeableViews
-        index={value}
-        axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-        onChangeIndex={handleChangeIndex}
-      >
+      {/*<SwipeableViews*/}
+      {/*  index={value}*/}
+      {/*  axis={theme.direction === "rtl" ? "x-reverse" : "x"}*/}
+      {/*  onChangeIndex={handleChangeIndex}*/}
+      {/*>*/}
         <TabPanel value={value} index={0} dir={theme.direction}>
           <ActivitiesColumn
             activities={props.activitiesToday}
-            columnName={null}
+            columnName={""}
           />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <ActivitiesColumn
             activities={props.activitiesNextSevenDays}
-            columnName={null}
+            columnName={""}
           />
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
           <ActivitiesColumn
             activities={props.activitiesNextThirtyDays}
-            columnName={null}
+            columnName={""}
           />
         </TabPanel>
-      </SwipeableViews>
+      {/*</SwipeableViews>*/}
     </Box>
   );
 };
