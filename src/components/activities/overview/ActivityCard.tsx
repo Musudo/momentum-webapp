@@ -11,23 +11,25 @@ import {IActivity} from "../../../types/models/IActivity";
 import {useQuery} from "@tanstack/react-query";
 import {ITask} from "../../../types/models/ITask.ts";
 import {fetchTask} from "../../../utils/axios/configs/taskAxios.ts";
+import {capitalizeFirstLetter} from "../../../utils/stringHelpers.ts";
 
 type TActivityCardProps = {
     activity: IActivity;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
+export const renderIcon = (type: string) => {
+    if (type === ActivityTypesEnum.Phone) {
+        return <LocalPhoneIcon fontSize="small" color="primary"/>;
+    } else if (type === ActivityTypesEnum.Online) {
+        return <ConnectWithoutContactIcon fontSize="small" color="primary"/>;
+    } else if (type === ActivityTypesEnum.Physical) {
+        return <PeopleIcon fontSize="small" color="primary"/>;
+    }
+};
+
 const ActivityCard = ({activity}: TActivityCardProps) => {
     const {t} = useTranslation();
-
-    const renderIcon = () => {
-        if (activity.type === ActivityTypesEnum.Phone) {
-            return <LocalPhoneIcon color="secondary"/>;
-        } else if (activity.type === ActivityTypesEnum.Online) {
-            return <ConnectWithoutContactIcon color="secondary"/>;
-        } else if (activity.type === ActivityTypesEnum.Physical) {
-            return <PeopleIcon color="secondary"/>;
-        }
-    };
 
     const {
         data: tasks,
@@ -63,7 +65,7 @@ const ActivityCard = ({activity}: TActivityCardProps) => {
                 height: 170,
                 width: 290,
             }}>
-                {renderIcon()}
+                {renderIcon(capitalizeFirstLetter(activity.type))}
                 <Box textAlign="center" mb={4}>
                     <Typography variant="subtitle2">{activity.subject}</Typography>
                     <Typography variant="subtitle2" color="textSecondary">

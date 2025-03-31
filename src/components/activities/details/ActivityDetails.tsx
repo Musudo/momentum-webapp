@@ -4,13 +4,9 @@ import {useParams} from "react-router-dom";
 import {Box, Button, Chip, Divider, Tab, Tabs, Typography,} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
-import PeopleIcon from "@mui/icons-material/People";
-import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
-import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {allyProps} from "../../../props/MUIElementProps";
 import {useQuery} from "@tanstack/react-query";
-import {ActivityTypesEnum} from "../../../types/enums/ActivityTypesEnum";
 import {fetchActivity} from "../../../utils/axios/configs/activityAxios";
 import ActivityExternalNote from "./notes/ActivityExternalNote";
 import ActivityVoiceMemo from "./ActivityVoiceMemo.tsx";
@@ -19,13 +15,14 @@ import ExternalParticipantsList from "./participants/ExternalParticipantsList.ts
 import ParticipantsList from "./participants/ParticipantsList.tsx";
 import ActivityTasks from "./ActivityTasks.tsx";
 import {ITag} from "../../../types/models/ITag.ts";
-import {capitalizeFirstLetter} from "../../../utils/stringHelpers.ts";
 import ActivityAside from "./ActivityAside.tsx";
 import AddParticipantsDialog from "./participants/AddParticipantsDialog.tsx";
 import AddExternalParticipantsDialog from "./participants/AddExternalParticipantsDialog.tsx";
 import ActivityCancelDialog from "./ActivityCancelDialog.tsx";
 import {CardContainer} from "../../cardContainer.tsx";
 import {useTheme} from "@mui/material/styles";
+import {renderIcon} from "../overview/ActivityCard.tsx";
+import {capitalizeFirstLetter} from "../../../utils/stringHelpers.ts";
 
 type TTabPanelProps = {
     children?: React.ReactNode;
@@ -81,16 +78,6 @@ const ActivityDetails = () => {
         return <div>Error</div>;
     }
 
-    const renderIcon = () => {
-        if (capitalizeFirstLetter(activity?.type) === ActivityTypesEnum.Phone) {
-            return <LocalPhoneIcon color="secondary"/>;
-        } else if (capitalizeFirstLetter(activity?.type) === ActivityTypesEnum.Online) {
-            return <ConnectWithoutContactIcon color="secondary"/>;
-        } else if (capitalizeFirstLetter(activity?.type) === ActivityTypesEnum.Physical) {
-            return <PeopleIcon color="secondary"/>;
-        }
-    };
-
     return (
         <Grid container spacing={4}>
             <Grid>
@@ -131,7 +118,7 @@ const ActivityDetails = () => {
                                     marginBottom: 2,
                                 }}
                             >
-                                {renderIcon()}
+                                {renderIcon(capitalizeFirstLetter(activity.type))}
                                 <Typography variant="caption" color="textSecondary">
                                     {activity?.type}
                                 </Typography>
