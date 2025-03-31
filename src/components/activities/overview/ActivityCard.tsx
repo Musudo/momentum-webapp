@@ -8,6 +8,9 @@ import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
 import {ActivityTypesEnum} from "../../../types/enums/ActivityTypesEnum";
 import {IActivity} from "../../../types/models/IActivity";
+import {useQuery} from "@tanstack/react-query";
+import {ITask} from "../../../types/models/ITask.ts";
+import {fetchTask} from "../../../utils/axios/configs/taskAxios.ts";
 
 type TActivityCardProps = {
     activity: IActivity;
@@ -25,6 +28,19 @@ const ActivityCard = ({activity}: TActivityCardProps) => {
             return <PeopleIcon color="secondary"/>;
         }
     };
+
+    const {
+        data: tasks,
+    } = useQuery<ITask[]>({
+        queryKey: ["tasks", activity.id],
+        queryFn: async () => {
+            const res = await fetchTask.get(`/by-activity-id/${activity.id}`);
+            return res.data;
+        }
+    });
+
+    const amountTasks = tasks ? tasks.filter(task => !task.completed).length : 0;
+    const amountParticipants = (activity.contacts?.length ?? 0) + (activity.externalParticipants?.length ?? 0);
 
     return (
         <Paper
@@ -66,15 +82,16 @@ const ActivityCard = ({activity}: TActivityCardProps) => {
                 </Box>
                 <Box display="flex" justifyContent="space-around" width="100%">
                     <Box display="flex" alignItems="center">
-                        <PersonIcon color="disabled" sx={{mr: 1}}/>
+                        <PersonIcon color={amountParticipants > 0 ? "success" : "disabled"} sx={{mr: 1}}/>
                         <Typography variant="caption" color="textSecondary">
+                            {amountParticipants} {" "}
                             {t("Activities overview page.Card.Participants")}
                         </Typography>
                     </Box>
                     <Box display="flex" alignItems="center">
-                        <TaskAltIcon color="disabled" sx={{mr: 1}}/>
+                        <TaskAltIcon color={amountTasks > 0 ? "success" : "disabled"} sx={{mr: 1}}/>
                         <Typography variant="caption" color="textSecondary">
-                            {activity.tasks?.length}
+                            {amountTasks}{" "}
                             {t("Activities overview page.Card.Tasks")}
                         </Typography>
                     </Box>

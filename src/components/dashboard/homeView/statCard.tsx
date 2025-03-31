@@ -63,7 +63,7 @@ const StatCard = ({
     const trendValues = {up: '+25%', down: '-25%', neutral: '+5%'};
 
     return (
-        <Card variant="outlined" sx={{height: '100%', flexGrow: 1}}>
+        <Card variant="outlined" sx={{height: '100%', flexGrow: 1, borderRadius: 4}}>
             <CardContent>
                 <Typography component="h2" variant="subtitle2" gutterBottom>
                     {title}

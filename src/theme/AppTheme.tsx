@@ -42,14 +42,20 @@ export default function AppTheme(props: AppThemeProps) {
                     /*TODO: consider moving these parts to separate files*/
                     MuiAppBar: {
                         styleOverrides: {
-                            root: ({theme}) => ({
+                            root: ({ theme }) => ({
                                 backgroundColor: brand[300],
+                                boxShadow: 'none',
                                 ...theme.applyStyles('dark', {
-                                    backgroundColor: brand[900],
+                                    backgroundColor: brand[800],
+                                    boxShadow: 'none',
                                 }),
                             }),
                         },
+                        defaultProps: {
+                            elevation: 0,
+                        },
                     },
+
                     MuiSpeedDial: {
                         styleOverrides: {
                             fab: ({ theme }) => ({

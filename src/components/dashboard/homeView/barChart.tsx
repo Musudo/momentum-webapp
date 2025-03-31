@@ -67,7 +67,7 @@ const BarChart = ({
     const trendValues = {up: '+25%', down: '-25%', neutral: '+5%'};
 
     return (
-        <Card variant="outlined" sx={{width: '100%'}}>
+        <Card variant="outlined" sx={{width: '100%', borderRadius: 4}}>
             <CardContent>
                 <Typography component="h2" variant="subtitle2" gutterBottom>
                     {title}

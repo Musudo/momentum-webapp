@@ -115,7 +115,7 @@ const AddParticipantsDialog = ({activityId}: TAddParticipantsDialogProps) => {
                     <DialogActions>
                         <Button type="button" size="small" variant="text"
                                 onClick={handleParticipantDialogClose}>Close</Button>
-                        <Button type="submit" size="small" variant="contained" disabled={isDisabled}>
+                        <Button type="submit" size="small" variant="contained" disabled={isDisabled} color={isDisabled ? "info" : "primary"}>
                             Add
                         </Button>
                     </DialogActions>
