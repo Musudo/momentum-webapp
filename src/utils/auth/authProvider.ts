@@ -1,7 +1,7 @@
 import {setCookie} from "../cookies.ts";
 
 class AuthProviderClass {
-    static #signInUri = `${window.location.origin}${import.meta.env.VITE_AUTH_SIGNIN_URL}`;
+    static #signInUri = `${window.location.origin}${import.meta.env.VITE_AUTH_SIGN_IN_URL}`;
     static TOKEN_EXPIRY = 60 * 60 * 10 * 1000;
 
     constructor() {

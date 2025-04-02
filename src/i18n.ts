@@ -8,7 +8,7 @@ i18n
 	.use(languageDetector)
 	.use(backend)
 	.init({
-		debug: true, //process.env.NODE_ENV === 'development',
+		debug: true, //process.env.VITE_NODE_ENV === 'development',
 		fallbackLng: 'en',
 		interpolation: {
 			escapeValue: false // react already safes from xss

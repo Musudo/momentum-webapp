@@ -173,7 +173,7 @@ export const UserMenu = () => {
                     <MenuItem
                         key="signIn"
                         onClick={() => {
-                            window.location.href = `${window.location.origin}${import.meta.env.VITE_AUTH_SIGNIN_URL}`;
+                            window.location.href = `${window.location.origin}${import.meta.env.VITE_AUTH_SIGN_IN_URL}`;
                         }}
                     >
                         <ListItemIcon>
