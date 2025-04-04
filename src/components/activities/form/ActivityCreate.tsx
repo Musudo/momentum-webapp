@@ -62,9 +62,9 @@ const ActivityCreate = () => {
                     message: "Activity created",
                 });
 
-                setTimeout(() => {
-                    window.location.href = "/activities";
-                }, 2000);
+                // setTimeout(() => {
+                //     window.location.href = "/activities";
+                // }, 2000);
             },
             onError: () => {
                 setSnackbarState({

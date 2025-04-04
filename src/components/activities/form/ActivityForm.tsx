@@ -46,6 +46,7 @@ const ActivityForm = (props: TActivityFormProps) => {
 
     const {
         data: tags,
+        error,
     } = useQuery<ITag[]>({
         queryKey: ["tags"],
         queryFn: async () => {
@@ -54,7 +55,7 @@ const ActivityForm = (props: TActivityFormProps) => {
         }
     });
 
-    if (!tags) {
+    if (!tags || error) {
         return <div>Error</div>;
     }
 

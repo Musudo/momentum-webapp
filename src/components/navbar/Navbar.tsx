@@ -223,7 +223,17 @@ const Navbar = () => {
                                 {navItems.map((item: string, index: number) => (
                                     <Tab
                                         key={index}
-                                        label={t("Common." + item)}
+                                        label={
+                                            <span style={{
+                                                // fontFamily: "Verdana",
+                                                // fontSize: 16,
+                                                // fontVariant: "small-caps",
+                                                letterSpacing: "0.05em",
+                                            }}
+                                            >
+                                              {t("Common." + item)}
+                                            </span>
+                                        }
                                         component={Link}
                                         to={unCapitalizeFirstLetter(item)}
                                         value={`/${unCapitalizeFirstLetter(item)}`}

@@ -49,7 +49,7 @@ const ActivityCancelDialog = (props: TActivityCancelDialogProps) => {
                     Cancel
                 </Button>
                 <Button variant="text" onClick={() => cancelActivity(true)} size="small">
-                    Delete and send email
+                    Delete with email
                 </Button>
                 <Button variant="text" onClick={() => cancelActivity(false)} size="small">
                     Just delete

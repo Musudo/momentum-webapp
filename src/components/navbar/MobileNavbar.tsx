@@ -8,6 +8,7 @@ import {SpeedDialDirectionsEnum} from "../../types/enums/ComponentPropsEnums.ts"
 import {UserMenu} from "./Navbar.tsx";
 import MobileDrawer from "./MobileDrawer.tsx";
 import {useState} from "react";
+import {AuthProvider} from "../../utils/auth/authProvider.ts";
 
 const MobileNavbar = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -35,7 +36,8 @@ const MobileNavbar = () => {
                                 margin: '0 auto',
                             }}
                         >
-                            <ActivitySpeedDial direction={SpeedDialDirectionsEnum.Up}/>
+                            {AuthProvider.isAuthenticated &&
+                                <ActivitySpeedDial direction={SpeedDialDirectionsEnum.Up}/>}
                         </Box>
                         <UserMenu/>
                     </Box>

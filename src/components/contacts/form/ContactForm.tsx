@@ -175,7 +175,7 @@ const ContactForm = (props: TContactFormProps) => {
                                 disablePortal
                                 options={institutions}
                                 getOptionLabel={(option) => option.name}
-                                sx={{minWidth: 120}}
+                                sx={{minWidth: 120, mt: 2}}
                                 onChange={(_event, newValue) => onChange(newValue ? newValue.id : null)}
                                 value={selectedInstitution}
                                 renderInput={(params) => (

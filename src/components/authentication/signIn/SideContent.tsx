@@ -12,25 +12,24 @@ const items = [
         title: 'Demo web application',
         description:
             <>
-                This demo application is designed to give a look into capabilities
-                of <span style={{display: 'inline-block', alignItems: 'center', margin: '0 4px'}}>{
-                <SiReact/>} React</span>
-                and <span style={{display: 'inline-block', alignItems: 'center', margin: '0 4px'}}>{
-                <SiSpringboot/>} Spring Boot</span>.
+                This is demo application created using
+                <span style={{display: 'inline-block', alignItems: 'center', margin: '0 4px'}}>{<SiReact/>} React</span>
+                and
+                <span style={{display: 'inline-block', alignItems: 'center', margin: '0 4px'}}>{<SiSpringboot/>} Spring Boot</span>.
             </>
     },
     {
         icon: <ConstructionRoundedIcon sx={{color: 'text.secondary'}}/>,
         title: 'Work in progress',
         description:
-            'The application is not fully ready yet. There can be bugs or some features might be not fully finished yet.',
+            'The application is not fully ready. There can be bugs or some features might be not fully implemented.',
     },
     {
         icon: <ManageAccountsIcon sx={{color: 'text.secondary'}}/>,
         title: 'Try it out as a guest user',
         description:
             <>
-                If you just want to have a brief introduction you can use guest user email (<strong>guest@email.com</strong>)
+                If you want to have a brief introduction you can use guest user email (<strong>guest@email.com</strong>)
                 and password (<strong>1Password</strong>) to sign in. You will then have fake data and all the
                 functionality of the app at your disposal.
             </>

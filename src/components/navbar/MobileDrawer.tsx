@@ -44,7 +44,7 @@ const MobileDrawer = (props: TCustomDrawerProps) => {
                         justifyContent: "center",
                     }}
                 >
-                    <MomentumIcon height={40} width={160}/>
+                    <MomentumIcon height={30} width={140}/>
                 </Box>
                 <Divider/>
                 <Box
