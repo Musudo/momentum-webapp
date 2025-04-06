@@ -14,7 +14,7 @@ type TActivityTasksProps = {
     activityId: string;
 }
 
-const ActivityTasks = ({activityId}: TActivityTasksProps) => {
+const Tasks = ({activityId}: TActivityTasksProps) => {
     const queryClient = useQueryClient();
     const theme = useTheme();
 
@@ -46,7 +46,7 @@ const ActivityTasks = ({activityId}: TActivityTasksProps) => {
         }
     );
 
-    const handleCreateTask = async (data: object) => {
+    const handleCreateTask = (data: object) => {
         createTaskMutation.mutate(data);
         resetField('description');
     }
@@ -55,7 +55,7 @@ const ActivityTasks = ({activityId}: TActivityTasksProps) => {
         {
             mutationFn: (task: ITask) => fetchTask.patch(`/${task.id}`, task),
             onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: ['tasks']});
+                //     queryClient.invalidateQueries({queryKey: ['tasks']});
             }
         }
     );
@@ -80,6 +80,7 @@ const ActivityTasks = ({activityId}: TActivityTasksProps) => {
         return <div>Error</div>;
     }
 
+    console.log("test", tasks);
     return (
         <Grid
             sx={{
@@ -166,7 +167,10 @@ const ActivityTasks = ({activityId}: TActivityTasksProps) => {
                                 opacity: task.completed ? "0.6" : "1",
                                 width: "100%"
                             }}
-                            onKeyDown={(event) => debouncedChangeTaskHandler(event, task)}
+                            onKeyDown={(event) => {
+                                debouncedChangeTaskHandler(event, task);
+                            }
+                            }
                         />
                     </ListItem>
                 ))}
@@ -175,4 +179,4 @@ const ActivityTasks = ({activityId}: TActivityTasksProps) => {
     );
 }
 
-export default ActivityTasks;
+export default Tasks;

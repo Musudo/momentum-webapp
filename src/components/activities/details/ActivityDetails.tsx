@@ -8,12 +8,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {allyProps} from "../../../props/MUIElementProps";
 import {useQuery} from "@tanstack/react-query";
 import {fetchActivity} from "../../../utils/axios/configs/activityAxios";
-import ActivityExternalNote from "./notes/ActivityExternalNote";
+import ExternalNote from "./notes/ExternalNote.tsx";
 import ActivityVoiceMemo from "./ActivityVoiceMemo.tsx";
-import ActivityInternalNote from "./notes/ActivityInternalNote.tsx";
+import InternalNote from "./notes/InternalNote.tsx";
 import ExternalParticipantsList from "./participants/ExternalParticipantsList.tsx";
 import ParticipantsList from "./participants/ParticipantsList.tsx";
-import ActivityTasks from "./ActivityTasks.tsx";
+import Tasks from "./Tasks.tsx";
 import {ITag} from "../../../types/models/ITag.ts";
 import ActivityAside from "./ActivityAside.tsx";
 import AddParticipantsDialog from "./participants/AddParticipantsDialog.tsx";
@@ -166,8 +166,8 @@ const ActivityDetails = () => {
 
                     {/*notes tab*/}
                     <TabPanel value={tabValue} index={0}>
-                        <ActivityExternalNote activity={activity}/>
-                        <ActivityInternalNote activity={activity}/>
+                        <ExternalNote activity={activity}/>
+                        <InternalNote activity={activity}/>
                         <ActivityVoiceMemo activity={activity}/>
                     </TabPanel>
 
@@ -179,7 +179,7 @@ const ActivityDetails = () => {
                             alignItems="center"
                             justifyContent="center"
                         >
-                            <ActivityTasks activityId={activity.id}/>
+                            <Tasks activityId={activity.id}/>
                         </Grid>
                     </TabPanel>
 

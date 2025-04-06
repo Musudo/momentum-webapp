@@ -7,11 +7,11 @@ import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {fetchActivity} from "../../../../utils/axios/configs/activityAxios.ts";
 import {gray} from "../../../../theme/theme.ts";
 
-type TActivityExternalNoteProps = {
+type TActivityInternalNoteProps = {
     activity: IActivity;
 }
 
-const ActivityExternalNote = ({activity}: TActivityExternalNoteProps) => {
+const InternalNote = ({activity}: TActivityInternalNoteProps) => {
     const [isHovering, setIsHovering] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const queryClient = useQueryClient();
@@ -22,9 +22,9 @@ const ActivityExternalNote = ({activity}: TActivityExternalNoteProps) => {
         setIsHovering(false);
     };
 
-    const modifyExternalNoteMutation = useMutation(
+    const modifyInternalNoteMutation = useMutation(
         {
-            mutationFn: (data: object) => fetchActivity.patch(`/${activity.id}/external-note`, data),
+            mutationFn: (internalNote: object) => fetchActivity.patch(`/${activity.id}/internal-note`, internalNote),
             onSuccess: () => {
                 handleCancelEditMode();
                 queryClient.invalidateQueries({queryKey: ['activity']});
@@ -33,31 +33,31 @@ const ActivityExternalNote = ({activity}: TActivityExternalNoteProps) => {
     );
 
     const {register, handleSubmit} = useForm<{
-        externalNote: string | undefined;
+        internalNote: string | undefined;
     }>({
         defaultValues: {
-            externalNote: activity?.externalNote
+            internalNote: activity?.internalNote
         }
     });
 
     return (
-        <Box mb={2}
+        <Box component="div" mb={2}
              onMouseEnter={() => setIsHovering(true)}
              onMouseLeave={() => setIsHovering(false)}>
             <Box mb={1} color="text.secondary">
                 <Typography component="span" variant="body1">
-                    External note (client will be able to see this note)
+                    Internal note
                 </Typography>
             </Box>
             {isEditing ? (
-                <form onSubmit={handleSubmit((note: object) => modifyExternalNoteMutation.mutate(note))}>
+                <form onSubmit={handleSubmit((note: object) => modifyInternalNoteMutation.mutate(note))}>
                     <Box>
                         <TextField
-                            label="External note"
+                            label="Internal note"
                             variant="filled"
                             fullWidth
                             multiline
-                            {...register("externalNote")}/>
+                            {...register("internalNote")}/>
                     </Box>
                     <Box display="flex" justifyContent="flex-end" mt={1}>
                         <Button
@@ -88,9 +88,8 @@ const ActivityExternalNote = ({activity}: TActivityExternalNoteProps) => {
                     marginBottom: 1,
                     minHeight: '4em'
                 }}>
-                    {/*TODO: fix react DOM errors*/}
-                    <Box flex={1}>
-                        {activity?.externalNote
+                    <Box component="div" flex={1}>
+                        {activity?.internalNote
                             ?.split('\n')
                             .map((paragraph: string, index: number) => (
                                 <Box
@@ -126,5 +125,4 @@ const ActivityExternalNote = ({activity}: TActivityExternalNoteProps) => {
         </Box>
     );
 }
-
-export default ActivityExternalNote;
+export default InternalNote;
