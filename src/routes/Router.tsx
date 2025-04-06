@@ -1,4 +1,4 @@
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import AppLayout from "../AppLayout.tsx";
 import {lazy, Suspense} from "react";
 import ProtectedRoute from "./protectedRoute.tsx";
@@ -19,7 +19,7 @@ const Router = () => {
             <Suspense fallback={<div>Loading...</div>}>
                 <Routes>
                     <Route element={<AppLayout/>}>
-                        <Route path="/" element={<SignIn/>}/>
+                        <Route path="/" element={<Dashboard/>}/>
                         <Route path="/signIn" element={<SignIn/>}/>
                         <Route path="/signUp" element={<SignUP/>}/>
                         <Route path="/profile" element={<Profile/>}/>

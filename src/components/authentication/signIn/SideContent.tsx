@@ -52,7 +52,7 @@ const SideContent = () => {
             sx={{flexDirection: 'column', alignSelf: 'center', gap: 4, maxWidth: 450}}
         >
             <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-                <MomentumIcon/>
+                <MomentumIcon height={30} width={160}/>
             </Box>
             {items.map((item, index) => (
                 <Stack key={index} direction="row" sx={{gap: 2}}>

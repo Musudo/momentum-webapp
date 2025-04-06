@@ -18,7 +18,7 @@ const Copyright = (props: TypographyProps) => {
             ]}
         >
             <Box mb={2}>
-                <MomentumIcon/>
+                <MomentumIcon height={20} width={120}/>
             </Box>
             <Box>
                 {'Copyright © '}
