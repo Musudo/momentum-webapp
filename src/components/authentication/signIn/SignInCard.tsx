@@ -242,14 +242,14 @@ const SignInCard = () => {
                 <Typography sx={{textAlign: "center"}}>
                     Don&apos;t have an account?{" "}
                     <span>
-            <Link
-                href="/signUp"
-                variant="body2"
-                sx={{alignSelf: "center"}}
-            >
-              Sign up
-            </Link>
-          </span>
+                        <Link
+                            href="/signUp"
+                            variant="body2"
+                            sx={{alignSelf: "center"}}
+                        >
+                          Sign up
+                        </Link>
+                    </span>
                 </Typography>
             </Box>
             <Divider>or</Divider>
