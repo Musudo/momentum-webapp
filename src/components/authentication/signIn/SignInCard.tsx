@@ -36,7 +36,7 @@ const signInSchema = z.object({
         .nonempty("Password is required")
         .regex(
             /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/,
-            "Password must be at least 6 characters long, contain at least 1 digit, and at least 1 uppercase letter"
+            "Password must be at least: 6 characters long, contain 1 digit, 1 uppercase letter, and no special characters"
         ),
 });
 

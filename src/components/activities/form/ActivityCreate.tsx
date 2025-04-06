@@ -23,7 +23,6 @@ const ActivityCreate = () => {
     });
     const {activityType} = useParams();
 
-    // TODO: fix validation
     const {
         register,
         control,
@@ -40,7 +39,7 @@ const ActivityCreate = () => {
             type: activityType,
             startTime: dayjs().format('YYYY-MM-DD[T]HH:mm:ss'),
             endTime: dayjs().add(60, 'minutes').format('YYYY-MM-DD[T]HH:mm:ss'),
-            emailSentAt: "",
+            // emailSentAt: "",
             contactIds: [],
             institutionName: "",
             externalParticipants: []
@@ -62,9 +61,9 @@ const ActivityCreate = () => {
                     message: "Activity created",
                 });
 
-                // setTimeout(() => {
-                //     window.location.href = "/activities";
-                // }, 2000);
+                setTimeout(() => {
+                    window.location.href = "/activities";
+                }, 2000);
             },
             onError: () => {
                 setSnackbarState({
@@ -91,6 +90,7 @@ const ActivityCreate = () => {
         <>
             <ParticipantForm
                 control={control}
+                register={register}
                 setValue={setValue}
             />
             <ExternalParticipantForm setValue={setValue}/>
@@ -101,7 +101,7 @@ const ActivityCreate = () => {
         <>
             <ActivityForm
                 register={register}
-                controller={control}
+                control={control}
                 errors={errors}
                 activity={null}
                 setValue={setValue}
@@ -182,7 +182,7 @@ const ActivityCreate = () => {
                             type="button"
                             variant="contained"
                             onClick={() => {
-                                trigger(["contacts"]).then(function (result) {
+                                trigger(["subject", "tagIds", "institutionName"]).then(function (result) {
                                     if (result) setActiveStep(activeStep + 1);
                                 });
                             }}

@@ -1,46 +1,46 @@
 import {MomentumIcon} from './CustomIcons';
 import {Box, Stack, Typography} from '@mui/material';
-import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
 import EmergencyIcon from '@mui/icons-material/Emergency';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import FlagIcon from '@mui/icons-material/Flag';
 import {SiReact, SiSpringboot} from 'react-icons/si';
+import PreviewIcon from '@mui/icons-material/Preview';
 
 const items = [
     {
         icon: <EmergencyIcon sx={{color: 'text.secondary'}}/>,
-        title: 'Demo web application',
+        title: 'Welcome to Momentum',
         description:
             <>
-                This is demo application created using
-                <span style={{display: 'inline-block', alignItems: 'center', margin: '0 4px'}}>{<SiReact/>} React</span>
+                A personal productivity app built with
+                <span style={{display: 'inline-block', alignItems: 'center', margin: '0 4px'}}>{<SiReact/>} <b>React</b></span>
                 and
-                <span style={{display: 'inline-block', alignItems: 'center', margin: '0 4px'}}>{<SiSpringboot/>} Spring Boot</span>.
+                <span style={{display: 'inline-block', alignItems: 'center', margin: '0 4px'}}>{<SiSpringboot/>} <b>Spring Boot</b></span>
+                — currently in active development.
             </>
     },
     {
-        icon: <ConstructionRoundedIcon sx={{color: 'text.secondary'}}/>,
-        title: 'Work in progress',
+        icon: <PreviewIcon sx={{color: 'text.secondary'}}/>,
+        title: 'Try it instantly as a guest',
         description:
-            'The application is not fully ready. There can be bugs or some features might be not fully implemented.',
+            <>
+                Use the guest account to explore all core features with fake data:
+                <ul style={{marginBottom: -2}}>
+                    <li><b>Username</b>: guest@email.com</li>
+                    <li><b>Password</b>: 1Password</li>
+                </ul>
+            </>,
     },
     {
         icon: <ManageAccountsIcon sx={{color: 'text.secondary'}}/>,
-        title: 'Try it out as a guest user',
+        title: 'Or create your own account',
         description:
             <>
-                If you want to have a brief introduction you can use guest user email (<strong>guest@email.com</strong>)
-                and password (<strong>1Password</strong>) to sign in. You will then have fake data and all the
-                functionality of the app at your disposal.
-            </>
-    },
-    {
-        icon: <FlagIcon sx={{color: 'text.secondary'}}/>,
-        title: 'Create your own account',
-        description:
-            <>
-                You can as well sign up and create your personal account and begin to use the app for your normal stuff.
-                But keep in mind that this is still only a demo app and not everything will work as expected.
+                Sign up to try it out with your own data.
+                This version is still evolving, so you may encounter the occasional issues — feedback is welcome!
+                <br/>
+                <br/>
+                <span style={{fontSize: 20}}>🚧</span> <b>This is a work-in-progress project, not a production-ready
+                service.</b>
             </>
     },
 ];

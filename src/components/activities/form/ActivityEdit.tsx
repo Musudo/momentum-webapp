@@ -29,7 +29,6 @@ const ActivityEdit = () => {
         }
     });
 
-    // TODO: fix validation
     const {register, control, handleSubmit, reset, setValue, formState: {errors}} = useForm<IActivity>({
         defaultValues: {
             type: capitalizeFirstLetter(activity?.type ?? "Online"),
@@ -53,8 +52,6 @@ const ActivityEdit = () => {
 
     const onSubmit = (data: IActivity) => {
         data.type = data.type.toUpperCase();
-        delete data.externalParticipants;
-
         modifyActivityMutation.mutate(data);
     }
 
@@ -104,7 +101,7 @@ const ActivityEdit = () => {
                     Edit Activity
                 </Typography>
                 <ActivityForm register={register}
-                              controller={control}
+                              control={control}
                               errors={errors}
                               setValue={setValue}
                               activity={activity}

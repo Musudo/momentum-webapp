@@ -17,7 +17,6 @@ const AppLayout = (props: { disableCustomTheme?: boolean }) => {
         <>
             <AppTheme {...props}>
                 <CssBaseline enableColorScheme/>
-                {/*TODO: find out what this does*/}
                 {isMobile ? <MobileNavbar/> : <Navbar/>}
                 <MainContainer parentStyles={{marginTop: '40px'}}>
                     <ErrorBoundary fallback={<div>Error</div>}>

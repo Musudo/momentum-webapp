@@ -52,7 +52,7 @@ const ContactForm = (props: TContactFormProps) => {
         }}>
             <TextField
                 id="firstName"
-                label="First name"
+                label="First name *"
                 fullWidth
                 autoComplete="first name"
                 {...register("firstName", {
@@ -63,7 +63,7 @@ const ContactForm = (props: TContactFormProps) => {
             <FormHelperText error>{errors?.firstName?.message}</FormHelperText>
             <TextField
                 id="lastName"
-                label="Last name"
+                label="Last name *"
                 fullWidth
                 autoComplete="last name"
                 {...register("lastName", {
@@ -74,7 +74,7 @@ const ContactForm = (props: TContactFormProps) => {
             <FormHelperText error>{errors?.lastName?.message}</FormHelperText>
             <TextField
                 id="email1"
-                label="Email 1"
+                label="Email 1 *"
                 fullWidth
                 autoComplete="email1"
                 {...register("email1", {
@@ -101,7 +101,7 @@ const ContactForm = (props: TContactFormProps) => {
             <FormHelperText error>{errors?.email2?.message}</FormHelperText>
             <TextField
                 id="phone1"
-                label="Phone number 1"
+                label="Phone number 1 *"
                 fullWidth
                 autoComplete="phone1"
                 {...register("phone1", {
@@ -121,7 +121,7 @@ const ContactForm = (props: TContactFormProps) => {
             />
             <FormHelperText error>{errors?.phone2?.message}</FormHelperText>
             <FormControl variant="standard" sx={{minWidth: 120}} fullWidth>
-                <InputLabel id="jobTitleLabel" shrink>Job title</InputLabel>
+                <InputLabel id="jobTitleLabel" shrink>Job title *</InputLabel>
                 {formType === FormTypesEnum.Create && (
                     <Select
                         id="jobTitle"
@@ -166,6 +166,7 @@ const ContactForm = (props: TContactFormProps) => {
                 <Controller
                     name="institutionId"
                     control={control}
+                    rules={{required: 'Institution is required'}}
                     render={({field: {onChange, value}, fieldState: {error}}) => {
                         const selectedInstitution =
                             institutions.find((i: IInstitution) => i.id === value) || null;
@@ -181,7 +182,7 @@ const ContactForm = (props: TContactFormProps) => {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Institution"
+                                        label="Institution *"
                                         error={!!error}
                                         helperText={error ? error.message : ''}
                                     />
@@ -190,7 +191,6 @@ const ContactForm = (props: TContactFormProps) => {
                         );
                     }}
                 />
-
             )}
         </div>
     );

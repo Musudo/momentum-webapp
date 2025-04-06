@@ -20,7 +20,7 @@ const ActivityTasks = ({activityId}: TActivityTasksProps) => {
 
     const {register, handleSubmit, resetField} = useForm({
         defaultValues: {
-            description: null,
+            description: "",
             completed: false,
             activityId: activityId
         }
@@ -28,6 +28,7 @@ const ActivityTasks = ({activityId}: TActivityTasksProps) => {
 
     const {
         data: tasks,
+        error
     } = useQuery<ITask[]>({
         queryKey: ["tasks"],
         queryFn: async () => {
@@ -62,7 +63,7 @@ const ActivityTasks = ({activityId}: TActivityTasksProps) => {
     const debouncedChangeTaskHandler = useMemo(
         () => debounce((event: any, task: ITask) => {
             task.description = event.target.value;
-            modifyTaskMutation.mutate(task)
+            modifyTaskMutation.mutate(task);
         }, 300)
         , [modifyTaskMutation]);
 
@@ -75,7 +76,7 @@ const ActivityTasks = ({activityId}: TActivityTasksProps) => {
         }
     );
 
-    if (!tasks) {
+    if (!tasks || error) {
         return <div>Error</div>;
     }
 
@@ -110,15 +111,19 @@ const ActivityTasks = ({activityId}: TActivityTasksProps) => {
                            {...register("description")}
                            onKeyDown={(event) => {
                                if (event.key === "Enter") {
+                                   event.preventDefault();
                                    handleSubmit(handleCreateTask)(event);
                                }
                            }}
                 />
-                {tasks.map((task: ITask) => (
+                {tasks.length > 0 && tasks.map((task: ITask) => (
                     <ListItem
+                        key={task.id}
                         secondaryAction={
-                            <IconButton edge="end" aria-label="delete task">
-                                <DeleteIcon sx={{opacity: 0.5}} onClick={() => deleteTaskMutation.mutate(task.id)}/>
+                            <IconButton edge="end"
+                                        aria-label="delete task"
+                                        onClick={() => deleteTaskMutation.mutate(task.id)}>
+                                <DeleteIcon sx={{opacity: 0.5}}/>
                             </IconButton>
                         }
                         disablePadding
@@ -147,18 +152,22 @@ const ActivityTasks = ({activityId}: TActivityTasksProps) => {
                                 }}
                             />
                         </ListItemIcon>
-                        <TextField variant="standard"
-                                   slotProps={{
-                                       input: {
-                                           disableUnderline: true
-                                       }
-                                   }}
-                                   defaultValue={task.description}
-                                   sx={{
-                                       opacity: task.completed ? "0.6" : "1",
-                                       width: "100%"
-                                   }}
-                                   onKeyDown={(event) => debouncedChangeTaskHandler(event, task)}/>
+                        {/*TODO: fix updating description bug*/}
+                        <TextField
+                            key={task.id}
+                            variant="standard"
+                            slotProps={{
+                                input: {
+                                    disableUnderline: true
+                                }
+                            }}
+                            defaultValue={task.description}
+                            sx={{
+                                opacity: task.completed ? "0.6" : "1",
+                                width: "100%"
+                            }}
+                            onKeyDown={(event) => debouncedChangeTaskHandler(event, task)}
+                        />
                     </ListItem>
                 ))}
             </List>

@@ -421,7 +421,6 @@ const ActivitiesOverview = () => {
                         )}
                     </CardContainer>
                 </>
-
             )}
         </Grid>
     );

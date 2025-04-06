@@ -24,7 +24,7 @@ import {DateTimePicker} from "@mui/x-date-pickers";
 
 type TActivityFormProps = {
     register: UseFormRegister<IActivity>;
-    controller: any;
+    control: any;
     errors: any;
     activity: IActivity | null;
     setValue: UseFormSetValue<any>;
@@ -33,16 +33,10 @@ type TActivityFormProps = {
 }
 
 const ActivityForm = (props: TActivityFormProps) => {
-    const {register, controller, errors, activity, setValue, formType = FormTypesEnum.Create} = props;
+    const {register, control, errors, activity, setValue, formType = FormTypesEnum.Create} = props;
     const activityTypes = Object.keys(ActivityTypesEnum);
     const [endTimeValue, setEndTimeValue] = useState(activity ? dayjs(activity?.endTime) : dayjs());
-    const {t, /*i18n*/} = useTranslation();
-    // const [locale, setLocale] = useState<string>("en-gb");
-
-    // change datetime locale when language is changed
-    // useEffect(() => {
-    //     setLocale(getLocale(i18n.language));
-    // }, [i18n.language]);
+    const {t} = useTranslation();
 
     const {
         data: tags,
@@ -77,7 +71,7 @@ const ActivityForm = (props: TActivityFormProps) => {
                 <InputLabel id="typeLabel">{t('Activity form.Type')}</InputLabel>
                 <Controller
                     name="type"
-                    control={controller}
+                    control={control}
                     render={({field}) => (
                         <Select
                             {...field}
@@ -95,7 +89,7 @@ const ActivityForm = (props: TActivityFormProps) => {
                 />
             </FormControl>
             <TextField
-                label={t('Activity form.Subject')}
+                label={`${t("Activity form.Subject")} *`}
                 fullWidth
                 {...register("subject", {
                     required: "Subject is required",
@@ -135,11 +129,11 @@ const ActivityForm = (props: TActivityFormProps) => {
             </FormControl>
             <FormHelperText error>{errors?.endTime?.message}</FormHelperText>
             <FormControl fullWidth sx={{minWidth: 120}}>
-                <InputLabel id="tagLabelId">{t('Activity form.Tags')}</InputLabel>
+                <InputLabel id="tagLabelId">{`${t('Activity form.Tags')} *`}</InputLabel>
                 {formType === FormTypesEnum.Create ? (
                     <Controller
                         name="tagIds"
-                        control={controller}
+                        control={control}
                         rules={{required: "Tag is required"}}
                         render={({field}) => (
                             <Select
@@ -172,33 +166,41 @@ const ActivityForm = (props: TActivityFormProps) => {
                         )}
                     />
                 ) : (
-                    <Select
-                        multiple
-                        id="tagSelect"
-                        labelId="tagLabelId"
-                        defaultValue={preselectedTagIds}
-                        input={<OutlinedInput label={t('Activity form.Tags')}/>}
-                        renderValue={(selected) => (
-                            <div style={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                                {selected.map((value: any) => (
-                                    tagIdsObj[value] && <Chip color="success"
-                                                              key={value}
-                                                              label={tagIdsObj[value].toLowerCase()}/>
-                                ))}
-                            </div>
-                        )}
-                        MenuProps={MenuProps}
-                        onChange={(element: SelectChangeEvent<string[]>) => setValue('tagIds', element.target.value)}
-                    >
-                        {tags.map((tag: ITag) => (
-                            <MenuItem
-                                key={tag.id}
-                                value={tag.id}
+                    <Controller
+                        name="tagIds"
+                        control={control}
+                        rules={{required: "Tag is required"}}
+                        render={({field}) => (
+                            <Select
+                                {...field}
+                                multiple
+                                id="tagSelect"
+                                labelId="tagLabelId"
+                                defaultValue={preselectedTagIds}
+                                input={<OutlinedInput label={t('Activity form.Tags')}/>}
+                                renderValue={(selected) => (
+                                    <div style={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                                        {selected.map((value: any) => (
+                                            tagIdsObj[value] && <Chip color="success"
+                                                                      key={value}
+                                                                      label={tagIdsObj[value].toLowerCase()}/>
+                                        ))}
+                                    </div>
+                                )}
+                                MenuProps={MenuProps}
+                                onChange={(element: SelectChangeEvent<string[]>) => setValue('tagIds', element.target.value)}
                             >
-                                {tag.name}
-                            </MenuItem>
-                        ))}
-                    </Select>
+                                {tags.map((tag: ITag) => (
+                                    <MenuItem
+                                        key={tag.id}
+                                        value={tag.id}
+                                    >
+                                        {tag.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        )}
+                    />
                 )}
             </FormControl>
             <FormHelperText error>{errors?.tagIds?.message}</FormHelperText>
@@ -207,7 +209,6 @@ const ActivityForm = (props: TActivityFormProps) => {
                 slotProps={{formHelperText: {style: {color: "#f57c00"}}}}
                 helperText={t('Activity form.Client will be able to see this note')}
                 variant="filled"
-                color="warning"
                 fullWidth
                 multiline
                 rows={3}
