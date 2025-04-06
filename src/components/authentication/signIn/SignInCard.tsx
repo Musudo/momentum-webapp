@@ -201,6 +201,11 @@ const SignInCard = () => {
                         variant="outlined"
                         color={passwordError ? "error" : "primary"}
                         onChange={handlePasswordChange}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                handleSignIn();
+                            }
+                        }}
                         slotProps={{
                             input: {
                                 endAdornment: (

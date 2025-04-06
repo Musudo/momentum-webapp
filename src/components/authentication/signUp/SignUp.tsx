@@ -376,6 +376,11 @@ const SignUp = () => {
                             helperText={repeatPasswordErrorMessage}
                             color={repeatPasswordError ? "error" : "primary"}
                             onChange={handleRepeatPasswordChange}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleSignUp();
+                                }
+                            }}
                             slotProps={{
                                 input: {
                                     endAdornment: (
