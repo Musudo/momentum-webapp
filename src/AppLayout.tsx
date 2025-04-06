@@ -8,10 +8,12 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from "./components/navbar/Navbar.tsx";
 import {useMediaQuery, useTheme} from "@mui/material";
 import MobileNavbar from "./components/navbar/MobileNavbar.tsx";
+import {useDynamicTitle} from "./hooks/useDynamicTitle.ts";
 
 const AppLayout = (props: { disableCustomTheme?: boolean }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    useDynamicTitle();
 
     return (
         <>

@@ -39,8 +39,9 @@ const items = [
                 This version is still evolving, so you may encounter the occasional issues — feedback is welcome!
                 <br/>
                 <br/>
-                <span style={{fontSize: 20}}>🚧</span> <b>This is a work-in-progress project, not a production-ready
-                service.</b>
+                <span style={{fontSize: 20}}>🚧 </span>
+                <b>This project is a work-in-progress and not ready for production use.</b>
+                <span style={{fontSize: 20}}> 🚧</span>
             </>
     },
 ];
