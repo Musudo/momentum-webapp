@@ -14,8 +14,6 @@ import ForgotPassword from './ForgotPassword';
 import {FacebookIcon, GoogleIcon} from './CustomIcons';
 import {CardContainer} from "../../cardContainer.tsx";
 import {useDispatch} from "react-redux";
-import {useMutation} from "@tanstack/react-query";
-import axios from "axios";
 import {AuthProvider} from "../../../utils/auth/authProvider.ts";
 import {setUser} from "../../../redux/slice/userSlice.ts";
 import {Snackbar, SnackbarCloseReason} from "@mui/material";
@@ -25,6 +23,7 @@ import IconButton from "@mui/material/IconButton";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import {useTheme} from "@mui/material/styles";
+import {useNavigate, useSearchParams} from 'react-router-dom';
 
 const signInSchema = z.object({
     email: z
@@ -58,34 +57,9 @@ const SignInCard = () => {
     });
     const dispatch = useDispatch();
     const theme = useTheme();
-
-    const signInMutation = useMutation({
-        mutationFn: async (data: object) => {
-            const res = await axios.post(
-                `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
-                data,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            return res.data;
-        },
-        onSuccess: (res) => {
-            AuthProvider.storeToken(res.token);
-            dispatch(setUser(res["user"]));
-
-            window.location.href = "/dashboard";
-        },
-        onError: () => {
-            setSnackbarState({
-                ...snackbarState,
-                open: true,
-                message: "Invalid credentials",
-            });
-        },
-    });
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const returnUrl = searchParams.get("returnUrl") || "/dashboard";
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newEmail = event.target.value;
@@ -113,7 +87,7 @@ const SignInCard = () => {
         }
     };
 
-    const handleSignIn = () => {
+    const handleSignIn = async () => {
         // Validate form values using the complete Zod schema on submit
         const result = signInSchema.safeParse({email, password});
         if (!result.success) {
@@ -128,11 +102,21 @@ const SignInCard = () => {
             }
             return;
         }
-        // If validation passes, proceed with sign in
-        signInMutation.mutate({
-            username: email,
-            password: password,
-        });
+
+        try {
+            const user = await AuthProvider.signIn({
+                username: email,
+                password: password,
+            });
+            dispatch(setUser(user));
+            navigate(returnUrl || "/dashboard");
+        } catch {
+            setSnackbarState({
+                ...snackbarState,
+                open: true,
+                message: "Invalid credentials",
+            });
+        }
     };
 
     return (

@@ -1,4 +1,5 @@
 import {setCookie} from "../cookies.ts";
+import axios from "axios";
 
 class AuthProviderClass {
     static #signInUri = `${window.location.origin}${import.meta.env.VITE_AUTH_SIGN_IN_URL}`;
@@ -54,9 +55,26 @@ class AuthProviderClass {
         }
     };
 
-    // TODO: maybe work this out in the future
-    signIn = (): string | undefined => {
-        return undefined;
+    signIn = async (credentials: { username: string, password: string }) => {
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
+                credentials,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            const {token, user} = response.data;
+
+            this.storeToken(token);
+
+            return user;
+        } catch {
+            throw new Error("Authentication failed.");
+        }
     };
 
     signOut = (): string => {

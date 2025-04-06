@@ -7,6 +7,7 @@ type TAuthGuardProps = {
 };
 
 const ProtectedRoute = ({children}: TAuthGuardProps) => {
+    // TODO: implement checkAuthentication here in the future
     const isAuthenticated = AuthProvider.isAuthenticated;
     return isAuthenticated ? children : <Navigate to="/signIn"/>;
 };

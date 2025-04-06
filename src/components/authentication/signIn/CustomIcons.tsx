@@ -27,7 +27,7 @@ export const MomentumIcon = ({
                 <line x1="20" y1="30" x2="280" y2="30" stroke={primaryStroke} strokeWidth="24"/>
 
                 {/*Text*/}
-                <text x="420" y="165" fontFamily="Arial Rounded MT Bold" fontSize="180" fontWeight="bold"
+                <text x="410" y="165" fontFamily="Arial Rounded MT Bold" fontSize="180" fontWeight="bold"
                       fill={secondaryStroke}>
                     Momentum
                 </text>

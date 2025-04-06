@@ -2,6 +2,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import AppLayout from "../AppLayout.tsx";
 import {lazy, Suspense} from "react";
 import ProtectedRoute from "./protectedRoute.tsx";
+import RedirectRoot from "./RedirectRoot.tsx";
 
 const SignIn = lazy(() => import("../components/authentication/signIn/SignIn.tsx"));
 const SignUP = lazy(() => import("../components/authentication/signUp/SignUp"));
@@ -19,7 +20,7 @@ const Router = () => {
             <Suspense fallback={<div>Loading...</div>}>
                 <Routes>
                     <Route element={<AppLayout/>}>
-                        <Route path="/" element={<Dashboard/>}/>
+                        <Route path="/" element={<RedirectRoot/>}/>
                         <Route path="/signIn" element={<SignIn/>}/>
                         <Route path="/signUp" element={<SignUP/>}/>
                         <Route path="/profile" element={<Profile/>}/>

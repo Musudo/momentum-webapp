@@ -7,7 +7,7 @@ const SettingsView = lazy(() => import("../components/dashboard/settingsView/Set
 const AboutView = lazy(() => import("../components/dashboard/aboutView/AboutView.tsx"));
 
 
-export const componentMapper: Record<string, LazyExoticComponent<ComponentType>> = {
+export const dashboardComponentRouteMapper: Record<string, LazyExoticComponent<ComponentType>> = {
     HomeView: HomeView,
     DataView: DataView,
     MiscView: MiscView,

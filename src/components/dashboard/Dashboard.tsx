@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import SideMenu from "./sideMenu/SideMenu.tsx";
 import {useSelector} from "react-redux";
 import {RootState} from "../../redux/store.ts";
-import {componentMapper} from "../../utils/componentMapper.ts";
+import {dashboardComponentRouteMapper} from "../../routes/dashboardComponentRouteMapper.ts";
 import Copyright from "./Copyright.tsx";
 
 const Dashboard = () => {
@@ -31,7 +31,7 @@ const Dashboard = () => {
                 >
                     {dashboardRouting.map((route) => {
                         if (!route.isVisible) return null;
-                        const Component = componentMapper[route.name];
+                        const Component = dashboardComponentRouteMapper[route.name];
                         return Component ? <Component key={route.name}/> : null;
                     })}
                 </Stack>
