@@ -80,7 +80,6 @@ const Tasks = ({activityId}: TActivityTasksProps) => {
         return <div>Error</div>;
     }
 
-    console.log("test", tasks);
     return (
         <Grid
             sx={{
