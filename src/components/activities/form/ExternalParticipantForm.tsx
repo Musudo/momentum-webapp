@@ -1,5 +1,16 @@
-import {useState} from 'react';
-import {Card, CardContent, CardHeader, IconButton, InputAdornment, TextField, Tooltip} from "@mui/material";
+import {useEffect, useState} from 'react';
+import {
+    Box,
+    Card,
+    CardContent,
+    CardHeader,
+    FormHelperText,
+    IconButton,
+    InputAdornment,
+    Switch,
+    TextField,
+    Tooltip
+} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import ClearIcon from "@mui/icons-material/Clear";
 import {IExternalParticipant} from "../../../types/models/IExternalParticipant.ts";
@@ -7,13 +18,26 @@ import AddIcon from "@mui/icons-material/Add";
 import PersonIcon from '@mui/icons-material/Person';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import {UseFormSetValue} from "react-hook-form";
+import dayjs from "dayjs";
+import {useTranslation} from "react-i18next";
 
 type TExternalParticipantFormProps = {
     setValue: UseFormSetValue<any>;
+    isWithParticipants: boolean;
+    setIsWithParticipants: (isWithParticipants: boolean) => void;
 }
 
-const ExternalParticipantForm = ({setValue}: TExternalParticipantFormProps) => {
+const ExternalParticipantForm = ({
+                                     setValue,
+                                     isWithParticipants,
+                                     setIsWithParticipants
+                                 }: TExternalParticipantFormProps) => {
     const [externalParticipants, setExternalParticipants] = useState<IExternalParticipant[]>([]);
+    const {t} = useTranslation();
+
+    useEffect(() => {
+        setIsWithParticipants(externalParticipants.length > 0);
+    }, [externalParticipants, setIsWithParticipants]);
 
     const addExternalParticipant = () => {
         const newExternal: IExternalParticipant = {id: Date.now().toString(), name: '', email: ''};
@@ -105,6 +129,28 @@ const ExternalParticipantForm = ({setValue}: TExternalParticipantFormProps) => {
                     <AddIcon/>
                 </IconButton>
             </Tooltip>
+
+            {isWithParticipants && (
+                <Box>
+                    <Switch
+                        onChange={(e) => {
+                            const isChecked = e.target.checked;
+                            if (isChecked) {
+                                setValue(
+                                    "emailSentAt",
+                                    dayjs().format("YYYY-MM-DD[T]HH:mm:ss")
+                                );
+                            } else {
+                                // Clear the value when unchecked
+                                setValue("emailSentAt", "");
+                            }
+                        }}
+                    />
+                    <FormHelperText>
+                        {t("Activity form.Switch to send email")}
+                    </FormHelperText>
+                </Box>
+            )}
         </>
     );
 }

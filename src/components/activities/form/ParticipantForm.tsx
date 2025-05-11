@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Autocomplete, Chip, FormControl, InputLabel, MenuItem, OutlinedInput, Select, TextField} from "@mui/material";
 import {Control, Controller, UseFormSetValue} from "react-hook-form";
 import {IContact} from "../../../types/models/IContact";
@@ -13,10 +13,12 @@ type TParticipantFormProps = {
     control: Control<any>,
     register: any,
     setValue: UseFormSetValue<any>;
+    watch: any;
+    setIsWithParticipants: (isWithParticipants: boolean) => void;
 }
 
 const ParticipantForm = (props: TParticipantFormProps) => {
-    const {control, setValue} = props;
+    const {control, setValue, watch, setIsWithParticipants} = props;
     const [institutionName, setInstitutionName] = useState<string | null>(null);
     const {t} = useTranslation();
     const [inputValue, setInputValue] = useState<string>("");
@@ -45,6 +47,11 @@ const ParticipantForm = (props: TParticipantFormProps) => {
             return res.data;
         }
     });
+
+    const contactIds = watch("contactIds");
+    useEffect(() => {
+        setIsWithParticipants(contactIds.length > 0);
+    }, [contactIds, setIsWithParticipants]);
 
     if (!institutions || !contacts) {
         return <div>Error</div>;
@@ -85,7 +92,7 @@ const ParticipantForm = (props: TParticipantFormProps) => {
                                 <TextField
                                     {...params}
                                     size="small"
-                                    label="Choose institution *"
+                                    label="Institution *"
                                     error={!!fieldState.error}
                                     helperText={fieldState.error?.message}
                                 />

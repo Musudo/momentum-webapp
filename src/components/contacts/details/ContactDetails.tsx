@@ -76,8 +76,8 @@ const ContactDetails = () => {
                 </CardContainer>
                 <Button
                     variant="text"
-                    color="error"
-                    startIcon={<DeleteIcon/>}
+                    sx={{color: 'error.main'}}
+                    startIcon={<DeleteIcon color="error"/>}
                     onClick={() => setOpenDeleteContactDialog(true)}
                 >
                     Delete
@@ -92,10 +92,17 @@ const ContactDetails = () => {
                         Delete contact
                     </DialogTitle>
                     <DialogActions>
-                        <Button variant="contained" onClick={() => setOpenDeleteContactDialog(false)} size="small">
+                        <Button
+                            variant="contained"
+                            onClick={() => setOpenDeleteContactDialog(false)}
+                            size="small">
                             Cancel
                         </Button>
-                        <Button variant="text" onClick={() => deleteContactMutation.mutate(contact.id)} size="small">
+                        <Button
+                            variant="text"
+                            onClick={() => deleteContactMutation.mutate(contact.id)}
+                            size="small"
+                        >
                             Delete
                         </Button>
                     </DialogActions>

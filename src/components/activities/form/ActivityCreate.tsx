@@ -22,6 +22,7 @@ const ActivityCreate = () => {
         message: "",
     });
     const {activityType} = useParams();
+    const [isWithParticipants, setIsWithParticipants] = useState<boolean>(false);
 
     const {
         register,
@@ -29,6 +30,7 @@ const ActivityCreate = () => {
         handleSubmit,
         setValue,
         trigger,
+        watch,
         formState: {errors},
     } = useForm<IActivity>({
         defaultValues: {
@@ -39,7 +41,7 @@ const ActivityCreate = () => {
             type: activityType,
             startTime: dayjs().format('YYYY-MM-DD[T]HH:mm:ss'),
             endTime: dayjs().add(60, 'minutes').format('YYYY-MM-DD[T]HH:mm:ss'),
-            // emailSentAt: "",
+            emailSentAt: "",
             contactIds: [],
             institutionName: "",
             externalParticipants: []
@@ -92,54 +94,25 @@ const ActivityCreate = () => {
                 control={control}
                 register={register}
                 setValue={setValue}
+                watch={watch}
+                setIsWithParticipants={setIsWithParticipants}
             />
-            <ExternalParticipantForm setValue={setValue}/>
+            <ExternalParticipantForm
+                setValue={setValue}
+                isWithParticipants={isWithParticipants}
+                setIsWithParticipants={setIsWithParticipants}
+            />
         </>
     );
 
     const activityStep = (
-        <>
-            <ActivityForm
-                register={register}
-                control={control}
-                errors={errors}
-                activity={null}
-                setValue={setValue}
-            />
-            {/*<Box style={{marginTop: 16}}>
-                <Controller
-                    name="emailSentAt"
-                    control={control}
-                    render={({field}) => (
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    {...field}
-                                    checked={!!field.value}
-                                    onChange={(e) => {
-                                        const isChecked = e.target.checked;
-                                        field.onChange(isChecked);
-                                        if (isChecked) {
-                                            setValue(
-                                                "emailSentAt",
-                                                dayjs(getValues("startTime")).format("YYYY-MM-DD[T]HH:mm:ss")
-                                            );
-                                        } else {
-                                            // Clear the value when unchecked
-                                            setValue("emailSentAt", "");
-                                        }
-                                    }}
-                                />
-                            }
-                            label={t("Activity form.Send email")}
-                        />
-                    )}
-                />
-                <FormHelperText>
-                    {t("Activity form.Switch to send email")}
-                </FormHelperText>
-            </Box>*/}
-        </>
+        <ActivityForm
+            register={register}
+            control={control}
+            errors={errors}
+            activity={null}
+            setValue={setValue}
+        />
     );
 
     return (

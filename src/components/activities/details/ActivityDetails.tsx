@@ -1,12 +1,13 @@
 import React, {useState} from "react";
 import {IActivity} from "../../../types/models/IActivity";
 import {useParams} from "react-router-dom";
-import {Box, Button, Chip, Divider, Tab, Tabs, Typography,} from "@mui/material";
+import {Box, Button, Chip, Divider, IconButton, Tab, Tabs, Typography, useMediaQuery,} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EmailIcon from "@mui/icons-material/Email";
 import {allyProps} from "../../../props/MUIElementProps";
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {fetchActivity} from "../../../utils/axios/configs/activityAxios";
 import ExternalNote from "./notes/ExternalNote.tsx";
 import ActivityVoiceMemo from "./ActivityVoiceMemo.tsx";
@@ -33,8 +34,8 @@ type TTabPanelProps = {
 const ActivityDetails = () => {
     const {id} = useParams();
     const theme = useTheme();
-    // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-    // const queryClient = useQueryClient();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const queryClient = useQueryClient();
     const [openDeleteActivityDialog, setOpenDeleteActivityDialog] = useState(false);
     const [tabValue, setTabValue] = useState(0);
 
@@ -67,12 +68,13 @@ const ActivityDetails = () => {
         );
     };
 
-    // const sendEmailMutation = useMutation({
-    //     mutationFn: (data: object) => fetchActivity.post(`/email/activity/${activity?.id}/confirm`, data),
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries({queryKey: ["activity"]});
-    //     },
-    // });
+    const sendEmailMutation = useMutation({
+        mutationFn: (activity: IActivity) => fetchActivity.post(`/send-confirmation-email`, activity),
+        onSuccess: () => {
+            // TODO: fix issue component no re-rendering
+            queryClient.invalidateQueries({queryKey: ["activity"]});
+        },
+    });
 
     if (!activity) {
         return <div>Error</div>;
@@ -124,15 +126,15 @@ const ActivityDetails = () => {
                                 </Typography>
                             </div>
                         </Grid>
-                        {/*<Grid>
-                            {!activity.emailSentAt && (
+                        <Grid>
+                            {(activity.contacts && !activity.emailSentAt) && (
                                 <>
                                     {!isMobile ? (
                                         <Button
                                             variant="contained"
                                             color="primary"
                                             startIcon={<EmailIcon/>}
-                                            onClick={() => sendEmailMutation.mutate([])}
+                                            onClick={() => sendEmailMutation.mutate(activity)}
                                         >
                                             Send email
                                         </Button>
@@ -140,14 +142,14 @@ const ActivityDetails = () => {
                                         <IconButton
                                             color="primary"
                                             size="large"
-                                            onClick={() => sendEmailMutation.mutate([])}
+                                            onClick={() => sendEmailMutation.mutate(activity)}
                                         >
                                             <EmailIcon/>
                                         </IconButton>
                                     )}
                                 </>
                             )}
-                        </Grid>*/}
+                        </Grid>
                     </Grid>
                     <Box sx={{borderBottom: 1, borderColor: "divider"}}>
                         <Tabs
@@ -205,8 +207,8 @@ const ActivityDetails = () => {
                 <Grid mt={1}>
                     <Button
                         variant="text"
-                        color="error"
-                        startIcon={<DeleteIcon/>}
+                        sx={{color: 'error.main'}}
+                        startIcon={<DeleteIcon color="error"/>}
                         onClick={() => setOpenDeleteActivityDialog(true)}
                     >
                         Delete
